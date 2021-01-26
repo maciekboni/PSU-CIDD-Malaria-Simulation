@@ -20,7 +20,7 @@
 #include "Properties/PersonIndexByLocationBittingLevel.h"
 #include "Core/Random.h"
 #include "Properties/PersonIndexByLocationMovingLevel.h"
-#include "MDC/ModelDataCollector.h"
+#include "../../ModelDataCollector.h"
 #include "SingleHostClonalParasitePopulations.h"
 #include "Helpers/TimeHelpers.h"
 #include "easylogging++.h"

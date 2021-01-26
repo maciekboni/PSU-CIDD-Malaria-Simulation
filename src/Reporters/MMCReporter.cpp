@@ -5,7 +5,7 @@
 #include "MMCReporter.h"
 #include "Model.h"
 #include "Core/Config/Config.h"
-#include "MDC/ModelDataCollector.h"
+#include "../../ModelDataCollector.h"
 #include "Core/Random.h"
 #include "Strategies/IStrategy.h"
 #include "Helpers/TimeHelpers.h"

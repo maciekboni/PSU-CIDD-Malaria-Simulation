@@ -10,7 +10,7 @@
 #include "Core/Config/Config.h"
 #include "Population/Person.h"
 #include "Core/Random.h"
-#include "MDC/ModelDataCollector.h"
+#include "../ModelDataCollector.h"
 #include "Events/BirthdayEvent.h"
 #include "Events/ProgressToClinicalEvent.h"
 #include "Events/EndClinicalDueToDrugResistanceEvent.h"

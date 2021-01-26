@@ -12,7 +12,7 @@
 #include "Population/SingleHostClonalParasitePopulations.h"
 #include "Model.h"
 #include "Core/Config/Config.h"
-#include "MDC/ModelDataCollector.h"
+#include "../../ModelDataCollector.h"
 
 OBJECTPOOL_IMPL(TestTreatmentFailureEvent)
 

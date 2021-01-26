@@ -12,7 +12,7 @@
 #include "Population/ClonalParasitePopulation.h"
 #include "Core/Config/Config.h"
 #include "Core/Random.h"
-#include "MDC/ModelDataCollector.h"
+#include "../../../ModelDataCollector.h"
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
 #include <easylogging++.h>
 

@@ -9,7 +9,7 @@
 #include "Model.h"
 #include "Core/Scheduler.h"
 #include "Core/Config/Config.h"
-#include "MDC/ModelDataCollector.h"
+#include "../../ModelDataCollector.h"
 #include <sstream>
 #include "IStrategy.h"
 #include "Therapies/Therapy.h"
