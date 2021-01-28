@@ -99,6 +99,18 @@ void MonthlyReporter::after_run()
 
   CLOG(INFO, "summary_reporter") << ss.str();
   ss.str("");
+
+  // All Mutation Pair Data
+  for (int i = 0; i < Model::DATA_COLLECTOR->MutPairInfoVector.size(); i++) {
+    // time
+    ss << std::get<0>(Model::DATA_COLLECTOR->MutPairInfoVector[i]) << ',';
+    // from
+    ss << std::get<1>(Model::DATA_COLLECTOR->MutPairInfoVector[i]) << ',';
+    // to
+    ss << std::get<2>(Model::DATA_COLLECTOR->MutPairInfoVector[i]) << '\n';
+  }
+  CLOG(INFO, "mutpair_reporter") << ss.str();
+  ss.str("");
 }
 
 void MonthlyReporter::print_EIR_PfPR_by_location()
