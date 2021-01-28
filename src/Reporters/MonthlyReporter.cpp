@@ -61,6 +61,14 @@ void MonthlyReporter::monthly_report()
     ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
   }
   ss << group_sep;
+  // Eric MDR Paper: Output NTF by Month
+  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    double change_in_NTF = 
+      Model::DATA_COLLECTOR->cumulative_NTF_by_location()[loc] - last_reported_NTF_;
+    ss << change_in_NTF << sep;
+    last_reported_NTF_ = Model::DATA_COLLECTOR->cumulative_NTF_by_location()[loc];
+  }
+  ss << group_sep;
 
 // including total number of positive individuals
   ReporterUtils::output_genotype_frequency3(ss, Model::CONFIG->number_of_parasite_types(),
