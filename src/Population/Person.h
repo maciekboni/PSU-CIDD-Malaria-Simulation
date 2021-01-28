@@ -208,6 +208,8 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
 
   void infected_by(const int &parasite_type_id);
 
+  bool inflict_bite(const unsigned int parasite_type_id);
+
   void randomly_choose_target_location();
 
   void schedule_move_to_target_location_next_day_event(const int &location);
