@@ -682,7 +682,11 @@ void ModelDataCollector::record_1_treatment(const int& location, const int& age,
   }
 }
 
-void ModelDataCollector::record_1_mutation(const int& location, Genotype* from, Genotype* to) {
+void ModelDataCollector::record_1_mutation(const int &location, Genotype* from, Genotype* to) {
+  // Eric's Mutation Pair Reporter
+  auto this_mutation_info = std::make_tuple(Model::SCHEDULER->current_time(), from->genotype_id(), to->genotype_id());
+  MutPairInfoVector.push_back(this_mutation_info);
+
   if (Model::SCHEDULER->current_time() >= Model::CONFIG->start_collect_data_day()) {
     cumulative_mutants_by_location_[location] += 1;
     monthly_number_of_mutation_events_by_location_[location] += 1;

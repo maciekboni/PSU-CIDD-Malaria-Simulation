@@ -84,6 +84,23 @@ void config_logger() {
   summary_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
   // default logger uses default configurations
   el::Loggers::reconfigureLogger("summary_reporter", summary_reporter_logger);
+
+  el::Configurations mutpair_reporter_logger;
+  mutpair_reporter_logger.setToDefault();
+  mutpair_reporter_logger.set(el::Level::Debug, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  mutpair_reporter_logger.set(el::Level::Error, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  mutpair_reporter_logger.set(el::Level::Fatal, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  mutpair_reporter_logger.set(el::Level::Trace, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  mutpair_reporter_logger.set(el::Level::Info, el::ConfigurationType::Format, "%msg");
+  mutpair_reporter_logger.set(el::Level::Warning, el::ConfigurationType::Format, "[%level] [%logger] %msg");
+  mutpair_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
+
+  mutpair_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
+  mutpair_reporter_logger.setGlobally(el::ConfigurationType::Filename, fmt::format("{}mutpair_{}.txt", path, job_number));
+  mutpair_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
+  mutpair_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
+  // default logger uses default configurations
+  el::Loggers::reconfigureLogger("mutpair_reporter", mutpair_reporter_logger);
 }
 
 int main(const int argc, char **argv) {

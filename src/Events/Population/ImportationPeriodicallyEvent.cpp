@@ -97,7 +97,7 @@ void ImportationPeriodicallyEvent::execute() {
     auto size = Model::CONFIG->parasite_density_level().log_parasite_density_asymptomatic;
 
     blood_parasite->set_gametocyte_level(Model::CONFIG->gametocyte_level_full());
-    blood_parasite->set_last_update_log10_parasite_density(size);
+    blood_parasite->set_last_update_log10_parasite_density(4.3);
     blood_parasite->set_update_function(Model::MODEL->immunity_clearance_update_function());
 
     //        Model::POPULATION->initial_infection(pi->vPerson()[0][0][ind_ac][index], Model::CONFIG->parasite_db()->get(0));

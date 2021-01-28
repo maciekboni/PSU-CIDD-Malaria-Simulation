@@ -614,6 +614,42 @@ void Person::infected_by(const int &parasite_type_id) {
 
 }
 
+bool Person::inflict_bite(const unsigned int parasite_type_id) {
+  // Update the overall bite count
+  increase_number_of_times_bitten();
+
+  // Get the probability of infection of a naive individual
+  double pr = Model::CONFIG->p_infection_from_an_infectious_bite();
+  
+  // Get the current immunity and calculate the baseline probability
+  double theta = immune_system()->get_current_value();
+  double pr_inf = pr * (1 - (theta - 0.2) / 0.6) + 0.1 * ((theta - 0.2) / 0.6);
+
+  // High immunity reduces likelihood of infection
+  if (theta > 0.8) {
+    pr_inf = 0.1;
+  } 
+  
+  // Low immunity sets likelihood at the probability of infection
+  if (theta < 0.2) {
+    pr_inf = pr;
+  }
+  
+  VLOG(1) << "theta:" << theta << " pr_inf: " << pr_inf;
+
+  // If the draw is less less than pr_inf, they get infected
+  const double draw = Model::RANDOM->random_flat(0.0, 1.0);
+  if (draw < pr_inf) {
+    if (host_state() != Person::EXPOSED && liver_parasite_type() == nullptr) {
+      today_infections()->push_back(parasite_type_id);
+      return true;
+    }
+  }
+
+  // We were not infected
+  return false;
+}
+
 void Person::schedule_move_parasite_to_blood(Genotype* genotype, const int &time) {
 
   MoveParasiteToBloodEvent::schedule_event(Model::SCHEDULER, this, genotype, Model::SCHEDULER->current_time() + time);
