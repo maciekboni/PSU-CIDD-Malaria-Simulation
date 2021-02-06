@@ -287,6 +287,25 @@ void ReporterUtils::output_3_genotype_frequency(
   }
 }
 
+void ReporterUtils::output_moi(std::stringstream& ss, PersonIndexByLocationStateAgeClass* pi) {
+  const auto number_of_locations = pi->vPerson().size();
+  const auto number_of_age_classes = pi->vPerson()[0][0].size();
+
+  for (auto loc = 0ul; loc < number_of_locations; loc++) {
+    auto pop_sum_location = 0;
+    for (auto hs = 0; hs < Person::NUMBER_OF_STATE - 1; hs++) {
+      for (auto ac = 0ul; ac < number_of_age_classes; ac++) {
+        std::size_t size = pi->vPerson()[loc][hs][ac].size();
+        for (int i = 0; i < size; i++) {
+          Person* p = pi->vPerson()[loc][hs][ac][i];
+          int moi = p->all_clonal_parasite_populations()->size();
+          ss << moi << "\n";
+        }
+      }
+    }
+  }
+}
+
 //
 //
 //

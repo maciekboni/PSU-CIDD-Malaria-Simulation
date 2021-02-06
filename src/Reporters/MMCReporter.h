@@ -33,12 +33,11 @@ public:
 
   void print_ntf_by_location();
 
-  void print_genotype_frequency();
-
-
   void monthly_report() override;
 
   void print_EIR_PfPR_by_location();
+
+  void report_moi();
 
 private:
   void output_genotype_frequency_3(
