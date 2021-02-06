@@ -123,6 +123,8 @@ void MMCReporter::after_run() {
   }
   CLOG(INFO, "summary_reporter") << ss.str();
   ss.str("");
+
+  report_moi();
 }
 
 void MMCReporter::print_EIR_PfPR_by_location() {
@@ -198,4 +200,31 @@ void MMCReporter::output_genotype_frequency_3(
       ss << i << sep;
     }
   }
+}
+
+void MMCReporter::report_moi() {
+  const std::string OUTPUT_FORMAT = "[%level] [%logger] [%host] [%func] [%loc] %msg";
+
+  el::Configurations moi_reporter_logger;
+  moi_reporter_logger.setToDefault();
+  moi_reporter_logger.set(el::Level::Debug, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Error, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Fatal, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Trace, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Info, el::ConfigurationType::Format, "%msg");
+  moi_reporter_logger.set(el::Level::Warning, el::ConfigurationType::Format, "[%level] [%logger] %msg");
+  moi_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
+
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
+  moi_reporter_logger.setGlobally(el::ConfigurationType::Filename, fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
+  moi_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
+  // default logger uses default configurations
+  el::Loggers::reconfigureLogger("moi_reporter", moi_reporter_logger);
+
+  // Report MOI
+  auto* pi = Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>();
+  ReporterUtils::output_moi(ss, pi);
+  CLOG(INFO, "moi_reporter") << ss.str();
+  ss.str("");
 }
