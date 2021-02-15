@@ -13,6 +13,8 @@ class MonthlyReporter : public Reporter {
 
  DISALLOW_MOVE(MonthlyReporter)
 
+  double last_reported_NTF_{0};
+
  public:
   std::stringstream ss;
   const std::string group_sep = "-1111\t";
