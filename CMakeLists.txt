@@ -1,6 +1,13 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_TOOLCHAIN_FILE
+        ${CMAKE_CURRENT_SOURCE_DIR}/ext/vcpkg/scripts/buildsystems/vcpkg.cmake  CACHE
+        STRING "Vcpkg toolchain file")
+
 project(POMS)
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 
 option(USING_ZAPCC "Use ZAPCC compiler." OFF)
 if (USING_ZAPCC)
@@ -68,4 +75,8 @@ endif ()
 #    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/bin/hello_2
 #    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 #)
-add_subdirectory(Google_tests)
+#add_subdirectory(tests)
+add_subdirectory(src)
+
+
+add_subdirectory(tests)
