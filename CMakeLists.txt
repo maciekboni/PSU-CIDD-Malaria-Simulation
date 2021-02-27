@@ -75,8 +75,6 @@ endif ()
 #    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/bin/hello_2
 #    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 #)
-#add_subdirectory(tests)
-add_subdirectory(src)
 
 
 add_subdirectory(tests)
