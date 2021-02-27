@@ -23,8 +23,7 @@ file(GLOB SRC_FILES *.cpp
 
 set(SRC_FILES ${SRC_FILES}
         ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4/easylogging++.h
-        ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4/easylogging++.cc
-        ../tests/lib/test1.cpp ../tests/test1.cpp ../tests/test2.cpp)
+        ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4/easylogging++.cc)
 
 add_library(MaSimCore STATIC ${SRC_FILES})
 add_dependencies(MaSimCore date args)

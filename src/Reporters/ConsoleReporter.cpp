@@ -13,7 +13,7 @@
 #include "Core/Config/Config.h"
 #include "Population/Population.h"
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include "Constants.h"
 #include "ReporterUtils.h"
 

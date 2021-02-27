@@ -29,7 +29,7 @@
 #include "Events/UpdateEveryKDaysEvent.h"
 #include "Events/ReturnToResidenceEvent.h"
 #include "Events/CirculateToTargetLocationNextDayEvent.h"
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include "Events/BirthdayEvent.h"
 #include "Therapies/MACTherapy.h"
 #include "Events/ReceiveTherapyEvent.h"

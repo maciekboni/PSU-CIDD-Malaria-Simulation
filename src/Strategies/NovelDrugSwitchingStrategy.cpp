@@ -2,7 +2,7 @@
 #include "Model.h"
 #include "Core/Random.h"
 #include "Therapies/Therapy.h"
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include "Core/Config/Config.h"
 #include "Helpers/TimeHelpers.h"
 #include "Core/Scheduler.h"
