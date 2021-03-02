@@ -3,9 +3,9 @@ find_package(fmt CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 #project(Google_tests)
 
-set(SRC ModelDataCollector.cpp ModelDataCollector.h )
+set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp)
 
-set(SRC_TEST test1.cpp test2.cpp test3.cpp)
+set(SRC_TEST test1.cpp test2.cpp test3.cpp Location.cpp Coordinate.cpp)
 add_executable(main_test ${SRC_TEST})
 include_directories (${POMS_SOURCE_DIR}/src)
 
