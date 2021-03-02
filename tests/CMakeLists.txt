@@ -5,7 +5,7 @@ find_package(GTest CONFIG REQUIRED)
 
 set(SRC ModelDataCollector.cpp ModelDataCollector.h )
 
-set(SRC_TEST test1.cpp test2.cpp)
+set(SRC_TEST test1.cpp test2.cpp test3.cpp)
 add_executable(main_test ${SRC_TEST})
 include_directories (${POMS_SOURCE_DIR}/src)
 
