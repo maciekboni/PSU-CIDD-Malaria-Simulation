@@ -18,7 +18,7 @@ endif ()
 # for Windows only
 if (WIN32)
   set(CMAKE_CXX_FLAGS_RELEASE "-DNOMINMAX ${CMAKE_CXX_FLAGS_RELEASE} /MT")
-  set(CMAKE_CXX_FLAGS_DEBUG "-DNOMINMAX ${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+  set(CMAKE_CXX_FLAGS_DEBUG "-DNOMINMAX ${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
   # Sets the flag to disable Linux specific error handling 
   add_definitions(-D__DISABLE_CRIT_ERR=1)
