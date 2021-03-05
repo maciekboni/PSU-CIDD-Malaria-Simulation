@@ -7,7 +7,7 @@
 
 #include "AdaptiveCyclingStrategy.h"
 #include "Model.h"
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include "Core/Config/Config.h"
 #include <sstream>
 #include "IStrategy.h"

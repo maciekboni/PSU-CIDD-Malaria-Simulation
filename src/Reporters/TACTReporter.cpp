@@ -3,7 +3,7 @@
 //
 
 #include <Model.h>
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include <Core/Config/Config.h>
 #include <Population/Population.h>
 #include <Population/Properties/PersonIndexByLocationStateAgeClass.h>

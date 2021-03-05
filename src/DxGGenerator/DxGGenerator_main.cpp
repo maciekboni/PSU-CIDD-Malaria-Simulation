@@ -29,7 +29,7 @@
 #include "Strategies/SFTStrategy.h"
 #include "Population/ImmuneSystem.h"
 #include "Events/ProgressToClinicalEvent.h"
-#include "../../ModelDataCollector.h"
+#include "MDC/ModelDataCollector.h"
 #include "Therapies/Therapy.h"
 #include "easylogging++.h"
 
