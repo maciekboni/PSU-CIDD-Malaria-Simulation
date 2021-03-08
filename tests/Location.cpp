@@ -2,7 +2,7 @@
 // Created by Nguyen Tran on 1/25/2018.
 //
 
-#include "Location.h"
+#include "Spatial/Location.h"
 
 namespace Spatial {
   Location::Location(const int id, float latitude, float longitude, const int population_size) :

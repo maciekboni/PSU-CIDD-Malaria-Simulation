@@ -3,10 +3,14 @@ find_package(fmt CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 #project(Google_tests)
 
-set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp)
+set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h
+        Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp
+        Helpers/TimeHelpers.h date/date.h Helpers/StringHelpers.h)
 
-set(SRC_TEST test1.cpp test2.cpp test3.cpp Location.cpp Coordinate.cpp)
+set(SRC_TEST test1.cpp test2.cpp test3.cpp test4.cpp Location.cpp Coordinate.cpp)
 add_executable(main_test ${SRC_TEST})
+add_dependencies(main_test date args)
+
 include_directories (${POMS_SOURCE_DIR}/src)
 
 # 'lib' is the folder with Google Test sources
