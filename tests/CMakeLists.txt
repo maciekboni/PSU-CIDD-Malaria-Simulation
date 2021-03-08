@@ -7,7 +7,7 @@ set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h
         Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp
         Helpers/TimeHelpers.h date/date.h Helpers/StringHelpers.h)
 
-set(SRC_TEST test1.cpp test2.cpp test3.cpp test4.cpp Location.cpp Coordinate.cpp)
+set(SRC_TEST test1.cpp test2.cpp test3.cpp test4.cpp test5.cpp Location.cpp Coordinate.cpp)
 add_executable(main_test ${SRC_TEST})
 add_dependencies(main_test date args)
 
