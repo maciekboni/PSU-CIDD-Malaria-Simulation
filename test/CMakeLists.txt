@@ -1,36 +1,30 @@
-include_directories(${PROJECT_SOURCE_DIR}/src ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4 ${CATCH_INCLUDE_DIR})
+# 'Google_test' is the subproject name
+find_package(fmt CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
+find_package(GSL REQUIRED)
+#project(Google_tests)
 
-set(TEST_SRC_FILES
-    main.cpp
-    sample_catch_test.cpp
-    sample_yaml_cpp_test.cpp
-    #SimpleFakeItTest.cpp
-    Spatial/CoordinateTest.cpp
-    Spatial/LocationTest.cpp
-    Core/RandomTest.cpp
-    Core/TimeHelpersTest.cpp
-    Core/StringHelpersTest.cpp
-    Core/Config/ConfigTest.cpp
-    )
+set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h
+        Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp
+        Helpers/TimeHelpers.h date/date.h Helpers/StringHelpers.h
+         Helpers/NumberHelpers.h)
 
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES} )
-add_dependencies(${PROJECT_TEST_NAME} MaSimCore date args catch)
+set(SRC_TEST test1.cpp CoordinateTest.cpp LocationTest.cpp StringHelpersTest.cpp TimeHelpersTest.cpp test6.cpp Location.cpp Coordinate.cpp)
+add_executable(main_test ${SRC_TEST})
+add_dependencies(main_test date args)
 
-target_link_libraries(${PROJECT_TEST_NAME}
-    MaSimCore
-    yaml-cpp
-    fmt::fmt fmt::fmt-header-only
-    GSL::gsl GSL::gslcblas
-    )
+include_directories (${POMS_SOURCE_DIR}/src)
+include_directories(${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
 
-target_compile_features(${PROJECT_TEST_NAME} PRIVATE cxx_range_for)
+# 'lib' is the folder with Google Test sources
+#add_subdirectory(lib)
+#include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+# 'Google_Tests_run' is the target name
+# 'test1.cpp tests2.cpp' are source files with tests
+#add_executable(Google_Tests_run test1.cpp tests2.cpp)
+#target_link_libraries(Google_Tests_run gtest gtest_main)
+#target_link_libraries(Google_Tests_run PSU-CIDD-Malaria-Simulation)
 
-add_custom_command(TARGET ${PROJECT_TEST_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${PROJECT_SOURCE_DIR}/misc/input.yml $<TARGET_FILE_DIR:${PROJECT_TEST_NAME}>)
-
-#
-#install(TARGETS ${PROJECT_TEST_NAME} DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-#install(FILES ${PROJECT_SOURCE_DIR}/misc/input.yml DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+target_link_libraries(main_test PRIVATE yaml-cpp fmt::fmt-header-only GSL::gsl GSL::gslcblas GTest::gtest GTest::gtest_main)
 
