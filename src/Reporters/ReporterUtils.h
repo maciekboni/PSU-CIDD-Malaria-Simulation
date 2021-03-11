@@ -63,6 +63,7 @@ public:
       PersonIndexByLocationStateAgeClass* pi
   );
 
+  static void initialize_moi_file_logger();
 
   static void output_moi(std::stringstream& ss, PersonIndexByLocationStateAgeClass* pi);
 

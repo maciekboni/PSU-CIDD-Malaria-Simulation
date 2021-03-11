@@ -8,6 +8,7 @@
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
 #include "Population/SingleHostClonalParasitePopulations.h"
 #include "Population/ClonalParasitePopulation.h"
+#include "Model.h"
 
 const std::string group_sep = "-1111\t";
 const std::string sep = "\t";
@@ -304,6 +305,32 @@ void ReporterUtils::output_moi(std::stringstream& ss, PersonIndexByLocationState
       }
     }
   }
+  CLOG(INFO, "moi_reporter") << ss.str();
+  ss.str("");
+}
+
+void ReporterUtils::initialize_moi_file_logger() {
+  const std::string OUTPUT_FORMAT = "[%level] [%logger] [%host] [%func] [%loc] %msg";
+
+  el::Configurations moi_reporter_logger;
+  moi_reporter_logger.setToDefault();
+  moi_reporter_logger.set(el::Level::Debug, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Error, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Fatal, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Trace, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Info, el::ConfigurationType::Format, "%msg");
+  moi_reporter_logger.set(el::Level::Warning, el::ConfigurationType::Format, "[%level] [%logger] %msg");
+  moi_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
+
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
+  moi_reporter_logger.setGlobally(
+      el::ConfigurationType::Filename,
+      fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
+  moi_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
+  // default logger uses default configurations
+  el::Loggers::reconfigureLogger("moi_reporter", moi_reporter_logger);
+
 }
 
 //

@@ -7,20 +7,19 @@
 #include "Core/Config/Config.h"
 #include "MDC/ModelDataCollector.h"
 #include "Core/Random.h"
-#include "Strategies/IStrategy.h"
-#include "Helpers/TimeHelpers.h"
 #include "Constants.h"
 #include "easylogging++.h"
-#include "date/date.h"
 #include "Population/Population.h"
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
 #include "Population/SingleHostClonalParasitePopulations.h"
 #include "ReporterUtils.h"
-// #include "Parasites/GenotypeDatabase.h"
 
 MMCReporter::MMCReporter() = default;
 
-void MMCReporter::initialize() { }
+void MMCReporter::initialize() {
+  ReporterUtils::initialize_moi_file_logger();
+
+}
 
 void MMCReporter::before_run() {
   // // std::cout << "MMC Reporter" << std::endl;
@@ -72,7 +71,8 @@ void MMCReporter::monthly_report() {
   }
   ss << group_sep;
 
-  output_genotype_frequency_3(
+  ReporterUtils::output_genotype_frequency3(
+      ss,
       Model::CONFIG->number_of_parasite_types(),
       Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
@@ -121,10 +121,12 @@ void MMCReporter::after_run() {
   for (int i = 0; i < number_of_years; ++i) {
     ss << Model::DATA_COLLECTOR->number_of_mutation_events_by_year()[i] << sep;
   }
+
   CLOG(INFO, "summary_reporter") << ss.str();
   ss.str("");
 
-  report_moi();
+  // Report MOI
+  ReporterUtils::output_moi(ss, Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 }
 
 void MMCReporter::print_EIR_PfPR_by_location() {
@@ -147,84 +149,3 @@ void MMCReporter::print_EIR_PfPR_by_location() {
 }
 
 
-void MMCReporter::output_genotype_frequency_3(
-    const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
-  auto sum1_all = 0.0;
-  std::vector<double> result3_all(number_of_genotypes, 0.0);
-  const auto number_of_locations = pi->vPerson().size();
-  const auto number_of_age_classes = pi->vPerson()[0][0].size();
-
-  for (auto loc = 0; loc < number_of_locations; loc++) {
-    std::vector<double> result3(number_of_genotypes, 0.0);
-    auto sum1 = 0.0;
-
-    for (auto hs = 0; hs < Person::NUMBER_OF_STATE - 1; hs++) {
-      for (auto ac = 0; ac < number_of_age_classes; ac++) {
-        const auto size = pi->vPerson()[loc][hs][ac].size();
-        for (auto i = 0ull; i < size; i++) {
-          auto* person = pi->vPerson()[loc][hs][ac][i];
-
-          if (!person->all_clonal_parasite_populations()->parasites()->empty()) {
-            sum1 += 1;
-            sum1_all += 1;
-          }
-
-          std::map<int, int> individual_genotype_map;
-
-          for (auto* parasite_population : *(person->all_clonal_parasite_populations()->parasites())) {
-            const auto g_id = parasite_population->genotype()->genotype_id();
-            if (individual_genotype_map.find(g_id) == individual_genotype_map.end()) {
-              individual_genotype_map[parasite_population->genotype()->genotype_id()] = 1;
-            } else {
-              individual_genotype_map[parasite_population->genotype()->genotype_id()] += 1;
-            }
-          }
-
-          for (const auto genotype : individual_genotype_map) {
-            result3[genotype.first] += genotype.second /
-                                       static_cast<double>(person->all_clonal_parasite_populations()
-                                                                 ->parasites()
-                                                                 ->size()
-                                       );
-            result3_all[genotype.first] += genotype.second / static_cast<double>(person
-                ->all_clonal_parasite_populations()->parasites()->size());
-          }
-        }
-      }
-    }
-    // output per location
-    for (auto& i : result3) {
-      i /= sum1;
-      ss << i << sep;
-    }
-  }
-}
-
-void MMCReporter::report_moi() {
-  const std::string OUTPUT_FORMAT = "[%level] [%logger] [%host] [%func] [%loc] %msg";
-
-  el::Configurations moi_reporter_logger;
-  moi_reporter_logger.setToDefault();
-  moi_reporter_logger.set(el::Level::Debug, el::ConfigurationType::Format, OUTPUT_FORMAT);
-  moi_reporter_logger.set(el::Level::Error, el::ConfigurationType::Format, OUTPUT_FORMAT);
-  moi_reporter_logger.set(el::Level::Fatal, el::ConfigurationType::Format, OUTPUT_FORMAT);
-  moi_reporter_logger.set(el::Level::Trace, el::ConfigurationType::Format, OUTPUT_FORMAT);
-  moi_reporter_logger.set(el::Level::Info, el::ConfigurationType::Format, "%msg");
-  moi_reporter_logger.set(el::Level::Warning, el::ConfigurationType::Format, "[%level] [%logger] %msg");
-  moi_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
-
-  moi_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
-  moi_reporter_logger.setGlobally(el::ConfigurationType::Filename, fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
-  moi_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
-  moi_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
-  // default logger uses default configurations
-  el::Loggers::reconfigureLogger("moi_reporter", moi_reporter_logger);
-
-  // Report MOI
-  auto* pi = Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>();
-  ReporterUtils::output_moi(ss, pi);
-  CLOG(INFO, "moi_reporter") << ss.str();
-  ss.str("");
-}

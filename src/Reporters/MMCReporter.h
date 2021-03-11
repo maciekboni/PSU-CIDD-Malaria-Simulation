@@ -37,13 +37,6 @@ public:
 
   void print_EIR_PfPR_by_location();
 
-  void report_moi();
-
-private:
-  void output_genotype_frequency_3(
-      const int& number_of_genotypes,
-      PersonIndexByLocationStateAgeClass* pi
-  );
 };
 
 #endif // MMCREPORTER_H
