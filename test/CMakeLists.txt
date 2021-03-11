@@ -4,32 +4,27 @@ find_package(GTest CONFIG REQUIRED)
 find_package(GSL REQUIRED)
 #project(Google_tests)
 
-#set(SRC MDC/ModelDataCollector.cpp MDC/ModelDataCollector.h Spatial/Location.h
-#        Spatial/Location.cpp Spatial/Coordinate.h Spatial/Coordinate.cpp
-#        Helpers/TimeHelpers.h date/date.h Helpers/StringHelpers.h
-#         Helpers/NumberHelpers.h Core/Random.h Core/Random.cpp
-#        )
+include_directories(${POMS_SOURCE_DIR}/src ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
 
-set(SRC_TEST test1.cpp CoordinateTest.cpp LocationTest.cpp StringHelpersTest.cpp
-        TimeHelpersTest.cpp RandomTest.cpp ConfigTest.cpp Location.cpp Coordinate.cpp)
+
+set(SRC_TEST main.cpp test1.cpp CoordinateTest.cpp LocationTest.cpp core/StringHelpersTest.cpp
+        core/TimeHelpersTest.cpp RandomTest.cpp ConfigTest.cpp)
+
 add_executable(main_test ${SRC_TEST})
-add_dependencies(main_test date args)
+add_dependencies(main_test date args MaSimCore)
 
-include_directories (${POMS_SOURCE_DIR}/src)
-include_directories(${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
+#include_directories (${POMS_SOURCE_DIR}/src)
+#include_directories(${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
 
-# 'lib' is the folder with Google Test sources
-#add_subdirectory(lib)
-#include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-# 'Google_Tests_run' is the target name
-# 'test1.cpp tests2.cpp' are source files with tests
-#add_executable(Google_Tests_run test1.cpp tests2.cpp)
-#target_link_libraries(Google_Tests_run gtest gtest_main)
-#target_link_libraries(Google_Tests_run PSU-CIDD-Malaria-Simulation)
-
-target_link_libraries(main_test PRIVATE yaml-cpp fmt::fmt-header-only
+target_link_libraries(main_test PRIVATE MaSimCore yaml-cpp fmt::fmt-header-only
         GSL::gsl GSL::gslcblas GTest::gtest GTest::gtest_main)
+
+target_compile_features(main_test PRIVATE cxx_range_for)
+
+
+add_custom_command(TARGET main_test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${POMS_SOURCE_DIR}/test/test_data/input.yml $<TARGET_FILE_DIR:main_test>)
 
 
 

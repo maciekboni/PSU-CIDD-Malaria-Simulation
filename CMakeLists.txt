@@ -5,8 +5,7 @@ set(CMAKE_TOOLCHAIN_FILE
 
 project(POMS)
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
-#set(CMAKE_CXX_STANDARD 20)
-#set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 
 
 option(USING_ZAPCC "Use ZAPCC compiler." OFF)
@@ -18,7 +17,7 @@ endif ()
 # for Windows only
 if (WIN32)
   set(CMAKE_CXX_FLAGS_RELEASE "-DNOMINMAX ${CMAKE_CXX_FLAGS_RELEASE} /MT")
-  #set(CMAKE_CXX_FLAGS_DEBUG "-DNOMINMAX ${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+  set(CMAKE_CXX_FLAGS_DEBUG "-DNOMINMAX ${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
   # Sets the flag to disable Linux specific error handling 
   add_definitions(-D__DISABLE_CRIT_ERR=1)
@@ -58,13 +57,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 
 #Setup test project
-option(BUILD_TESTS "Build all tests." OFF) # Makes boolean 'test' available.
+option(BUILD_TESTS "Build all tests." ON) # Makes boolean 'test' available.
 if (BUILD_TESTS)
 #  find_package(Catch2 CONFIG REQUIRED)
-  add_subdirectory(${EXT_PROJECTS_DIR}/catch)
+  #add_subdirectory(${EXT_PROJECTS_DIR}/catch)
 
   set(PROJECT_TEST_NAME masim_test)
-  add_subdirectory(test)
+
+#add_subdirectory(test)
 endif ()
 #enable_testing()
 #add_test(test1 ${CMAKE_BINARY_DIR}/bin/${PROJECT_TEST_NAME} --gtest_color=yes)
