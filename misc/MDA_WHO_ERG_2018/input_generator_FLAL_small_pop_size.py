@@ -34,7 +34,7 @@ data['location_db']['location_info']= location_info;
 
 
 #population size 
-popsize = 5000
+popsize = 3378
 data['location_db']['population_size_by_location'] = [popsize];       
 
 #3RMDA
@@ -49,10 +49,11 @@ data['sd_prob_individual_present_at_mda'] = sd_prob_individual_present_at_mda
 #        data['events'][index]['info'] = data['events'][index]['info'][0:number_MDA_round]
 
 
-betas = [0.048, 0.0538]
+# betas = [0.051, 0.0535]
 
-pfpr = { 0.048: 'PFPR0p1',
-        0.0538: 'PFPR1p0'
+pfprs = { 0.051: 'PFPR0p25',
+        0.0535: 'PFPR0p5',
+        0.059: 'PFPR1p0'
         }
 
 improved_tc = {True: '_itc' , 
@@ -64,7 +65,7 @@ importations = {True: '_imp' ,
 
 
 for mda_round in number_MDA_round:
-    for beta in betas:
+    for beta, pfpr_str in pfprs.items():
         for _,itc in improved_tc.items():
             for _,imp in importations.items():                
                 new_data = copy.deepcopy(data)
@@ -72,8 +73,7 @@ for mda_round in number_MDA_round:
                 
                 for index,event in enumerate(data['events']):
                     if event['name'] == 'single_round_MDA':
-                        new_data['events'][index]['info'] = data['events'][index]['info'][0:mda_round]                    
-                pfpr_str = pfpr[beta]
+                        new_data['events'][index]['info'] = data['events'][index]['info'][0:mda_round]                                    
                 
                 if itc == '':
                     for index,event in enumerate(data['events']):
@@ -84,7 +84,7 @@ for mda_round in number_MDA_round:
                         if event['name'] == 'introduce_parasites_periodically':
                             new_data['events'][index]['info']= []     
             
-                output_filename = 'FLAL_small_pop_size/ONELOC_%s_%dRMDA_%s_OPPUNIFORM_FLAL%s%s.yml'%(kFormatter(popsize),mda_round,pfpr_str,itc,imp);
+                output_filename = 'FLAL_small_pop_size/ONELOC_%s_%dRMDA_%s_OPPUNIFORM_FLAL%s%s.yml'%('5k',mda_round,pfpr_str,itc,imp);
                 output_stream = open(output_filename, 'w');
                 yaml.dump(new_data, output_stream); 
                 output_stream.close();
