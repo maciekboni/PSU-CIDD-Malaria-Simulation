@@ -8,6 +8,7 @@
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
 #include "Population/SingleHostClonalParasitePopulations.h"
 #include "Population/ClonalParasitePopulation.h"
+#include "Model.h"
 
 const std::string group_sep = "-1111\t";
 const std::string sep = "\t";
@@ -285,6 +286,51 @@ void ReporterUtils::output_3_genotype_frequency(
     ss << result1_all[j] << sep;
     ss << result1_all[j] << sep;
   }
+}
+
+void ReporterUtils::output_moi(std::stringstream& ss, PersonIndexByLocationStateAgeClass* pi) {
+  const auto number_of_locations = pi->vPerson().size();
+  const auto number_of_age_classes = pi->vPerson()[0][0].size();
+
+  for (auto loc = 0ul; loc < number_of_locations; loc++) {
+    auto pop_sum_location = 0;
+    for (auto hs = 0; hs < Person::NUMBER_OF_STATE - 1; hs++) {
+      for (auto ac = 0ul; ac < number_of_age_classes; ac++) {
+        std::size_t size = pi->vPerson()[loc][hs][ac].size();
+        for (int i = 0; i < size; i++) {
+          Person* p = pi->vPerson()[loc][hs][ac][i];
+          int moi = p->all_clonal_parasite_populations()->size();
+          ss << moi << "\n";
+        }
+      }
+    }
+  }
+  CLOG(INFO, "moi_reporter") << ss.str();
+  ss.str("");
+}
+
+void ReporterUtils::initialize_moi_file_logger() {
+  const std::string OUTPUT_FORMAT = "[%level] [%logger] [%host] [%func] [%loc] %msg";
+
+  el::Configurations moi_reporter_logger;
+  moi_reporter_logger.setToDefault();
+  moi_reporter_logger.set(el::Level::Debug, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Error, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Fatal, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Trace, el::ConfigurationType::Format, OUTPUT_FORMAT);
+  moi_reporter_logger.set(el::Level::Info, el::ConfigurationType::Format, "%msg");
+  moi_reporter_logger.set(el::Level::Warning, el::ConfigurationType::Format, "[%level] [%logger] %msg");
+  moi_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
+
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
+  moi_reporter_logger.setGlobally(
+      el::ConfigurationType::Filename,
+      fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
+  moi_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
+  moi_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
+  // default logger uses default configurations
+  el::Loggers::reconfigureLogger("moi_reporter", moi_reporter_logger);
+
 }
 
 //
