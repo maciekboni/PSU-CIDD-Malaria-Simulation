@@ -64,7 +64,7 @@ if (BUILD_TESTS)
 
   set(PROJECT_TEST_NAME masim_test)
 
-#add_subdirectory(test)
+add_subdirectory(test)
 endif ()
 #enable_testing()
 #add_test(test1 ${CMAKE_BINARY_DIR}/bin/${PROJECT_TEST_NAME} --gtest_color=yes)
@@ -77,4 +77,4 @@ endif ()
 #)
 
 
-add_subdirectory(test)
+#add_subdirectory(test)
