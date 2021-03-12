@@ -31,9 +31,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 
 #Setup test project
-option(BUILD_TESTS "Build all tests." OFF) # Makes boolean 'test' available.
+option(BUILD_TESTS "Build all tests." ON) # Makes boolean 'test' available.
 if (BUILD_TESTS)
-  set(PROJECT_TEST_NAME masim_test)
   add_subdirectory(test)
 endif ()
 
