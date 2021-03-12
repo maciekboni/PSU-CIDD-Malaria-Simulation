@@ -11,7 +11,7 @@
  * Created on January 12, 2017, 4:31 PM
  */
 #include <iomanip>
-#include <CLI11.hpp>
+#include <CLI/CLI.hpp>
 #include <math.h>  // log10
 
 #include <cstdlib>
