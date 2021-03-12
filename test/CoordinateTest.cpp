@@ -1,6 +1,4 @@
-//
-// Created by Pakhi on 1/26/2021.
-//
+//Spatial/Coordinate Test
 
 #include "gtest/gtest.h"
 #include "Spatial/Coordinate.h"
