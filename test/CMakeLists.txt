@@ -2,6 +2,7 @@
 find_package(fmt CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 find_package(GSL REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
 #project(Google_tests)
 
 include_directories(${POMS_SOURCE_DIR}/src ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
