@@ -2,14 +2,13 @@
 find_package(fmt CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 find_package(GSL REQUIRED)
-find_package(yaml-cpp CONFIG REQUIRED)
 #project(Google_tests)
 
 include_directories(${POMS_SOURCE_DIR}/src ${EXT_PROJECTS_DIR}/easyloggingpp.9.96.4)
 
 
-set(SRC_TEST main.cpp test1.cpp CoordinateTest.cpp LocationTest.cpp Core/StringHelpersTest.cpp
-        Core/TimeHelpersTest.cpp RandomTest.cpp ConfigTest.cpp)
+set(SRC_TEST main.cpp test1.cpp Spatial/CoordinateTest.cpp Spatial/LocationTest.cpp Core/StringHelpersTest.cpp
+        Core/TimeHelpersTest.cpp RandomTest.cpp Core/ConfigTest.cpp)
 
 add_executable(main_test ${SRC_TEST})
 add_dependencies(main_test date args MaSimCore)

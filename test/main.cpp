@@ -7,7 +7,7 @@ INITIALIZE_EASYLOGGINGPP
 
 //#define NOMINMAX
 
-//#define CATCH_CONFIG_RUNNER
+//#define Catch_CONFIG_RUNNER
 
 #include <gtest/gtest.h>
 
@@ -51,6 +51,7 @@ void config_logger() {
   // CLOG(INFO, "reporter") << "test reporter log";
   // CLOG(INFO, "reporter") << "test reporter log2";
 }
+
 /*
 int main(int argc, char *argv[]) {
   // global setup...
