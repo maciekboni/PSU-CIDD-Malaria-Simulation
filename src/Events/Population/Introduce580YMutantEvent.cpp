@@ -21,7 +21,7 @@ void Introduce580YMutantEvent::execute() {
 
   // get the approximate current frequency of 580Y in the population
   // and only fill up the different between input fraction and the current frequency
-
+  
   double current_580Y_fraction = 0.0;
   double total_population_count = 0;
   for (int j = 0; j < Model::CONFIG->number_of_age_classes(); ++j) {
@@ -35,13 +35,9 @@ void Introduce580YMutantEvent::execute() {
     }
   }
 
-  current_580Y_fraction = total_population_count == 0 ? 0 : current_580Y_fraction / total_population_count;
+  current_580Y_fraction = total_population_count == 0 ? 0 : current_580Y_fraction / current_580Y_fraction;
   double target_fraction = fraction_ - current_580Y_fraction;
-  if (target_fraction <= 0) {
-    LOG(INFO) << date::year_month_day{scheduler->calendar_date} << " : Introduce 580Y Copy event with 0 cases";
-    return;
-  }
-//  std::cout << target_fraction << std::endl;
+  if (target_fraction <= 0) return;
 
   for (int j = 0; j < Model::CONFIG->number_of_age_classes(); ++j) {
     const auto number_infected_individual_in_ac =
@@ -70,6 +66,5 @@ void Introduce580YMutantEvent::execute() {
     }
   }
 
-  LOG(INFO) << date::year_month_day{scheduler->calendar_date} << " : Introduce 580Y Copy event with fraction: "
-            << target_fraction;
+  LOG(INFO) << date::year_month_day{scheduler->calendar_date} << " : Introduce 580Y Copy";
 }
