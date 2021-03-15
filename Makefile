@@ -3,7 +3,7 @@ PWD := $(dir $(mkfile_path))
 
 .PHONY: all test clean build
 
-all: build
+all: generate-vcpkg build
 
 build:
 	cmake --build build --config Release
@@ -23,14 +23,7 @@ generate-vcpkg: clean
 		./ext/vcpkg/bootstrap-vcpkg.sh; \
   fi
 
-	./ext/vcpkg/vcpkg install gsl
-	./ext/vcpkg/vcpkg install yaml-cpp
-	./ext/vcpkg/vcpkg install fmt
-	./ext/vcpkg/vcpkg install date
-	./ext/vcpkg/vcpkg install args
-	./ext/vcpkg/vcpkg install CLI11
-	./ext/vcpkg/vcpkg install gtest
-	./ext/vcpkg/vcpkg install catch
+	./ext/vcpkg/vcpkg install gsl yaml-cpp fmt date args CLI11 gtest catch
   # install other dependcies here
 	cmake -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .
 	cp $(PWD)build/compile_commands.json $(PWD)

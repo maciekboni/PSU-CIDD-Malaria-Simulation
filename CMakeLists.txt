@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_TOOLCHAIN_FILE
   ${CMAKE_CURRENT_SOURCE_DIR}/ext/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE
@@ -28,6 +28,7 @@ add_subdirectory(src)
 #Setup test project
 option(BUILD_TESTS "Build all tests." ON) # Makes boolean 'test' available.
 if (BUILD_TESTS)
+  enable_testing()
   add_subdirectory(test)
 endif ()
 

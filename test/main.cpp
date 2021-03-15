@@ -52,15 +52,11 @@ void config_logger() {
   // CLOG(INFO, "reporter") << "test reporter log2";
 }
 
-/*
+
 int main(int argc, char *argv[]) {
   // global setup...
   config_logger();
+  ::testing::InitGoogleTest(&argc, argv);
 
-  const auto result = Catch::Session().run(argc, argv);
-
-  // global clean-up...
-
-  return result;
+  return RUN_ALL_TESTS();
 }
-*/
