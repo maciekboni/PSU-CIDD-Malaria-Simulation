@@ -6,7 +6,7 @@ PWD := $(dir $(mkfile_path))
 all: generate-vcpkg build
 
 build:
-	cmake --build build --config Release
+	cmake --build build --config Release -- -j6
 
 ci: generate-vcpkg build test
 

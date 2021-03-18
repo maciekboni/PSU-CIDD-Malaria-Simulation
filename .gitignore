@@ -17,4 +17,7 @@ documentation/MaSim.uml~
 
 # Ingore the "default" output directory
 out
-**/*/myeasylog.log
+
+**/myeasylog.log
+**/compile_commands.json
+**/.cache

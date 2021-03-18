@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   main.cpp
  * Author: Merlin
  *
@@ -66,7 +66,7 @@ inline double round(double val) {
 }
 
 /*
- * 
+ *
  */
 int main(int argc, char** argv) {
   CLI::App app{"PKPD model"};
@@ -87,17 +87,17 @@ int main(int argc, char** argv) {
 
   if(as_iov != -1) {
       p_model->CONFIG->as_iov() = as_iov;
-  } 
+  }
 
   if(as_iiv != -1) {
       for (auto &sd :p_model->CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()) {
           sd = as_iiv;
       }
-  } 
+  }
 
   if(as_ec50 != -1) {
       p_model->CONFIG->EC50_power_n_table()[0][0] = pow(as_ec50, p_model->CONFIG->drug_db()->at(0)->n());
-  } 
+  }
 
   // initialEC50Table
   std::vector<std::vector<double>> EC50_table(Model::CONFIG->genotype_db()->size(),
