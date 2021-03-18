@@ -238,7 +238,7 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
     blood_parasite->set_gametocyte_level(Model::CONFIG->gametocyte_level_full());
     blood_parasite->set_last_update_log10_parasite_density(density);
 
-    ProgressToClinicalEvent::schedule_event(Model::SCHEDULER, person, blood_parasite, 1);
+    ProgressToClinicalEvent::schedule_event(Model::SCHEDULER, person, blood_parasite, 0);
   }
 
   p_model->run();
