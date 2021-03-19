@@ -3,6 +3,7 @@
 
 #include "Reporters/Reporter.h"
 #include <sstream>
+#include <fstream>
 
 class AppInput;
 
@@ -32,7 +33,7 @@ public:
 
 private:
   AppInput* appInput{nullptr};
-
+  std::ofstream outputFStream;
   //  void print_monthly_incidence_by_location();
 };
 

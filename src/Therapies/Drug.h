@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Drug.h
  * Author: Merlin
  *
@@ -49,7 +49,7 @@ class Drug {
 
   void set_number_of_dosing_days(int dosingDays);
 
-  double get_parasite_killing_rate(int &genotype_id) const;
+  double get_parasite_killing_rate(const int &genotype_id) const;
 };
 
 #endif    /* DRUG_H */

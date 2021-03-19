@@ -15,7 +15,7 @@
 starting_date: 1990/2/1
 
 # ending time point of the simulation (in yyyy/m/d format)
-ending_date: 1990/3/1
+ending_date: 1990/3/2
 
 # the day at which the simulation's reporting functionality begins collecting data for
 # EIR, # of clinical episodes, # death , # of treatment, #TF by location,...

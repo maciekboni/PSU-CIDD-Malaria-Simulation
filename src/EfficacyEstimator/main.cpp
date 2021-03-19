@@ -2,11 +2,21 @@
 // Created by nguyentd on 3/11/2021.
 //
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+
+#include <CLI/App.hpp>
+#include <CLI/Config.hpp>
+#include <CLI/Formatter.hpp>
+#include <iostream>
+#include <memory>
+
+#include "AppInput.h"
 #include "Core/Config/Config.h"
-#include "PkPdReporter.h"
 #include "Events/ProgressToClinicalEvent.h"
 #include "MDC/ModelDataCollector.h"
 #include "Model.h"
+#include "PkPdReporter.h"
 #include "Population/ImmuneSystem.h"
 #include "Population/Population.h"
 #include "Population/Properties/PersonIndexAll.h"
@@ -15,14 +25,6 @@
 #include "Strategies/SFTStrategy.h"
 #include "Therapies/SCTherapy.h"
 #include "easylogging++.h"
-#include "AppInput.h"
-#include <CLI/App.hpp>
-#include <CLI/Config.hpp>
-#include <CLI/Formatter.hpp>
-#include <fmt/core.h>
-#include <fmt/format.h>
-#include <iostream>
-#include <memory>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -33,12 +35,19 @@ bool validate_config(AppInput &input);
 int main(int argc, char **argv) {
   AppInput input;
 
-  CLI::App app{"Efficacy Estimator"};
+  CLI::App app { "Efficacy Estimator" };
   create_cli_options(argc, argv, app, input);
   CLI11_PARSE(app, argc, argv);
 
   if (!validate_config(input)) {
     return 1;
+  }
+  //
+  if (input.to_file) {
+    input.output_file =
+        fmt::format("popsize_{}_dosing_{}_hl_{}_kmax_{}_ec50_{}_n_{}.csv", input.population_size,
+                    fmt::join(input.dosing_days, "_"), fmt::join(input.half_life, "_"), fmt::join(input.k_max, "_"),
+                    fmt::join(input.EC50, "_"), fmt::join(input.slope, "_"));
   }
 
   // Turn off logger
@@ -98,56 +107,48 @@ int main(int argc, char **argv) {
   auto *genotype = Model::CONFIG->genotype_db()->at(0);
 
   for (auto person : Model::POPULATION->all_persons()->vPerson()) {
-
-    auto density =
-        Model::CONFIG->parasite_density_level().log_parasite_density_from_liver;
+    auto density = Model::CONFIG->parasite_density_level().log_parasite_density_from_liver;
     auto *blood_parasite = person->add_new_parasite_to_blood(genotype);
 
     person->immune_system()->set_increase(true);
     person->set_host_state(Person::EXPOSED);
 
-    blood_parasite->set_gametocyte_level(
-        Model::CONFIG->gametocyte_level_full());
+    blood_parasite->set_gametocyte_level(Model::CONFIG->gametocyte_level_full());
     blood_parasite->set_last_update_log10_parasite_density(density);
 
-    ProgressToClinicalEvent::schedule_event(Model::SCHEDULER, person,
-                                            blood_parasite, 1);
+    ProgressToClinicalEvent::schedule_event(Model::SCHEDULER, person, blood_parasite, 0);
   }
 
   // run model
   p_model->run();
-  const auto result =
-      1 - Model::DATA_COLLECTOR->blood_slide_prevalence_by_location()[0];
 
-  fmt::print("Efficacy: {:f}\n", result);
+  // const auto result = 1 - Model::DATA_COLLECTOR->blood_slide_prevalence_by_location()[0];
+  // fmt::print("Efficacy: {:f}\n", result);
 
   return 0;
 }
 
 void create_cli_options(int argc, char **argv, CLI::App &app, AppInput &input) {
-  app.add_option("-i,--input", input.input_file,
-                 "Input filename. Default: `input.yml`");
+  app.add_option("-i,--input", input.input_file, "Input filename. Default: `input.yml`");
 
-  app.add_option(
-      "-p,--popsize", input.population_size,
-      "Number of individuals used in the simulation (default: 10,000)");
+  app.add_flag("-f,--file", input.to_file, "Output to file. Default: false, output to console");
 
-  app.add_option(
-      "-d,--dosing", input.dosing_days,
-      "Drung dosing days.\nEx: `-d 2` or `--dosing 2` for monotherapy,\n  `-d "
-      "5 2` or `--dosing 5 2` for a combination of two drugs.");
+  app.add_option("-p,--popsize", input.population_size,
+                 "Number of individuals used in the simulation (default: 10,000)");
 
-  app.add_option(
-      "-t,--halflife", input.half_life,
-      "Drug elimintaion half-life in date unit.\nEx: `-t 2` or "
-      "`--halflife 2` for monotherapy,\n  `-t 4.5 28.0` or `--halflife 4.5 "
-      "28.0` for a combination of two drugs.");
+  app.add_option("-d,--dosing", input.dosing_days,
+                 "Drung dosing days.\nEx: `-d 2` or `--dosing 2` for monotherapy,\n  `-d "
+                 "5 2` or `--dosing 5 2` for a combination of two drugs.");
 
-  app.add_option(
-      "-k,--kmax", input.k_max,
-      "The maximum fraction of parasites that can be killed per day.\nEx: `-k "
-      "0.999` or `--kmax 0.999` for monotherapy,\n  `-k 0.999 0.99` or "
-      "`--kmax= 0.999 0.99` for drug combination.");
+  app.add_option("-t,--halflife", input.half_life,
+                 "Drug elimintaion half-life in date unit.\nEx: `-t 2` or "
+                 "`--halflife 2` for monotherapy,\n  `-t 4.5 28.0` or `--halflife 4.5 "
+                 "28.0` for a combination of two drugs.");
+
+  app.add_option("-k,--kmax", input.k_max,
+                 "The maximum fraction of parasites that can be killed per day.\nEx: `-k "
+                 "0.999` or `--kmax 0.999` for monotherapy,\n  `-k 0.999 0.99` or "
+                 "`--kmax= 0.999 0.99` for drug combination.");
 
   app.add_option("-e,--EC50", input.EC50,
                  "The drug concentration at which the parasite killng reach "
@@ -164,23 +165,20 @@ bool validate_config(AppInput &input) {
   input.number_of_drugs_in_combination = input.half_life.size();
 
   if (input.number_of_drugs_in_combination > 5) {
-    std::cerr
-        << "Error: Number of drugs in combination should not greater than 5"
-        << std::endl;
+    std::cerr << "Error: Number of drugs in combination should not greater than 5" << std::endl;
     return false;
   }
 
-  if (input.k_max.size() != input.number_of_drugs_in_combination ||
-      input.EC50.size() != input.number_of_drugs_in_combination ||
-      input.slope.size() != input.number_of_drugs_in_combination ||
-      input.dosing_days.size() != input.number_of_drugs_in_combination) {
+  if (input.k_max.size() != input.number_of_drugs_in_combination
+      || input.EC50.size() != input.number_of_drugs_in_combination
+      || input.slope.size() != input.number_of_drugs_in_combination
+      || input.dosing_days.size() != input.number_of_drugs_in_combination) {
     std::cerr << "Error: Wrong number of drugs in combination" << std::endl;
     return false;
   }
 
   if (input.population_size < 0) {
-    std::cerr << "Error: Population size cannot be smaller than 0."
-              << std::endl;
+    std::cerr << "Error: Population size cannot be smaller than 0." << std::endl;
     return false;
   }
 

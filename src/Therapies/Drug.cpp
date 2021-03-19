@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   Drug.cpp
  * Author: Merlin
- * 
+ *
  * Created on July 31, 2013, 1:47 PM
  */
 
@@ -94,7 +94,7 @@ void Drug::set_number_of_dosing_days(int dosingDays) {
   end_time_ = last_update_time_ + drug_type_->get_total_duration_of_drug_activity(dosingDays);
 }
 
-double Drug::get_parasite_killing_rate(int &genotype_id) const {
+double Drug::get_parasite_killing_rate(const int &genotype_id) const {
   return drug_type_->get_parasite_killing_rate_by_concentration(last_update_value_,
                                                                 Model::CONFIG
                                                                     ->EC50_power_n_table()[genotype_id][drug_type_
