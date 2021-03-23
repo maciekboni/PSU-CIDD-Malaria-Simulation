@@ -43,8 +43,9 @@ void PkPdReporter::begin_time_step() {
     }
   }
 
+  auto start_drug_id = appInput->is_art ? 0 : 1;
   // drug concentrate profile
-  for (int drug_id = 0; drug_id < appInput->number_of_drugs_in_combination; drug_id++) {
+  for (int drug_id = start_drug_id; drug_id < appInput->number_of_drugs_in_combination + start_drug_id; drug_id++) {
     for (int i = 0; i < Model::POPULATION->all_persons()->vPerson().size(); i++) {
       auto p_person = Model::POPULATION->all_persons()->vPerson()[i];
       bool found { false };
@@ -62,7 +63,7 @@ void PkPdReporter::begin_time_step() {
   }
 
   // drug killing profile
-  for (int drug_id = 0; drug_id < appInput->number_of_drugs_in_combination; drug_id++) {
+  for (int drug_id = start_drug_id; drug_id < appInput->number_of_drugs_in_combination + start_drug_id; drug_id++) {
     for (int i = 0; i < Model::POPULATION->all_persons()->vPerson().size(); i++) {
       auto p_person = Model::POPULATION->all_persons()->vPerson()[i];
 
@@ -82,11 +83,10 @@ void PkPdReporter::begin_time_step() {
 
   // ss << Model::POPULATION->all_persons()->vPerson().size() << sep;
 
-  // TODO: output to file
-  //
   if (outputFStream.is_open()) {
     outputFStream << ss.str() << std::endl;
-  } else {
+  }
+  if (appInput->to_console) {
     std::cout << ss.str() << std::endl;
   }
   ss.str("");

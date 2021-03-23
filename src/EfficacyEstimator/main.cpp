@@ -2,6 +2,7 @@
 // Created by nguyentd on 3/11/2021.
 //
 
+#include <bits/types/stack_t.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
 
@@ -44,10 +45,11 @@ int main(int argc, char **argv) {
   }
   //
   if (input.to_file) {
+    std::string is_art = input.is_art ? "art" : "";
     input.output_file =
-        fmt::format("popsize_{}_dosing_{}_hl_{}_kmax_{}_ec50_{}_n_{}.csv", input.population_size,
+        fmt::format("popsize_{}_dosing_{}_hl_{}_kmax_{}_ec50_{}_n_{}_{}.csv", input.population_size,
                     fmt::join(input.dosing_days, "_"), fmt::join(input.half_life, "_"), fmt::join(input.k_max, "_"),
-                    fmt::join(input.EC50, "_"), fmt::join(input.slope, "_"));
+                    fmt::join(input.EC50, "_"), fmt::join(input.slope, "_"), is_art);
   }
 
   // Turn off logger
@@ -71,9 +73,9 @@ int main(int argc, char **argv) {
   }
 
   // ==== override drug type info ========
-
+  auto start_drug_id = input.is_art ? 0 : 1;
   for (int i = 0; i < input.number_of_drugs_in_combination; i++) {
-    auto *dt = Model::CONFIG->drug_db()->at(i);
+    auto *dt = Model::CONFIG->drug_db()->at(i + start_drug_id);
     dt->set_name(fmt::format("D{}", i));
     dt->set_drug_half_life(input.half_life[i]);
     dt->set_maximum_parasite_killing_rate(input.k_max[i]);
@@ -81,7 +83,7 @@ int main(int argc, char **argv) {
     // TODO: add app arguments later
     dt->set_p_mutation(0.0);
     dt->set_k(4);
-    Model::CONFIG->EC50_power_n_table()[0][0] = pow(input.EC50[i], dt->n());
+    Model::CONFIG->EC50_power_n_table()[0][i + start_drug_id] = pow(input.EC50[i], dt->n());
   }
 
   // ======= override therapy 0 ==========
@@ -90,7 +92,7 @@ int main(int argc, char **argv) {
   scTherapy->dosing_day.clear();
 
   for (int i = 0; i < input.number_of_drugs_in_combination; i++) {
-    scTherapy->drug_ids.push_back(i);
+    scTherapy->drug_ids.push_back(i + start_drug_id);
     scTherapy->dosing_day.push_back(input.dosing_days[i]);
   }
 
@@ -122,8 +124,8 @@ int main(int argc, char **argv) {
   // run model
   p_model->run();
 
-  // const auto result = 1 - Model::DATA_COLLECTOR->blood_slide_prevalence_by_location()[0];
-  // fmt::print("Efficacy: {:f}\n", result);
+  const auto result = 1 - Model::DATA_COLLECTOR->blood_slide_prevalence_by_location()[0];
+  fmt::print("Efficacy: {:f}\n", result);
 
   return 0;
 }
@@ -131,7 +133,11 @@ int main(int argc, char **argv) {
 void create_cli_options(int argc, char **argv, CLI::App &app, AppInput &input) {
   app.add_option("-i,--input", input.input_file, "Input filename. Default: `input.yml`");
 
-  app.add_flag("-f,--file", input.to_file, "Output to file. Default: false, output to console");
+  app.add_flag("-f,--file", input.to_file, "Output to file. Default: false.");
+
+  app.add_flag("-c,--console", input.to_console, "Output to file. Default: false.");
+
+  app.add_flag("-a,--art", input.is_art, "Drug is artemisinin / ACT. Default: false");
 
   app.add_option("-p,--popsize", input.population_size,
                  "Number of individuals used in the simulation (default: 10,000)");
