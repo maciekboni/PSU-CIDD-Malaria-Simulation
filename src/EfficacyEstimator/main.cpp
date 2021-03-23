@@ -125,7 +125,9 @@ int main(int argc, char **argv) {
   p_model->run();
 
   const auto result = 1 - Model::DATA_COLLECTOR->blood_slide_prevalence_by_location()[0];
-  fmt::print("Efficacy: {:f}\n", result);
+  fmt::print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{:f}\n", input.population_size, fmt::join(input.dosing_days, "\t"),
+             fmt::join(input.half_life, "\t"), fmt::join(input.k_max, "\t"), fmt::join(input.EC50, "\t"),
+             fmt::join(input.slope, "\t"), input.is_art ? 1 : 0, result);
 
   return 0;
 }
