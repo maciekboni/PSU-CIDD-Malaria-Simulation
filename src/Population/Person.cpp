@@ -367,10 +367,6 @@ void Person::receive_therapy(Therapy* therapy, ClonalParasitePopulation* clinica
 
       add_drug_to_blood(Model::CONFIG->drug_db()->at(drug_id), dosing_days);
     }
-
-    for (auto drug_id : sc_therapy->drug_ids) {
-
-    }
   } else {
     //else if therapy is MACTherapy
     auto* mac_therapy = dynamic_cast<MACTherapy*>(therapy);
@@ -402,7 +398,7 @@ void Person::add_drug_to_blood(DrugType* dt, const int &dosing_days) {
   //    std::cout << ageClass << "====" << sd << std::endl;
   const auto drug_level = Model::RANDOM->random_normal_truncated(1.0, sd);
 
-  drug->set_last_update_value(drug_level);
+  drug->set_last_update_value(0.0);
   drug->set_starting_value(drug_level);
 
   drug->set_start_time(Model::SCHEDULER->current_time());

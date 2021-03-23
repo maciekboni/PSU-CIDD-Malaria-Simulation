@@ -46,7 +46,7 @@ double Drug::get_current_drug_concentration(int currentTime) {
       //            return starting_value_;
     }
 
-    starting_value_ += Model::RANDOM->random_uniform_double(0, 0.1);
+    starting_value_ += days >=1 ? Model::RANDOM->random_uniform_double(0, 0.1) : 0;
     //        return starting_value_ + Model::RANDOM->random_uniform_double(-0.1, 0.1);
     return starting_value_;
   } else {
