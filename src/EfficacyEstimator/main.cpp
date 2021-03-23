@@ -2,7 +2,6 @@
 // Created by nguyentd on 3/11/2021.
 //
 
-#include <bits/types/stack_t.h>
 #include <fmt/core.h>
 #include <fmt/format.h>
 
