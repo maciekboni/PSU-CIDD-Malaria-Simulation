@@ -14,6 +14,8 @@ if (MSVC)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DNOMINMAX -D__DISABLE_CRIT_ERR=1")
 endif ()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DELPP_NO_DEFAULT_LOG_FILE")
+
 IF (APPLE)
   # Fix linking on 10.14+. See https://stackoverflow.com/questions/54068035
   LINK_DIRECTORIES(/usr/local/lib)
