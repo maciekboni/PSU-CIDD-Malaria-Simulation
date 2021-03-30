@@ -58,7 +58,7 @@ location_db:
 # probability that a symptomatic and infected individual seeks and receives antimalarial treatment
 #if the number of values less than number of locations, the first value will be applied for all locations
 # this is the initial value, the modification values can be change by setting in events node
-  p_treatment_for_less_than_5_by_location: [0.700000]
+  p_treatment_for_less_than_5_by_location: [0.70000]
   p_treatment_for_more_than_5_by_location: [0.70000]
 
   #transmission intensity
@@ -116,6 +116,7 @@ parasite_density_level:
   log_parasite_density_clinical_from:     3.301    # corresponds to 2000 parasites per microliter of blood (total 10^10)
   log_parasite_density_clinical_to:     5.301    # corresponds to 200,000 parasites per microliter of blood (total 10^12)
   log_parasite_density_detectable:   1.000    # corresponds to 10 parasites per microliter of blood
+  log_parasite_density_detectable_pfpr: 1.000 # corresponds to 10 parasites per microliter of blood
   log_parasite_density_pyrogenic:    3.398    # corresponds to 2500 parasites per microliter of blood
 
   
@@ -150,7 +151,7 @@ immune_system_information:
   age_mature_immunity: 10
   
   # parameter kappa in supplement of 2015 LGH paper
-  factor_effect_age_mature_immunity : 1
+  factor_effect_age_mature_immunity: 1
 
 
 # this functionality works, but it was not used in any analyses for the 2015 LGH paper
@@ -289,6 +290,7 @@ genotype_info:
           can_mutate_to: [0]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
+
 
 #
 # initialize parasite population
@@ -530,8 +532,7 @@ drug_db:
       16...: 1.19
       #TYFYF
       17...: 1.35
-
-  9:
+  7:
     name: "KAF156"
     half_life: 1.6
     maximum_parasite_killing_rate: 0.999
@@ -598,22 +599,13 @@ therapy_db:
   10:
     drug_id: [0,4]
     dosing_days: [3]
-  #TACT AL-AQ
-  11:
-    drug_id: [0,1,2]
-    dosing_days: [3]
-
-  #TACT DHA-PPQ-MQ / ASMQ-PPQ
-  12:
-    drug_id: [0,3,4]
-    dosing_days: [3]
   #Mono KAF156
-  13:
-    drug_id: [9]
+  11:
+    drug_id: [7]
     dosing_days: [3]
   #KAF156+Lumefantrine
-  14:
-    drug_id: [9,1]
+  12:
+    drug_id: [7,1]
     dosing_days: [3]
   
 
@@ -647,19 +639,18 @@ strategy_db:
     start_distribution: [0.05,0.95]
     peak_distribution: [0.8,0.2]
     peak_after: 10958
-    switch_to: 7
-    tf_threshold: 0.15
+    switch_to: 4
+    tf_threshold: 0.1
     replace_fraction: 0.1
     replace_duration: 0
 
-initial_strategy_id: 3
+initial_strategy_id: 5
 
     
 
 # this number use to detemine whether a therapy is "useful" or not and it is used to calculate 
 # the useful therapeutic duration of a therapy
 tf_rate: 0.1
-
 
 # days from end of liver-stage infection to appearance of symptoms
 days_to_clinical_under_five: 4
@@ -779,12 +770,29 @@ events:
   - name: turn_on_mutation
     info:
       - day: 2005/1/1
-
+        mutation_probability: 0.001983
+  - name: introduce_parasites_periodically
+    info:
+    - location: 0
+      parasite_info:
+        - duration: 400
+          genotype_id: 4
+          number_of_cases: 1
+          start_day: 2020/1/1
+        - duration: 400
+          genotype_id: 12
+          number_of_cases: 1
+          start_day: 2020/1/1
+        - duration: 400
+          genotype_id: 20
+          number_of_cases: 1
+          start_day: 2020/1/1
+        - duration: 400
+          genotype_id: 28
+          number_of_cases: 1
+          start_day: 2020/1/1
  
-mda_therapy_id : 8
-
+mda_therapy_id: 8
 age_bracket_prob_individual_present_at_mda: [10, 40]
-
 mean_prob_individual_present_at_mda: [0.85, 0.75, 0.85]
-
 sd_prob_individual_present_at_mda: [0.3, 0.3, 0.3]
