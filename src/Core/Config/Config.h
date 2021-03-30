@@ -127,12 +127,15 @@ class Config {
 
   CUSTOM_CONFIG_ITEM(relative_bitting_info, RelativeBittingInformation())
 
+//  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(therapy_db, TherapyPtrVector())
 
+//  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(strategy_db, StrategyPtrVector())
 
   CUSTOM_CONFIG_ITEM(initial_parasite_info, std::vector<InitialParasiteInfo>())
 
+//  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(preconfig_population_events, std::vector<Event *>())
 
   CUSTOM_CONFIG_ITEM(bitting_level_generator, MultinomialDistributionGenerator())

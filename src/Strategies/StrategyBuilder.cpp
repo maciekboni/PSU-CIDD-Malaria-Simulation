@@ -228,11 +228,22 @@ StrategyBuilder::buildNovelDrugSwitchingStrategy(const YAML::Node &ns, const int
   result->id = strategy_id;
   result->name = ns["name"].as<std::string>();
 
-  add_distributions(ns["distribution"], result->distribution);
-  add_therapies(ns, result, config);
+  add_distributions(ns["start_distribution"], result->start_distribution);
+  add_distributions(ns["start_distribution"], result->distribution);
+  add_distributions(ns["peak_distribution"], result->peak_distribution);
+
+  result->peak_after = ns["peak_after"].as<int>();
+
+  for (int i = 0; i < ns["strategy_ids"].size(); i++) {
+    result->add_strategy(
+        config->strategy_db()[ns["strategy_ids"][i].as<int>()]);
+  }
 
   result->switch_to = ns["switch_to"].as<int>();
   result->tf_threshold = ns["tf_threshold"].as<double>();
+
+  result->replace_fraction =  ns["replace_fraction"].as<double>();
+  result->replace_duration =  ns["replace_duration"].as<double>();
 
   return result;
 }
