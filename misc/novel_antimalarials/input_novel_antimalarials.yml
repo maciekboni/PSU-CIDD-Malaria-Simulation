@@ -43,7 +43,7 @@ age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 20, 60, 100]
 # the last four rows of the matrix below are ignored when the number of locations is 1
 initial_age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 25, 35, 45, 55, 65, 100]
 
-artificial_rescaling_of_population_size: 0.01
+artificial_rescaling_of_population_size: 1.0
 
 #spatial information
 location_db:
@@ -631,14 +631,14 @@ strategy_db:
   4:
     name: KAF-LUM-SFTStrategy
     type: SFT
-    therapy_id: 14
+    therapy_id: 12
   5:
     name: NovelDrugSwitchingStrategy
     type: NovelDrugSwitching
     strategy_ids: [0,3]
-    start_distribution: [0.05,0.95]
-    peak_distribution: [0.8,0.2]
-    peak_after: 10958
+    start_distribution: [0.7,0.3]
+    peak_distribution: [0.7,0.3]
+    peak_after: 0
     switch_to: 4
     tf_threshold: 0.1
     replace_fraction: 0.1
@@ -778,19 +778,19 @@ events:
         - duration: 400
           genotype_id: 4
           number_of_cases: 1
-          start_day: 2020/1/1
+          start_day: 2005/1/1
         - duration: 400
           genotype_id: 12
           number_of_cases: 1
-          start_day: 2020/1/1
+          start_day: 2005/1/1
         - duration: 400
           genotype_id: 20
           number_of_cases: 1
-          start_day: 2020/1/1
+          start_day: 2005/1/1
         - duration: 400
           genotype_id: 28
           number_of_cases: 1
-          start_day: 2020/1/1
+          start_day: 2005/1/1
  
 mda_therapy_id: 8
 age_bracket_prob_individual_present_at_mda: [10, 40]

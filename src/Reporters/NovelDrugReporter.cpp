@@ -30,9 +30,7 @@ void NovelDrugReporter::before_run() {
   for (auto i = 0; i < Model::CONFIG->genotype_db()->size(); i++) {
     ss << "GENOTYPE_ID_" << i << sep;
   }
-  ss << group_sep;
-  ss << (dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->is_switched ? 1 : 0) << sep;
-  ss << group_sep;
+  ss << "IS_SWITCHED" << sep;
   for (auto i = 0; i < Model::DATA_COLLECTOR->current_tf_by_therapy().size(); i++) {
     ss << "TF_THERAPY_" << i << sep;
   }
@@ -62,19 +60,15 @@ void NovelDrugReporter::monthly_report() {
       Model::CONFIG->number_of_parasite_types(),
       Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
-  ss << group_sep;
-
-  for (auto tf_by_therapy : Model::DATA_COLLECTOR->current_tf_by_therapy()) {
+  ss << (dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->is_switched ? 1 : 0) << sep;
+  for (const auto& tf_by_therapy : Model::DATA_COLLECTOR->current_tf_by_therapy()) {
     ss << tf_by_therapy << sep;
   }
 
   ss << Model::DATA_COLLECTOR->current_TF_by_location()[0] << sep;
 
-  if (Model::TREATMENT_STRATEGY->get_type() == IStrategy::NestedMFT) {
-    ss << dynamic_cast<NestedMFTStrategy*>(Model::TREATMENT_STRATEGY)->distribution[0] << sep;
-    ss << dynamic_cast<NestedMFTStrategy*>(Model::TREATMENT_STRATEGY)->distribution[1];
-  }
-
+  ss << dynamic_cast<NestedMFTStrategy*>(Model::TREATMENT_STRATEGY)->distribution[0] << sep;
+  ss << dynamic_cast<NestedMFTStrategy*>(Model::TREATMENT_STRATEGY)->distribution[1];
 
   CLOG(INFO, "monthly_reporter") << ss.str();
   ss.str("");
@@ -93,8 +87,11 @@ void NovelDrugReporter::after_run() {
     ss << Model::DATA_COLLECTOR->cumulative_number_treatments_by_location()[loc] << sep;
     ss << Model::DATA_COLLECTOR->cumulative_TF_by_location()[loc] << sep;
     ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[loc] << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->switch_to) << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->tf_threshold) << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->replace_fraction) << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugSwitchingStrategy*>(Model::TREATMENT_STRATEGY)->replace_duration) << sep;
     ss << "FLT" << sep;
-    ss << "TACT" << sep;
     ss << "importation" << sep;
   }
 

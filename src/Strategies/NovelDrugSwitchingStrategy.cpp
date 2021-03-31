@@ -25,15 +25,14 @@ std::string NovelDrugSwitchingStrategy::to_string() const {
 void NovelDrugSwitchingStrategy::monthly_update() {
   NestedMFTStrategy::monthly_update();
 
-  auto public_sector_strategy = strategy_list[0];
-
-  int current_public_therapy_id =
-      public_sector_strategy->type == SFT
-      ? dynamic_cast<SFTStrategy*>(public_sector_strategy)->therapy_list()[0]->id()
-      : dynamic_cast<MFTStrategy*>(public_sector_strategy)->therapy_list[0]->id();
-
   if (!is_switched) {
-    if (Model::DATA_COLLECTOR->current_tf_by_therapy()[current_public_therapy_id] >= tf_threshold) {
+    auto public_sector_strategy = strategy_list[0];
+
+    int current_public_therapy_id =
+        public_sector_strategy->type == SFT
+        ? dynamic_cast<SFTStrategy*>(public_sector_strategy)->therapy_list()[0]->id()
+        : dynamic_cast<MFTStrategy*>(public_sector_strategy)->therapy_list[0]->id();
+    if (Model::SCHEDULER->current_time() > 2000 && Model::DATA_COLLECTOR->current_tf_by_therapy()[current_public_therapy_id] >= tf_threshold) {
 
       // switch to novel drugs
 
@@ -56,6 +55,7 @@ void NovelDrugSwitchingStrategy::monthly_update() {
       new_public_stategy->starting_time = Model::SCHEDULER->current_time();
 
       strategy_list[0] = new_public_stategy;
+      new_public_stategy->id = Model::CONFIG->strategy_db().size();
 
       Model::CONFIG->strategy_db().push_back(new_public_stategy);
 
@@ -76,7 +76,7 @@ void NovelDrugSwitchingStrategy::monthly_update() {
 
       LOG(INFO) << date::year_month_day{Model::SCHEDULER->calendar_date} << ": Switch to novel drug with id "
                 << switch_to;
-
+      LOG(INFO) << "New total time: " << new_total_time;
       is_switched = true;
     } else {
 

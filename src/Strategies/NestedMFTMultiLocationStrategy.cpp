@@ -12,19 +12,19 @@
 #include "Therapies/Therapy.h"
 
 
-
 NestedMFTMultiLocationStrategy::NestedMFTMultiLocationStrategy() : IStrategy(
-    "NestedMFTMultiLocationStrategy", NestedMFTMultiLocation) {}
+    "NestedMFTMultiLocationStrategy", NestedMFTMultiLocation
+) { }
 
 NestedMFTMultiLocationStrategy::~NestedMFTMultiLocationStrategy() = default;
 
-void NestedMFTMultiLocationStrategy::add_strategy(IStrategy *strategy) {
+void NestedMFTMultiLocationStrategy::add_strategy(IStrategy* strategy) {
   strategy_list.push_back(strategy);
 }
 
-void NestedMFTMultiLocationStrategy::add_therapy(Therapy *therapy) {}
+void NestedMFTMultiLocationStrategy::add_therapy(Therapy* therapy) { }
 
-Therapy *NestedMFTMultiLocationStrategy::get_therapy(Person *person) {
+Therapy* NestedMFTMultiLocationStrategy::get_therapy(Person* person) {
   const auto loc = person->location();
   const auto p = Model::RANDOM->random_flat(0.0, 1.0);
 
@@ -56,18 +56,18 @@ std::string NestedMFTMultiLocationStrategy::to_string() const {
 
 void NestedMFTMultiLocationStrategy::update_end_of_time_step() {
   // update each strategy in the nest
-  for (auto &strategy : strategy_list) {
+  for (auto& strategy : strategy_list) {
     strategy->update_end_of_time_step();
   }
 }
 
-void NestedMFTMultiLocationStrategy::adjust_distribution(const int &time) {
-  if (peak_after==-1) {
+void NestedMFTMultiLocationStrategy::adjust_distribution(const int& time) {
+  if (peak_after == -1) {
     // inflation every year
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-      const auto d_act = distribution[loc][0]*(1 + Model::CONFIG->inflation_factor()/12);
+      const auto d_act = distribution[loc][0] * (1 + Model::CONFIG->inflation_factor() / 12);
       distribution[loc][0] = d_act;
-      const auto other_d = (1 - d_act)/(distribution[loc].size() - 1);
+      const auto other_d = (1 - d_act) / (distribution[loc].size() - 1);
       for (auto i = 1; i < distribution[loc].size(); i++) {
         distribution[loc][i] = other_d;
       }
@@ -78,10 +78,11 @@ void NestedMFTMultiLocationStrategy::adjust_distribution(const int &time) {
       if (distribution[0][0] < 1) {
         for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
           for (auto i = 0; i < distribution[loc].size(); i++) {
-            const auto dist =
-                (peak_distribution[loc][i] - start_distribution[loc][i])*(time - starting_time)/
-                    peak_after + start_distribution[
-                    loc][i];
+
+            auto dist = peak_after == 0 ? peak_distribution[loc][i] :
+                        (peak_distribution[loc][i] - start_distribution[loc][i]) * (time - starting_time) /
+                        peak_after + start_distribution[loc][i];
+            dist = dist > peak_distribution[loc][i] ? peak_distribution[loc][i] : dist;
             distribution[loc][i] = dist;
           }
         }
@@ -90,10 +91,10 @@ void NestedMFTMultiLocationStrategy::adjust_distribution(const int &time) {
   } //    std::cout << to_string() << std::endl;
 }
 
-void NestedMFTMultiLocationStrategy::adjust_started_time_point(const int &current_time) {
+void NestedMFTMultiLocationStrategy::adjust_started_time_point(const int& current_time) {
   starting_time = current_time;
   // update each strategy in the nest
-  for (auto *strategy : strategy_list) {
+  for (auto* strategy : strategy_list) {
     strategy->adjust_started_time_point(current_time);
   }
 }
@@ -101,7 +102,7 @@ void NestedMFTMultiLocationStrategy::adjust_started_time_point(const int &curren
 void NestedMFTMultiLocationStrategy::monthly_update() {
   adjust_distribution(Model::SCHEDULER->current_time());
 
-  for (auto *strategy : strategy_list) {
+  for (auto* strategy : strategy_list) {
     strategy->monthly_update();
   }
 
