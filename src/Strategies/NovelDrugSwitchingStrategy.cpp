@@ -32,7 +32,7 @@ void NovelDrugSwitchingStrategy::monthly_update() {
         public_sector_strategy->type == SFT
         ? dynamic_cast<SFTStrategy*>(public_sector_strategy)->therapy_list()[0]->id()
         : dynamic_cast<MFTStrategy*>(public_sector_strategy)->therapy_list[0]->id();
-    if (Model::SCHEDULER->current_time() > 2000 && Model::DATA_COLLECTOR->current_tf_by_therapy()[current_public_therapy_id] >= tf_threshold) {
+    if (Model::SCHEDULER->current_time() > 3000 && Model::DATA_COLLECTOR->current_tf_by_therapy()[current_public_therapy_id] >= tf_threshold) {
 
       // switch to novel drugs
 

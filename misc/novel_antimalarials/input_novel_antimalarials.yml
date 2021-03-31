@@ -535,15 +535,15 @@ drug_db:
   7:
     name: "KAF156"
     half_life: 1.6
-    maximum_parasite_killing_rate: 0.999
-    n: 25
+    maximum_parasite_killing_rate: 0.99
+    n: 15
     age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
     mutation_probability: 0.005
     affecting_loci: [2]
     selecting_alleles: [[1]]
     k: 4
     EC50:
-      ....0 : 0.75
+      ....0 : 0.55
       ....1 : 1.2
 
 lumefantrine_drug_id: 1
