@@ -770,7 +770,7 @@ events:
   - name: turn_on_mutation
     info:
       - day: 2005/1/1
-        mutation_probability: 0.001983
+        mutation_probability: 0.01983
   - name: introduce_parasites_periodically
     info:
     - location: 0
