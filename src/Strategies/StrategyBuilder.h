@@ -55,7 +55,7 @@ class StrategyBuilder {
   buildNestedMFTDifferentDistributionByLocationStrategy(const YAML::Node &ns, const int &strategy_id,
                                                         Config *config);
 
-  static IStrategy *buildNovelDrugSwitchingStrategy(const YAML::Node &ns, const int strategy_id, Config *config);
+  static IStrategy *buildNovelDrugIntroductionStrategy(const YAML::Node &ns, const int strategy_id, Config *config);
 };
 
 #endif /* STRATEGYBUILDER_H */

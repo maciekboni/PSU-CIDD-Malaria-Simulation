@@ -71,7 +71,7 @@ tf_switch ={
     0.2 : '0p20',
     }
 
-replace_fractions = {
+replacement_fractions = {
     0.0 : '0p0',
     0.1 : '0p1',
     0.2 : '0p2',
@@ -93,7 +93,7 @@ for tc, tc_details in tcs.items():
     for beta,pfpr in pfprs.items():
         for fl_id, fl_str in fl.items():
             for tf, tf_str in tf_switch.items():
-                for rf, rf_str in replace_fractions.items():
+                for rf, rf_str in replacement_fractions.items():
                     for ec50, ec50_str in KAF_EC50s.items():
                         print(beta, tc_str, fl_str, tf_str, rf_str)
                         new_data = copy.deepcopy(data)
@@ -104,7 +104,7 @@ for tc, tc_details in tcs.items():
                         
                         new_data['strategy_db'][5]['strategy_ids'][0] = fl_id
                         new_data['strategy_db'][5]['tf_threshold'] = tf
-                        new_data['strategy_db'][5]['replace_fraction'] = rf
+                        new_data['strategy_db'][5]['replacement_fraction'] = rf
                       
                         new_data['drug_db'][7]['EC50']['....1'] = ec50
                         

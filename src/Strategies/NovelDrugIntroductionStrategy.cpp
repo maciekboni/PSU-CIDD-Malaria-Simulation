@@ -1,4 +1,4 @@
-#include "NovelDrugSwitchingStrategy.h"
+#include "NovelDrugIntroductionStrategy.h"
 #include "Model.h"
 #include "Core/Random.h"
 #include "Therapies/Therapy.h"
@@ -9,20 +9,20 @@
 #include "SFTStrategy.h"
 #include "MFTStrategy.h"
 
-NovelDrugSwitchingStrategy::NovelDrugSwitchingStrategy() {
-  name = "NovelDrugSwitchingStrategy";
-  type = NovelDrugSwitching;
+NovelDrugIntroductionStrategy::NovelDrugIntroductionStrategy() {
+  name = "NovelDrugIntroductionStrategy";
+  type = NovelDrugIntroduction;
 }
 
 
-std::string NovelDrugSwitchingStrategy::to_string() const {
+std::string NovelDrugIntroductionStrategy::to_string() const {
   std::stringstream sstm;
   sstm << id << "-" << name << "-";
   sstm << NestedMFTStrategy::to_string();
   return sstm.str();
 }
 
-void NovelDrugSwitchingStrategy::monthly_update() {
+void NovelDrugIntroductionStrategy::monthly_update() {
   NestedMFTStrategy::monthly_update();
 
   if (!is_switched) {
@@ -36,22 +36,22 @@ void NovelDrugSwitchingStrategy::monthly_update() {
 
       // switch to novel drugs
 
-      auto novel_SFT_strategy = Model::CONFIG->strategy_db()[switch_to];
+      auto novel_SFT_strategy = Model::CONFIG->strategy_db()[newly_introduced_strategy_id];
 
       auto* new_public_stategy = new NestedMFTStrategy();
 
       new_public_stategy->strategy_list.push_back(public_sector_strategy);
       new_public_stategy->strategy_list.push_back(novel_SFT_strategy);
-      new_public_stategy->distribution.push_back(1 - replace_fraction);
-      new_public_stategy->distribution.push_back(replace_fraction);
+      new_public_stategy->distribution.push_back(1 - replacement_fraction);
+      new_public_stategy->distribution.push_back(replacement_fraction);
 
       new_public_stategy->start_distribution.push_back(1);
       new_public_stategy->start_distribution.push_back(0);
 
-      new_public_stategy->peak_distribution.push_back(1 - replace_fraction);
-      new_public_stategy->peak_distribution.push_back(replace_fraction);
+      new_public_stategy->peak_distribution.push_back(1 - replacement_fraction);
+      new_public_stategy->peak_distribution.push_back(replacement_fraction);
 
-      new_public_stategy->peak_after = replace_duration;
+      new_public_stategy->peak_after = replacement_duration;
       new_public_stategy->starting_time = Model::SCHEDULER->current_time();
 
       strategy_list[0] = new_public_stategy;
@@ -75,7 +75,7 @@ void NovelDrugSwitchingStrategy::monthly_update() {
       Model::CONFIG->total_time() = new_total_time;
 
       LOG(INFO) << date::year_month_day{Model::SCHEDULER->calendar_date} << ": Switch to novel drug with id "
-                << switch_to;
+                << newly_introduced_strategy_id;
       LOG(INFO) << "New total time: " << new_total_time;
       is_switched = true;
     } else {

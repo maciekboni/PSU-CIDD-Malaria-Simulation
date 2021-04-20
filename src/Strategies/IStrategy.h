@@ -36,7 +36,7 @@ class IStrategy {
     MFTMultiLocation = 5,
     NestedMFT = 6,
     NestedMFTMultiLocation = 7,
-    NovelDrugSwitching = 8
+    NovelDrugIntroduction = 8
   };
 
   static std::map<std::string, StrategyType> StrategyTypeMap;

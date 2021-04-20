@@ -22,7 +22,7 @@
 #include "MFTRebalancingStrategy.h"
 #include "MFTMultiLocationStrategy.h"
 #include "NestedMFTMultiLocationStrategy.h"
-#include "NovelDrugSwitchingStrategy.h"
+#include "NovelDrugIntroductionStrategy.h"
 
 StrategyBuilder::StrategyBuilder() = default;
 
@@ -49,8 +49,8 @@ IStrategy* StrategyBuilder::build(const YAML::Node &ns, const int &strategy_id, 
       return buildNestedMFTDifferentDistributionByLocationStrategy(ns,
                                                                    strategy_id,
                                                                    config);
-    case IStrategy::NovelDrugSwitching:
-      return buildNovelDrugSwitchingStrategy(ns, strategy_id, config);
+    case IStrategy::NovelDrugIntroduction:
+      return buildNovelDrugIntroductionStrategy(ns, strategy_id, config);
     default:
       return nullptr;
   }
@@ -223,8 +223,8 @@ IStrategy* StrategyBuilder::buildNestedMFTDifferentDistributionByLocationStrateg
 }
 
 IStrategy*
-StrategyBuilder::buildNovelDrugSwitchingStrategy(const YAML::Node &ns, const int strategy_id, Config* config) {
-  auto* result = new NovelDrugSwitchingStrategy();
+StrategyBuilder::buildNovelDrugIntroductionStrategy(const YAML::Node &ns, const int strategy_id, Config* config) {
+  auto* result = new NovelDrugIntroductionStrategy();
   result->id = strategy_id;
   result->name = ns["name"].as<std::string>();
 
@@ -239,11 +239,11 @@ StrategyBuilder::buildNovelDrugSwitchingStrategy(const YAML::Node &ns, const int
         config->strategy_db()[ns["strategy_ids"][i].as<int>()]);
   }
 
-  result->switch_to = ns["switch_to"].as<int>();
+  result->newly_introduced_strategy_id = ns["newly_introduced_strategy_id"].as<int>();
   result->tf_threshold = ns["tf_threshold"].as<double>();
 
-  result->replace_fraction =  ns["replace_fraction"].as<double>();
-  result->replace_duration =  ns["replace_duration"].as<double>();
+  result->replacement_fraction =  ns["replacement_fraction"].as<double>();
+  result->replacement_duration =  ns["replacement_duration"].as<double>();
 
   return result;
 }

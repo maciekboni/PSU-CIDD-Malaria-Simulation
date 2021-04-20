@@ -633,16 +633,16 @@ strategy_db:
     type: SFT
     therapy_id: 12
   5:
-    name: NovelDrugSwitchingStrategy
-    type: NovelDrugSwitching
+    name: NovelDrugIntroductionStrategy
+    type: NovelDrugIntroduction
     strategy_ids: [0,3]
     start_distribution: [0.7,0.3]
     peak_distribution: [0.7,0.3]
     peak_after: 0
-    switch_to: 4
+    newly_introduced_strategy_id: 4
     tf_threshold: 0.1
-    replace_fraction: 0.1
-    replace_duration: 0
+    replacement_fraction: 0.1
+    replacement_duration: 0
 
 initial_strategy_id: 5
 

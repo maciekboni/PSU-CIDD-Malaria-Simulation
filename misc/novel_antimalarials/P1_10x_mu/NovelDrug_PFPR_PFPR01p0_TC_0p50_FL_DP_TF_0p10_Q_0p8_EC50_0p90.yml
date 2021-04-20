@@ -360,16 +360,16 @@ strategy_db:
     type: MFT
   4: {name: KAF-LUM-SFTStrategy, therapy_id: 12, type: SFT}
   5:
-    name: NovelDrugSwitchingStrategy
+    name: NovelDrugIntroductionStrategy
     peak_after: 0
     peak_distribution: [0.7, 0.3]
-    replace_duration: 0
-    replace_fraction: 0.8
+    replacement_duration: 0
+    replacement_fraction: 0.8
     start_distribution: [0.7, 0.3]
     strategy_ids: [0, 3]
-    switch_to: 4
+    newly_introduced_strategy_id: 4
     tf_threshold: 0.1
-    type: NovelDrugSwitching
+    type: NovelDrugIntroduction
 tf_rate: 0.1
 tf_testing_day: 28
 tf_window_size: 60
