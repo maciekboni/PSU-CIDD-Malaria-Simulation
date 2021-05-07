@@ -396,7 +396,8 @@ void Person::add_drug_to_blood(DrugType* dt, const int &dosing_days) {
 
   const auto sd = dt->age_group_specific_drug_concentration_sd()[age_class_];
   //    std::cout << ageClass << "====" << sd << std::endl;
-  const auto drug_level = Model::RANDOM->random_normal_truncated(1.0, sd);
+  const auto mean_drug_absorption = dt->age_specific_drug_absorption()[age_class_];
+  const auto drug_level = Model::RANDOM->random_normal_truncated(mean_drug_absorption, sd);
 
   if (drugs_in_blood_->is_drug_in_blood(dt)){
     drug->set_last_update_value(drugs_in_blood_->get_drug(dt->id())->last_update_value());
