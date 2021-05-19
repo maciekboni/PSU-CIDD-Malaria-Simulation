@@ -14,4 +14,5 @@ struct AppInput {
   std::vector<double> k_max;
   std::vector<double> EC50;
   std::vector<double> slope;
+  std::vector<double> mean_drug_absorption;
 };
