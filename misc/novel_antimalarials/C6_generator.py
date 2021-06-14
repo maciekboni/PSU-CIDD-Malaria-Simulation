@@ -81,8 +81,8 @@ replacement_fractions = {
 
 KAF_EC50s = {
 #    0.75: '0p75',
-#    0.90: '0p90',
-    1.25: '1p25',
+    0.90: '0p90',
+#    1.25: '1p25',
     }
 
 mutation_factors = {
