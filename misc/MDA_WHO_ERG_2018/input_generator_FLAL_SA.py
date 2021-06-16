@@ -51,11 +51,12 @@ popsizes = {
     201368: '300K',
         }
 
-pfprs = {0.1849: 'PFPR15',        
-        0.077: 'PFPR5',
+pfprs = {
+#        0.1849: 'PFPR15',        
+#        0.077: 'PFPR5',
         0.06413: 'PFPR3',
-#        0.0585: 'PFPR2',
-#        0.0538: 'PFPR1'
+        0.0585: 'PFPR2',
+        0.0538: 'PFPR1'
         }
 
 itcs = {
@@ -67,11 +68,11 @@ itcs = {
         }
 
 importations = {
-        0: '0p0', 
-        0.001: '0p001' , 
+#        0: '0p0', 
+        0.001: '0p001' ,
         0.01: '0p01',
-#        0.1: '0p1',
-#        0.2: '0p2'
+        0.1: '0p1',
+        0.2: '0p2'
         }
 
 cr_factors= {
@@ -102,7 +103,7 @@ for mda_round in number_MDA_round:
     for popsize, popsize_str in popsizes.items():
         for beta,pfpr_str in pfprs.items():
             for importation, importation_str in importations.items():
-                for itc, itc_str in importations.items():
+                for itc, itc_str in itcs.items():
                     for cr_factor, cr_str in cr_factors.items():
                         new_data = copy.deepcopy(data)
                         #population size 
@@ -130,7 +131,7 @@ for mda_round in number_MDA_round:
                             for allele_index, allele in enumerate(locus['alleles']):
                                 new_data['genotype_info']['loci'][locus_index]['alleles'][allele_index]['daily_cost_of_resistance'] = cal_new_cr(data['genotype_info']['loci'][locus_index]['alleles'][allele_index]['daily_cost_of_resistance'], cr_factor)
                         
-                        output_filename = 'FLAL_SA1/ONELOC_%s_%dRMDA_%s_OPPUNIFORM_FLAL_imp_%s_itc_%s_crfactor_%s.yml'%(popsize_str, mda_round,pfpr_str,importation_str,itc_str, cr_str);
+                        output_filename = 'FLAL_SA1/%s/ONELOC_%s_%dRMDA_%s_OPPUNIFORM_FLAL_imp_%s_itc_%s_crfactor_%s.yml'%(popsize_str, popsize_str, mda_round,pfpr_str,importation_str,itc_str, cr_str);
                         output_stream = open(output_filename, 'w');
                         yaml.dump(new_data, output_stream); 
                         output_stream.close();
