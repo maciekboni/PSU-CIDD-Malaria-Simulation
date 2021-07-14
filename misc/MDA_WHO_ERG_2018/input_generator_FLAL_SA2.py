@@ -87,7 +87,7 @@ def cal_new_cr( old_cr, cr_factor):
 for mda_round in number_MDA_round:
     input_id=0;
     df = pd.read_csv("SA2_paramspace_%d.csv"%mda_round);
-    for index, row in df.iterrows():
+    for r_index, row in df.iterrows():
         new_data = copy.deepcopy(data)
         #population size 
         data['location_db']['population_size_by_location'] = [round(row.popsize.item())];
