@@ -17,7 +17,7 @@ def kFormatter(num):
     return str(num) if num <=999 else str(round(num/1000)) +'k';
 
 
-stream = open('input_FLAL.yml', 'r');
+stream = open('input_FLAL_v2.yml', 'r');
 data = yaml.load(stream);
 stream.close();
 
@@ -107,7 +107,7 @@ for mda_round in number_MDA_round:
                                         new_data['mda_therapy_id'] = mda_therapy_id
                                         new_data['events'][index]['info'][0]['strategy_id'] = mda_therapy[0]
                         
-                        output_filename = 'A1/ONELOC_40k_%dRMDA_%s_OPPUNIFORM_FLAL_%s_%s%s%s.yml'%(
+                        output_filename = 'A1_v2/ONELOC_40k_%dRMDA_%s_OPPUNIFORM_FLAL_%s_%s%s%s.yml'%(
                                 mda_round,pfpr_str,strategy, mda_therapy[1], itc,imp);
                         output_stream = open(output_filename, 'w');
                         yaml.dump(new_data, output_stream); 

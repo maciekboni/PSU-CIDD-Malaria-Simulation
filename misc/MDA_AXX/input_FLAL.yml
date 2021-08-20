@@ -842,8 +842,7 @@ events:
   - name: modify_nested_mft_strategy
     info:
       - day: 2022/6/1
-      # to 4 or  5 => ALAQ or ASMQ-PPQ
-        strategy_id: 7
+        strategy_id: 3
         
 mda_therapy_id : 9
 

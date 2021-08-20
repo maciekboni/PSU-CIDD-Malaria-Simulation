@@ -21,12 +21,12 @@ class ImportationPeriodicallyEvent : public Event {
 
  VIRTUAL_PROPERTY_REF(int, duration)
 
- VIRTUAL_PROPERTY_REF(unsigned int, genotype_id)
+ VIRTUAL_PROPERTY_REF(int, genotype_id)
 
  VIRTUAL_PROPERTY_REF(int, number_of_cases)
 
  public:
-  ImportationPeriodicallyEvent(const int &location = -1, const int &duration = -1, unsigned int genotype_id = -1,
+  ImportationPeriodicallyEvent(const int &location = -1, const int &duration = -1, int genotype_id = -1,
                                const int &number_of_cases = -1, const int &start_day = -1);
 
   //    ImportationEvent(const ImportationEvent& orig);
