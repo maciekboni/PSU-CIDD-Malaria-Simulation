@@ -61,18 +61,13 @@ void ReporterUtils::output_genotype_frequency1(
 
     for (auto& i : result1) {
       i /= sum1;
-    }
-
-    for (auto& i : result1) {
-      ss << i << sep;
+      ss << (sum1 == 0 ? 0 : i) << sep;
     }
   }
   ss << group_sep;
   for (auto& i : result1_all) {
     i /= sum1_all;
-  }
-  for (auto& i : result1_all) {
-    ss << i << sep;
+    ss << (sum1_all == 0 ? 0 : i) << sep;
   }
 }
 
@@ -112,19 +107,14 @@ void ReporterUtils::output_genotype_frequency2(
 
     for (auto& i : result2) {
       i /= sum2;
+      ss << (sum2 == 0 ? 0 : i) << sep;
     }
-    for (auto& i : result2) {
-      ss << i << sep;
-    }
-
   }
   // output for all locations
   ss << group_sep;
   for (auto& i : result2_all) {
     i /= sum2_all;
-  }
-  for (auto& i : result2_all) {
-    ss << i << sep;
+    ss << (sum2_all == 0 ? 0 : i) << sep;
   }
 }
 
@@ -178,7 +168,7 @@ void ReporterUtils::output_genotype_frequency3(
     // output per location
     for (auto& i : result3) {
       i /= sum1;
-      ss << i << sep;
+      ss << (sum1 == 0 ? 0 : i) << sep;
     }
   }
 
@@ -186,7 +176,7 @@ void ReporterUtils::output_genotype_frequency3(
   ss << group_sep;
   for (auto& i : result3_all) {
     i /= sum1_all;
-    ss << i << sep;
+    ss << (sum1_all == 0 ? 0 : i) << sep;
   }
 
   ss << group_sep;
@@ -267,9 +257,13 @@ void ReporterUtils::output_3_genotype_frequency(
     }
 
     for (auto j = 0; j < number_of_genotypes; ++j) {
-      ss << result1[j] << sep;
-      ss << result2[j] << sep;
-      ss << result3[j] << sep;
+      if (sum1 == 0) {
+        ss << 0 << sep << 0 << sep << 0 << sep;
+      } else {
+        ss << result1[j] << sep;
+        ss << result2[j] << sep;
+        ss << result3[j] << sep;
+      }
     }
 
     ss << group_sep;
@@ -278,13 +272,17 @@ void ReporterUtils::output_3_genotype_frequency(
   //this is for all locations
   ss << group_sep;
   for (auto j = 0; j < number_of_genotypes; ++j) {
-    result1_all[j] /= sum1_all;
-    result2_all[j] /= sum2_all;
-    result3_all[j] /= sum1_all;
+    if (sum1_all == 0) {
+      ss << 0 << sep << 0 << sep << 0 << sep;
+    } else {
+      result1_all[j] /= sum1_all;
+      result2_all[j] /= sum2_all;
+      result3_all[j] /= sum1_all;
 
-    ss << result1_all[j] << sep;
-    ss << result1_all[j] << sep;
-    ss << result1_all[j] << sep;
+      ss << result1_all[j] << sep;
+      ss << result1_all[j] << sep;
+      ss << result1_all[j] << sep;
+    }
   }
 }
 

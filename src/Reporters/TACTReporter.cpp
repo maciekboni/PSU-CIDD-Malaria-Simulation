@@ -153,7 +153,7 @@ void TACTReporter::output_genotype_frequency_3(
     // output per location
     for (auto& i : result3) {
       i /= sum1;
-      ss << i << sep;
+      ss << (sum1 == 0 ? 0 : i) << sep;
     }
   }
 }
