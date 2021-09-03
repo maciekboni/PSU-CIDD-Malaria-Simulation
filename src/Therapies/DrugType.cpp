@@ -11,6 +11,8 @@
 #include "Model.h"
 #include "Core/Config/Config.h"
 #include "Core/Random.h"
+#include "easylogging++.h"
+
 
 #ifndef LOG2_10
 #define LOG2_10 3.32192809489
@@ -85,7 +87,10 @@ double DrugType::infer_ec50(Genotype* genotype) {
     for (i = 0; i < genotype->gene_expression().size(); i++) {
       if (key[i] == '.')
         continue;
-      if ((key[i] - '0') == genotype->gene_expression()[i])
+
+      int value = key[i] >= 'A' ? key[i] - 'A' + 10 : key[i] - '0';
+
+      if (value == genotype->gene_expression()[i])
         continue;
       break;
     }
@@ -102,6 +107,8 @@ double DrugType::infer_ec50(Genotype* genotype) {
   //    }
 
   assert(false);
+  el::Logger* defaultLogger = el::Loggers::getLogger("default");
+  defaultLogger->fatal("EC50 not match for genotype: %s" , *genotype);
   //hopefully it will never reach here
   return 0;
 
