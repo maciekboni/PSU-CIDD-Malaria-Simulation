@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
   int max_genotype_id{0}, min_genotype_id{0};
   if (genotypes.empty()) {
     min_genotype_id = 0;
-    max_genotype_id = Model::CONFIG->number_of_parasite_types();
+    max_genotype_id = Model::CONFIG->number_of_parasite_types() - 1;
   } else if (genotypes.size() == 1) {
     min_genotype_id = genotypes[0];
     max_genotype_id = genotypes[0];
@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
   std::cout << std::endl;
 
 
-  for (auto genotype_id = min_genotype_id; genotype_id < max_genotype_id; genotype_id++) {
+  for (auto genotype_id = min_genotype_id; genotype_id <= max_genotype_id; genotype_id++) {
 
     std::stringstream ss;
     auto p_genotype = (*Model::CONFIG->genotype_db())[genotype_id];
@@ -145,7 +145,6 @@ int main(int argc, char** argv) {
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
 
       auto* therapy = dynamic_cast<SCTherapy*>(Model::CONFIG->therapy_db()[therapy_id]);
-
 
       EF50Key key = get_EC50_key(therapy, p_genotype);
       auto search = efficacies.find(key);
