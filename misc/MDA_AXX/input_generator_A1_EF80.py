@@ -17,9 +17,14 @@ def kFormatter(num):
     return str(num) if num <=999 else str(round(num/1000)) +'k';
 
 
-stream = open('input_FLAL_v2_EF80.yml', 'r');
+stream = open('input_FLAL_v2.yml', 'r');
 data = yaml.load(stream);
 stream.close();
+
+stream = open('input_FLAL_v2_EF80.yml', 'r');
+data_EF80 = yaml.load(stream);
+stream.close();
+
 
 data['starting_date'] = '2008/1/1';
 data['ending_date'] = '2042/1/1';
@@ -64,7 +69,6 @@ importations = {True: '_imp' ,
 #### Main (A) Drug AL
 #### B Drug: AL / (OZ+FQ / KAF-LUM)
 mda_therapy_ids = {
-        9: [3, 'DHAPPQ'],
         12: [4, 'KAFLUM'],
         15: [5, 'OZFQ'],
         }
@@ -107,7 +111,14 @@ for mda_round in number_MDA_round:
                                         new_data['mda_therapy_id'] = mda_therapy_id
                                         new_data['events'][index]['info'][0]['strategy_id'] = mda_therapy[0]
                         
-                        output_filename = 'A1_EF80/ONELOC_40k_%dRMDA_%s_OPPUNIFORM_FLAL_%s_%s%s%s.yml'%(
+                        if mda_therapy_id == 12:
+                            new_data['drug_db'][7]= data_EF80['drug_db'][7]
+                        
+                        if mda_therapy_id == 15:
+                            new_data['drug_db'][8]= data_EF80['drug_db'][8]
+                            new_data['drug_db'][9]= data_EF80['drug_db'][9]
+                        
+                        output_filename = 'A1_EF80_v2/ONELOC_40k_%dRMDA_%s_OPPUNIFORM_FLAL_%s_%s%s%s.yml'%(
                                 mda_round,pfpr_str,strategy, mda_therapy[1], itc,imp);
                         output_stream = open(output_filename, 'w');
                         yaml.dump(new_data, output_stream); 
