@@ -253,6 +253,7 @@ double Person::get_biting_level_value() {
 }
 
 double Person::relative_infectivity(const double &log10_parasite_density) {
+  // this sigma has already taken 'ln' and 'log10' into account
   const auto d_n = log10_parasite_density * Model::CONFIG->relative_infectivity().sigma +
                    Model::CONFIG->relative_infectivity().ro_star;
   const auto p = Model::RANDOM->cdf_standard_normal_distribution(d_n);
