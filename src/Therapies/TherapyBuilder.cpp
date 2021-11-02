@@ -34,8 +34,6 @@ Therapy* TherapyBuilder::build(const YAML::Node &ns, const int &t_id) {
       const auto dosing_days = ns["dosing_days"][i].as<int>();
       dynamic_cast<SCTherapy*>(t)->dosing_day.push_back(dosing_days);
     }
-
-
   } else {
     if (ns["therapy_ids"]) {
       t = new MACTherapy();
@@ -52,6 +50,10 @@ Therapy* TherapyBuilder::build(const YAML::Node &ns, const int &t_id) {
         dynamic_cast<MACTherapy*>(t)->add_schedule(starting_day);
       }
     }
+  }
+
+  if (ns["name"]){
+    t->set_name(ns["name"].as<std::string>());
   }
 
   return t;

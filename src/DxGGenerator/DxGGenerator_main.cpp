@@ -129,9 +129,9 @@ int main(int argc, char** argv) {
   }
 
 
-  std::cout << "ID\tGenotype";
+  std::cout << "ID,Genotype";
   for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
-    std::cout << "\t" << *Model::CONFIG->therapy_db()[therapy_id];
+    std::cout << "," << *Model::CONFIG->therapy_db()[therapy_id];
   }
   std::cout << std::endl;
 
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 
     std::stringstream ss;
     auto p_genotype = (*Model::CONFIG->genotype_db())[genotype_id];
-   ss << *p_genotype << "\t";
+    ss << p_genotype->genotype_id() << "," << p_genotype->get_gene_string() << ",";
 
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
 
@@ -150,10 +150,10 @@ int main(int argc, char** argv) {
       auto search = efficacies.find(key);
       if (search == efficacies.end()) {
         double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
-        ss << efficacy << "\t";
+        ss << efficacy << (therapy_id == max_therapy_id ? "" : ",") ;
         efficacies.insert(std::make_pair(key, efficacy));
       } else {
-        ss << search->second << "\t";
+        ss << search->second << (therapy_id == max_therapy_id ? "" : ",");
       }
 
 //      double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);

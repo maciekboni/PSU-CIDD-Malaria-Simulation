@@ -47,6 +47,8 @@ class Genotype {
 
   int select_mutation_allele(const int &mutation_locus);
 
+  std::string get_gene_string() const;
+
   friend std::ostream &operator<<(std::ostream &os, const Genotype &e);
 
  private:

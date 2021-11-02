@@ -105,11 +105,17 @@ int Genotype::select_mutation_allele(const int &mutation_locus) {
 
 std::ostream &operator<<(std::ostream &os, const Genotype &e) {
   os << e.genotype_id_ << "\t";
-  for (auto i = 0; i < e.gene_expression_.size(); i++) {
-    const auto v = e.gene_expression_[i];
-    os << Model::CONFIG->genotype_info().loci_vector[i].alleles[v];
-  }
-
+  os << e.get_gene_string();
 //    os << "\t" << e.number_of_resistance_position_;
   return os;
+}
+
+std::string Genotype::get_gene_string() const {
+  std::stringstream ss;
+  for (auto i = 0; i < gene_expression_.size(); i++) {
+    const auto v = gene_expression_[i];
+    ss << Model::CONFIG->genotype_info().loci_vector[i].alleles[v];
+  }
+
+  return ss.str();
 }

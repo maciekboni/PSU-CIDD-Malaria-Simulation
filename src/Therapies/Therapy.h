@@ -20,6 +20,8 @@ VIRTUAL_PROPERTY_REF(int, id)
 
 VIRTUAL_PROPERTY_REF(int, testing_day)
 
+VIRTUAL_PROPERTY_REF(std::string, name)
+
 public:
   std::vector<int> drug_ids;
 
