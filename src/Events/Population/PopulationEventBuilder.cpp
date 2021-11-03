@@ -6,6 +6,7 @@
 #include "Core/Config/Config.h"
 #include "ImportationEvent.h"
 #include "ImportationPeriodicallyEvent.h"
+#include "IntroduceParasitesPeriodicallyEventV2.h"
 #include "ChangeTreatmentCoverageEvent.h"
 #include "ChangeStrategyEvent.h"
 #include <algorithm>
@@ -61,6 +62,49 @@ PopulationEventBuilder::build_introduce_parasites_periodically_events(const YAML
         auto time = (date::sys_days{starting_date} - date::sys_days{config->starting_date()}).count();
 
         auto* event = new ImportationPeriodicallyEvent(loc, dur, genotype_id, num, time);
+        events.push_back(event);
+      }
+    }
+  }
+  return events;
+}
+
+std::vector<Event*>
+PopulationEventBuilder::build_introduce_parasites_periodically_events_v2(const YAML::Node& node, Config* config) {
+  std::vector<Event*> events;
+  for (std::size_t i = 0; i < node.size(); i++) {
+    const auto location = node[i]["location"].as<unsigned long>();
+    const auto location_from = location == -1 ? 0 : location;
+    const auto location_to =
+        location == -1 ? config->number_of_locations() : std::min(location + 1, config->number_of_locations());
+
+    for (auto loc = location_from; loc < location_to; ++loc) {
+      for (auto j = 0; j < node[i]["parasite_info"].size(); j++) {
+
+        const auto dur = node[i]["parasite_info"][j]["duration"].as<int>();
+        const auto num = node[i]["parasite_info"][j]["number_of_cases"].as<int>();
+
+        const auto starting_date = node[i]["parasite_info"][j]["start_day"].as<date::year_month_day>();
+        auto time = (date::sys_days{starting_date} - date::sys_days{config->starting_date()}).count();
+
+        std::vector<std::vector<double>> allele_distributions(Model::CONFIG->genotype_info().loci_vector.size());
+        // generate default distributions
+        for (int k = 0; k < Model::CONFIG->genotype_info().loci_vector.size(); ++k) {
+          auto number_of_alleles = Model::CONFIG->genotype_info().loci_vector[k].alleles.size();
+          for (int l = 0; l < number_of_alleles; ++l) {
+            allele_distributions[k].push_back(1.0/number_of_alleles);
+          }
+        }
+
+        // read and replace
+        for (auto m = 0; m < node[i]["parasite_info"][j]["allele_distributions"].size(); m++) {
+          auto pos = node[i]["parasite_info"][j]["allele_distributions"][m]["position"].as<int>();
+          for (int n = 0; n < node[i]["parasite_info"][j]["allele_distributions"][m]["distribution"].size(); ++n) {
+            allele_distributions[pos][n] = node[i]["parasite_info"][j]["allele_distributions"][m]["distribution"][n].as<double>();
+          }
+        }
+
+        auto* event = new IntroduceParasitesPeriodicallyEventV2(allele_distributions, loc, dur, num, time);
         events.push_back(event);
       }
     }
@@ -283,6 +327,11 @@ std::vector<Event*> PopulationEventBuilder::build(const YAML::Node& node, Config
   if (name == "introduce_parasites_periodically") {
     events = build_introduce_parasites_periodically_events(node["info"], config);
   }
+
+  if (name == "introduce_parasites_periodically_v2") {
+    events = build_introduce_parasites_periodically_events_v2(node["info"], config);
+  }
+
   if (name == "change_treatment_coverage") {
     events = build_change_treatment_coverage_event(node["info"], config);
   }

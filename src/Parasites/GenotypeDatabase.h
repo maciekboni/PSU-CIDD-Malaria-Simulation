@@ -36,6 +36,8 @@ class GenotypeDatabase : public GenotypePtrMap {
 
   int get_id(const IntVector &gene);
 
+  Genotype* get_genotype_from_alleles_structure(const IntVector &alleles);
+
   void initialize_matting_matrix();
 
   std::vector<double> generate_offspring_parasite_density(const IntVector &m, const IntVector &f);

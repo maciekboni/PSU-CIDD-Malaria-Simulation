@@ -92,3 +92,11 @@ int GenotypeDatabase::get_id(const IntVector &gene) {
   return id;
 
 }
+
+Genotype* GenotypeDatabase::get_genotype_from_alleles_structure(const IntVector &alleles) {
+  auto id = 0;
+  for (auto i = 0; i < alleles.size(); i++) {
+    id += weight_[i]*alleles[i];
+  }
+  return this->at(id);
+}

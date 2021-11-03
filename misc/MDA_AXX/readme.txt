@@ -7,9 +7,9 @@ A1_EF80: both AL res and OZ res (double mutations) have efficacies 80%, mu 0p005
 A1_EF40_v2: only OZ res (double mutations) have efficacies 40%, mu 0p005
 A1_EF80_v2: only OZ res (double mutations) have efficacies 80%, mu 0p005
 
-A4_varied_OZ_EF: mutation 0p005
+A4_varied_OZ_EF: importation, mutation 0p005
 
-A4_varied_OZEF_mu: mutation 0p001983
+A4_varied_OZEF_mu: importation, mutation 0p001983
 
 A1_mu_0p001983: importation with random x and X, mutation rate 0p001983
 
