@@ -163,10 +163,32 @@ drug_db:
     - [1]
 ending_date: 2042/1/1
 events:
+- info:
+  - {day: 2008/1/1}
+  name: turn_off_mutation
+- info:
+  - {day: 2013/1/1, mutation_probability: 0.001983}
+  name: turn_on_mutation
 - info: []
   name: introduce_parasites
-- info: []
-  name: introduce_parasites_periodically
+- info:
+  - location: 0
+    parasite_info:
+    - allele_distributions:
+      - distribution: [0.5, 0.5]
+        position: 0
+      - distribution: [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125]
+        position: 1
+      - distribution: [0.5, 0.5]
+        position: 2
+      - distribution: [0.5, 0.5]
+        position: 3
+      - distribution: [0.5, 0.5]
+        position: 4
+      duration: 10
+      number_of_cases: 1
+      start_day: 2008/2/1
+  name: introduce_parasites_periodically_v2
 - info: []
   name: change_treatment_coverage
 - info: []
