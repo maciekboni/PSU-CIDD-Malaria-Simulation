@@ -52,12 +52,8 @@ PopulationEventBuilder::build_introduce_parasites_periodically_events(const YAML
 
     for (auto loc = location_from; loc < location_to; ++loc) {
       for (std::size_t j = 0; j < node[i]["parasite_info"].size(); j++) {
-        //            InitialParasiteInfo ipi;
-        //            ipi.location = location;
-        const auto genotype_id = -1;
-        // TODO: implement new importation parasite genotype based on allele distribution
 
-
+        const auto genotype_id = node[i]["parasite_info"][j]["genotype_id"].as<int>();
         const auto dur = node[i]["parasite_info"][j]["duration"].as<int>();
         const auto num = node[i]["parasite_info"][j]["number_of_cases"].as<int>();
 
