@@ -93,7 +93,7 @@ for mda_round in number_MDA_round:
                                     new_data['events'][index]['info']= []
                         if imp == '':
                             for index,event in enumerate(data['events']):
-                                if event['name'] == 'introduce_parasites_periodically':
+                                if event['name'] == 'introduce_parasites_periodically_v2':
                                     new_data['events'][index]['info']= []     
                         
                         for index,event in enumerate(data['events']):                    
