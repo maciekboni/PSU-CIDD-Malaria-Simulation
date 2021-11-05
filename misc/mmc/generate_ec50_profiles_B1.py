@@ -35,7 +35,7 @@ for i in range(0,10):
             print(ec50_k, ec50_v, new_ec50)
     
     
-    output_filename = 'SA5/DxG_profile_%d.yml'%(i);
+    output_filename = 'B1/EC50_profile_%d.yml'%(i);
     output_stream = open(output_filename, 'w');
     yaml.dump(new_data, output_stream); 
     output_stream.close();
