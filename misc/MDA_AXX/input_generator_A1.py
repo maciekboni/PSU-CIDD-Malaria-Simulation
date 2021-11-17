@@ -68,7 +68,6 @@ importations = {True: '_imp' ,
 mda_therapy_ids = {
         9: [3, 'DHAPPQ'],
         12: [4, 'KAFLUM'],
-        15: [5, 'OZFQ'],
         }
 
 mda_stategy= ['AAB', 'ABA', 'ABB']

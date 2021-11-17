@@ -18,13 +18,17 @@ OBJECTPOOL_IMPL(IntroduceParasitesPeriodicallyEventV2)
 IntroduceParasitesPeriodicallyEventV2::IntroduceParasitesPeriodicallyEventV2(
     const std::vector<std::vector<double>>& allele_distributions_in,
     const int& location, const int& duration,
-    const int& number_of_cases, const int& start_day_in
+    const int& number_of_cases, const int& start_day_in, const int & end_day_in
 )
     : allele_distributions(allele_distributions_in),
       location_(location), duration_(duration), number_of_cases_(number_of_cases),
-      start_day(start_day_in) {
-  //TODO: remove start_day_
+      start_day(start_day_in), end_day(end_day_in) {
+
   time = start_day;
+
+  if (end_day_in == -1){
+    end_day = Model::CONFIG->total_time();
+  }
 }
 
 IntroduceParasitesPeriodicallyEventV2::~IntroduceParasitesPeriodicallyEventV2() = default;
@@ -36,21 +40,23 @@ void IntroduceParasitesPeriodicallyEventV2::schedule_event(
     auto* e = new IntroduceParasitesPeriodicallyEventV2(
         old_event->allele_distributions,
         old_event->location(), old_event->duration(),
-        old_event->number_of_cases(), old_event->start_day
+        old_event->number_of_cases(), old_event->start_day, old_event->end_day
     );
     e->dispatcher = nullptr;
     e->time = scheduler->current_time() + 1;
     scheduler->schedule_population_event(e);
   }
-
 }
 
 void IntroduceParasitesPeriodicallyEventV2::execute() {
   // std::cout << date::year_month_day{ Model::SCHEDULER->calendar_date } << ":import periodically event" << std::endl;
   //schedule importation for the next day
-  schedule_event(
-      Model::SCHEDULER, this
-  );
+  if (Model::SCHEDULER->current_time() < end_day) {
+    schedule_event(Model::SCHEDULER, this);
+  }
+//  else {
+//    LOG(INFO) << "Hello End importation" ;
+//  }
 
   const auto number_of_importation_cases = Model::RANDOM->random_poisson(
       static_cast<double>(number_of_cases_) / duration_

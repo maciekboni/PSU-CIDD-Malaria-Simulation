@@ -889,6 +889,8 @@ events:
 #      - duration: 10
 #        number_of_cases: 1
 #        start_day: 2008/2/1
+# # if there is no end_day, the end_date will be the end_date of the simulation
+#        end_day: 2008/2/1
 #        allele_distributions:
 #          # If the position is not defined here, uniform distribution will be applied
 #          - position: 0

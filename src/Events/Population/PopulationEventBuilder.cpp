@@ -85,7 +85,15 @@ PopulationEventBuilder::build_introduce_parasites_periodically_events_v2(const Y
         const auto num = node[i]["parasite_info"][j]["number_of_cases"].as<int>();
 
         const auto starting_date = node[i]["parasite_info"][j]["start_day"].as<date::year_month_day>();
+
+        date::year_month_day end_date = Model::CONFIG->ending_date();
+
+        if (node[i]["parasite_info"][j]["end_day"]) {
+          end_date = node[i]["parasite_info"][j]["end_day"].as<date::year_month_day>();
+        }
+
         auto time = (date::sys_days{starting_date} - date::sys_days{config->starting_date()}).count();
+        auto end_time = (date::sys_days{end_date} - date::sys_days{config->starting_date()}).count();
 
         std::vector<std::vector<double>> allele_distributions(Model::CONFIG->genotype_info().loci_vector.size());
         // generate default distributions
@@ -104,7 +112,7 @@ PopulationEventBuilder::build_introduce_parasites_periodically_events_v2(const Y
           }
         }
 
-        auto* event = new IntroduceParasitesPeriodicallyEventV2(allele_distributions, loc, dur, num, time);
+        auto* event = new IntroduceParasitesPeriodicallyEventV2(allele_distributions, loc, dur, num, time, end_time);
         events.push_back(event);
       }
     }

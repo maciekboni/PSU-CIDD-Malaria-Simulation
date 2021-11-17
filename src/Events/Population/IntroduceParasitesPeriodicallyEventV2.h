@@ -20,14 +20,19 @@ class IntroduceParasitesPeriodicallyEventV2  : public Event {
   VIRTUAL_PROPERTY_REF(int, duration)
 
   VIRTUAL_PROPERTY_REF(int, number_of_cases)
+
+
+
 public:
   std::vector<std::vector<double>> allele_distributions;
   int start_day;
+  int end_day;
 
 public:
   IntroduceParasitesPeriodicallyEventV2( const std::vector<std::vector<double>> & allele_distributions_in = std::vector<std::vector<double>>(),
                                          const int &location = -1, const int &duration = -1,
-                                        const int &number_of_cases = -1, const int &start_day_in = -1);
+                                        const int &number_of_cases = -1, const int &start_day_in = -1,
+                                         const int & end_day_in = -1);
 
   //    ImportationEvent(const ImportationEvent& orig);
   virtual ~IntroduceParasitesPeriodicallyEventV2();

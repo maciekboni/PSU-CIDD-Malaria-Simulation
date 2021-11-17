@@ -29,13 +29,13 @@ for i in range(0,10):
     for drug in data['drug_db']:
         print(drug)
         for ec50_k, ec50_v in data['drug_db'][drug]['EC50'].items():
-            sd = ec50_v * 0.05
+            sd = ec50_v * 0.1
             new_ec50 = sd * np.random.randn() + ec50_v
             new_data['drug_db'][drug]['EC50'][ec50_k] = new_ec50
             print(ec50_k, ec50_v, new_ec50)
     
     
-    output_filename = 'B1/EC50_profile_%d.yml'%(i);
+    output_filename = 'B1/sd_0p10/EC50_profile_%d.yml'%(i);
     output_stream = open(output_filename, 'w');
     yaml.dump(new_data, output_stream); 
     output_stream.close();

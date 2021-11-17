@@ -1,0 +1,386 @@
+age_bracket_prob_individual_present_at_mda: [10, 40]
+age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 20, 60, 100]
+allow_new_coinfection_to_cause_symtoms: true
+artemisinin_drug_id: 0
+artificial_rescaling_of_population_size: 1.0
+birth_rate: 0.0
+circulation_info:
+  circulation_percent: 0.0
+  length_of_stay: {mean: 5, sd: 10}
+  max_relative_moving_value: 35
+  moving_level_distribution:
+    Exponential: {scale: 0.17}
+    Gamma: {mean: 5, sd: 10}
+    distribution: Gamma
+  number_of_moving_levels: 100
+days_mature_gametocyte_over_five: 6
+days_mature_gametocyte_under_five: 4
+days_to_clinical_over_five: 6
+days_to_clinical_under_five: 4
+death_rate_by_age_class: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0]
+drug_db:
+  0:
+    EC50: {..0..: 0.8224258707569734, ..1..: 1.3230791842819236}
+    affecting_loci: [2]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 0.0
+    k: 4
+    maximum_parasite_killing_rate: 0.999
+    mutation_probability: 0.005
+    n: 25
+    name: AS
+    selecting_alleles:
+    - [1]
+  1:
+    EC50: {00...: 0.7859160712819326, 01...: 0.6417296784089835, 02...: 0.8777182756013419,
+      03...: 0.7857622319543965, 04...: 1.2098835024004029, 05...: 0.8976001476193699,
+      06...: 1.0438635576380526, 07...: 1.0491616984033767, 10...: 0.7665664167886486,
+      11...: 0.6515255237203869, 12...: 0.8837997412231888, 13...: 0.7780384993589421,
+      14...: 0.7950732543984227, 15...: 0.9010040671478731, 16...: 0.9890841020600148,
+      17...: 1.0305123070223718}
+    affecting_loci: [0, 1]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 4.5
+    k: 4
+    maximum_parasite_killing_rate: 0.99
+    mutation_probability: 0.005
+    n: 20
+    name: LM
+    selecting_alleles:
+    - [0]
+    - [0, 2, 3, 4, 6, 7]
+  2:
+    EC50: {00...: 0.6885340131600327, 01...: 0.8649651570318527, 02...: 0.4792228459065055,
+      03...: 0.8434229269495752, 04...: 0.6232931236810987, 05...: 0.9376273477268202,
+      06...: 0.4664835248819069, 07...: 0.7236060507720076, 10...: 0.6695432718289096,
+      11...: 0.7750896515426552, 12...: 0.7984729081307262, 13...: 0.9372833924295306,
+      14...: 0.6372385441089627, 15...: 0.9268922988488064, 16...: 0.6881812326366649,
+      17...: 0.7374619752668916}
+    affecting_loci: [0, 1]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 9.0
+    k: 4
+    maximum_parasite_killing_rate: 0.95
+    mutation_probability: 0.005
+    n: 19
+    name: AQ
+    selecting_alleles:
+    - [1]
+    - [0, 1, 3, 4, 5, 7]
+  3:
+    EC50: {'...0.': 0.6205480354838039, '...1.': 1.4287305544307998}
+    affecting_loci: [3]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 28.0
+    k: 4
+    maximum_parasite_killing_rate: 0.9
+    mutation_probability: 0.005
+    n: 15
+    name: PPQ
+    resistant_factor:
+    - [1]
+    selecting_alleles:
+    - [1]
+  4:
+    EC50: {.0...: 0.4584984694526563, .1...: 0.46424873228028934, .2...: 0.4653042980662672,
+      .3...: 0.47488059566902785, .4...: 1.0875297915479765, .5...: 1.125229883379839,
+      .6...: 1.0904384836172358, .7...: 1.1041022745751479}
+    affecting_loci: [1]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 21.0
+    k: 4
+    maximum_parasite_killing_rate: 0.9
+    mutation_probability: 0.005
+    n: 15
+    name: MQ
+    selecting_alleles:
+    - [4, 5, 6, 7]
+  5:
+    EC50: {'.....': 0.9710175898731367}
+    affecting_loci: []
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 6.5
+    k: 4
+    maximum_parasite_killing_rate: 0.9
+    mutation_probability: 0.0
+    n: 15
+    name: SP
+    selecting_alleles: []
+  6:
+    EC50: {00...: 0.7135792617316836, 01...: 0.7175505429337307, 02...: 0.7333285243147056,
+      03...: 1.024060530564349, 04...: 0.7749380194250326, 05...: 0.8066584995402444,
+      06...: 0.7070102600420156, 07...: 0.9092155710661715, 10...: 1.1364089550912928,
+      11...: 1.2419360041949874, 12...: 1.2512520092844905, 13...: 1.1263595726166529,
+      14...: 1.2924753885675235, 15...: 1.314400738835922, 16...: 1.3302869445953438,
+      17...: 1.2158021020288472}
+    affecting_loci: [0, 1]
+    age_specific_drug_concentration_sd: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4,
+      0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    half_life: 10
+    k: 4
+    maximum_parasite_killing_rate: 0.95
+    mutation_probability: 0.0
+    n: 19
+    name: CQ
+    selecting_alleles:
+    - [1]
+    - [1, 3, 5, 7]
+ending_date: 1990/3/2
+events:
+- info:
+  - {day: 1990/2/1}
+  name: turn_off_mutation
+external_population_circulation_information:
+  circulation_percent: [0.0, 0.01, 0.01, 0.01, 0.01]
+  daily_EIR: [0.01, 0.01, 0.01, 0.01, 0.1]
+  length_of_stay: {mean: 5, sd: 10}
+  max_relative_moving_value: 35
+  moving_level_distribution:
+    Exponential: {scale: 0.17}
+    Gamma: {mean: 5, sd: 10}
+    distribution: Gamma
+  number_of_moving_levels: 100
+  seasonal_EIR:
+    a: [1]
+    min_value: 0.1
+    period: 360
+    phi: [180]
+fraction_mosquitoes_interrupted_feeding: 0.0
+gametocyte_level_full: 1.0
+gametocyte_level_under_artemisinin_action: 1.0
+genotype_info:
+  loci:
+  - alleles:
+    - allele_name: K76
+      can_mutate_to: [1]
+      daily_cost_of_resistance: 0.0
+      mutation_level: 0
+      short_name: K
+      value: 0
+    - allele_name: 76T
+      can_mutate_to: [0]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: T
+      value: 1
+    locus_name: pfcrt
+    position: 0
+  - alleles:
+    - allele_name: N86 Y184 one copy of pfmdr1
+      can_mutate_to: [1, 2, 4]
+      daily_cost_of_resistance: 0.0
+      mutation_level: 0
+      short_name: NY--
+      value: 0
+    - allele_name: 86Y Y184 one copy of pfmdr1
+      can_mutate_to: [3, 0, 5]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: YY--
+      value: 1
+    - allele_name: N86 184F one copy of pfmdr1
+      can_mutate_to: [3, 0, 6]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: NF--
+      value: 2
+    - allele_name: 86Y 184F one copy of pfmdr1
+      can_mutate_to: [1, 2, 7]
+      daily_cost_of_resistance: 0.00099975
+      mutation_level: 2
+      short_name: YF--
+      value: 3
+    - allele_name: N86 Y184 2 copies of pfmdr1
+      can_mutate_to: [0]
+      daily_cost_of_resistance: 0.005
+      mutation_level: 1
+      short_name: NYNY
+      value: 4
+    - allele_name: 86Y Y184 2 copies of pfmdr1
+      can_mutate_to: [1]
+      daily_cost_of_resistance: 0.0055
+      mutation_level: 2
+      short_name: YYYY
+      value: 5
+    - allele_name: N86 184F 2 copies of pfmdr1
+      can_mutate_to: [2]
+      daily_cost_of_resistance: 0.0055
+      mutation_level: 2
+      short_name: NFNF
+      value: 6
+    - allele_name: 86Y 184F 2 copies of pfmdr1
+      can_mutate_to: [3]
+      daily_cost_of_resistance: 0.006
+      mutation_level: 3
+      short_name: YFYF
+      value: 7
+    locus_name: pfmdr1
+    position: 1
+  - alleles:
+    - allele_name: C580
+      can_mutate_to: [1]
+      daily_cost_of_resistance: 0.0
+      mutation_level: 0
+      short_name: C
+      value: 0
+    - allele_name: 580Y
+      can_mutate_to: [0]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: Y
+      value: 1
+    locus_name: K13 Propeller
+    position: 2
+  - alleles:
+    - allele_name: Plasmepsin 2-3 one copy
+      can_mutate_to: [1]
+      daily_cost_of_resistance: 0.0
+      mutation_level: 0
+      short_name: '1'
+      value: 0
+    - allele_name: Plasmepsin 2-3 2 copies
+      can_mutate_to: [0]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: '2'
+      value: 1
+    locus_name: Plasmepsin 2-3
+    position: 3
+  - alleles:
+    - allele_name: naive
+      can_mutate_to: [1]
+      daily_cost_of_resistance: 0.0
+      mutation_level: 0
+      short_name: x
+      value: 0
+    - allele_name: mutant
+      can_mutate_to: [0]
+      daily_cost_of_resistance: 0.0005
+      mutation_level: 1
+      short_name: X
+      value: 1
+    locus_name: Hypothetical locus for multiple use
+    position: 4
+immune_system_information: {age_mature_immunity: 10, b1: 0.00125, b2: 0.0025, duration_for_fully_immune: 60,
+  duration_for_naive: 300, factor_effect_age_mature_immunity: 1, immune_effect_on_progression_to_clinical: 4,
+  immune_inflation_rate: 0.01, max_clinical_probability: 0.99, mean_initial_condition: 0.1,
+  min_clinical_probability: 0.05, sd_initial_condition: 0.1}
+inflation_factor: 1.01
+initial_age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 25, 35,
+  45, 55, 65, 100]
+initial_parasite_info:
+- location_id: -1
+  parasite_info: []
+initial_strategy_id: 0
+location_db:
+  age_distribution_by_location:
+  - [0.0334, 0.03, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.031, 0.0285, 0.0256,
+    0.0298, 0.0212, 0.0321, 0.0228, 0.023, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344,
+    0.0387]
+  beta_by_location: [0.0]
+  location_info:
+  - [0, 0, 0]
+  p_treatment_for_less_than_5_by_location: [1]
+  p_treatment_for_more_than_5_by_location: [1]
+  population_size_by_location: [10000]
+lumefantrine_drug_id: 2
+mda_therapy_id: 8
+mean_prob_individual_present_at_mda: [0.85, 0.75, 0.85]
+min_dosing_days: 1
+mortality_when_treatment_fail_by_age_class: [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0,
+  -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+number_of_age_classes: 15
+number_of_tracking_days: 11
+p_compliance: 1
+p_infection_from_an_infectious_bite: 0.1
+p_relapse: 0.0
+parasite_density_level: {log_parasite_density_asymptomatic: 3, log_parasite_density_clinical: 4.301,
+  log_parasite_density_clinical_from: 3.301, log_parasite_density_clinical_to: 5.301,
+  log_parasite_density_cured: -4.699, log_parasite_density_detectable: 1.0, log_parasite_density_from_liver: -2.0,
+  log_parasite_density_pyrogenic: 3.398}
+relapseRate: 4.4721
+relapse_duration: 30
+relative_bitting_info:
+  biting_level_distribution:
+    Exponential: {scale: 0.17}
+    Gamma: {mean: 5, sd: 10}
+    distribution: Gamma
+  max_relative_biting_value: 35
+  number_of_biting_levels: 100
+relative_infectivity: {blood_meal_volume: 3, ro: 0.00031, sigma: 3.91}
+report_frequency: 30
+sd_prob_individual_present_at_mda: [0.03, 0.03, 0.03]
+seasonal_info:
+  a: [1]
+  enable: false
+  min_value: [0.1]
+  period: 365
+  phi: [250]
+spatial_model:
+  Barabasi: {beta_r: 1.65, kappa: 350, r_g_0: 5.8}
+  Wesolowski: {alpha: 0.22268982, beta: 0.14319618, gamma: 0.83741484, kappa: 0.01093251}
+  name: Wesolowski
+start_collect_data_day: 0
+start_of_comparison_period: 2019/12/1
+starting_date: 1990/2/1
+strategy_db:
+  0: {name: SFTStrategy, therapy_id: 5, type: SFT}
+tf_rate: 0.1
+tf_testing_day: 28
+tf_window_size: 90
+therapy_db:
+  0:
+    dosing_days: [3]
+    drug_id: [0]
+    name: AS
+  1:
+    dosing_days: [3]
+    drug_id: [1]
+    name: LM
+  2:
+    dosing_days: [3]
+    drug_id: [2]
+    name: AQ
+  3:
+    dosing_days: [3]
+    drug_id: [3]
+    name: PPQ
+  4:
+    dosing_days: [3]
+    drug_id: [4]
+    name: MQ
+  5:
+    dosing_days: [3]
+    drug_id: [5]
+    name: SP
+  6:
+    dosing_days: [3]
+    drug_id: [6]
+    name: CQ
+  7:
+    dosing_days: [3]
+    drug_id: [0, 1]
+    name: AL
+  8:
+    dosing_days: [3]
+    drug_id: [0, 2]
+    name: ASAQ
+  9:
+    dosing_days: [3]
+    drug_id: [0, 3]
+    name: DHAPPQ
+  10:
+    dosing_days: [3]
+    drug_id: [0, 4]
+    name: ASMQ
+update_frequency: 1
+using_age_dependent_bitting_level: false
+using_free_recombination: true
+using_variable_probability_infectious_bites_cause_infection: false
