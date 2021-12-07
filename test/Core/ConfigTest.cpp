@@ -184,29 +184,30 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
 
     ASSERT_EQ(c.preconfig_population_events().size(), 15);
     ASSERT_EQ(c.preconfig_population_events()[0]->time, 78);
-    ASSERT_EQ(c.preconfig_population_events()[1]->time, 104);
-    ASSERT_EQ(c.preconfig_population_events()[2]->time, 236);
-    ASSERT_EQ(c.preconfig_population_events()[3]->time, 292);
-    ASSERT_EQ(c.preconfig_population_events()[4]->time, 152);
-    ASSERT_EQ(c.preconfig_population_events()[5]->time, 31);
-    ASSERT_EQ(c.preconfig_population_events()[6]->time, 59);
-    ASSERT_EQ(c.preconfig_population_events()[7]->time, 151);
-    ASSERT_EQ(c.preconfig_population_events()[8]->time, 60);
-    ASSERT_EQ(c.preconfig_population_events()[9]->time, 152);
-    ASSERT_EQ(c.preconfig_population_events()[10]->time, 244);
-    ASSERT_EQ(c.preconfig_population_events()[11]->time,10957);
+    ASSERT_EQ(c.preconfig_population_events()[1]->time, 78);
+    ASSERT_EQ(c.preconfig_population_events()[2]->time, 104);
+    ASSERT_EQ(c.preconfig_population_events()[3]->time, 236);
+    ASSERT_EQ(c.preconfig_population_events()[4]->time, 292);
+    ASSERT_EQ(c.preconfig_population_events()[5]->time, 152);
+    ASSERT_EQ(c.preconfig_population_events()[6]->time, 31);
+    ASSERT_EQ(c.preconfig_population_events()[7]->time, 59);
+    ASSERT_EQ(c.preconfig_population_events()[8]->time, 151);
+    ASSERT_EQ(c.preconfig_population_events()[9]->time, 60);
+    ASSERT_EQ(c.preconfig_population_events()[10]->time, 152);
+    ASSERT_EQ(c.preconfig_population_events()[11]->time, 244);
+    ASSERT_EQ(c.preconfig_population_events()[12]->time,10957);
 
-    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[11])->fraction_population_targeted[0],
+    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[12])->fraction_population_targeted[0],
             1);
-    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[11])->fraction_population_targeted[1],
+    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[12])->fraction_population_targeted[1],
             1);
-    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[11])->fraction_population_targeted[2],
+    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[12])->fraction_population_targeted[2],
             1);
-    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[11])->days_to_complete_all_treatments,
+    ASSERT_EQ(dynamic_cast<SingleRoundMDAEvent*>(c.preconfig_population_events()[12])->days_to_complete_all_treatments,
             14);
 
-    ASSERT_EQ(c.preconfig_population_events()[12]->time, 10995);
-    ASSERT_EQ(c.preconfig_population_events()[13]->time, 11030);
+    ASSERT_EQ(c.preconfig_population_events()[13]->time, 10995);
+    ASSERT_EQ(c.preconfig_population_events()[14]->time, 11030);
 
     ASSERT_EQ(c.bitting_level_generator().level_density.size(), 100);
     ASSERT_EQ(c.moving_level_generator().level_density.size(), 100);
