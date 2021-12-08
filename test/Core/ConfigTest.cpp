@@ -130,8 +130,8 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
 
     ASSERT_NE(c.genotype_db(), nullptr);
     ASSERT_EQ(c.genotype_db()->size(), 128);
-    //ASSERT_EQ(c.genotype_db()->at(0)->gene_expression(), IntVector{0, 0, 0, 0, 0});
-    //ASSERT_EQ(c.genotype_db()->at(127)->gene_expression(), IntVector{1, 7, 1, 1, 1});
+    //ASSERT_EQ(c.genotype_db()->at(0)->aa_structure(), IntVector{0, 0, 0, 0, 0});
+    //ASSERT_EQ(c.genotype_db()->at(127)->aa_structure(), IntVector{1, 7, 1, 1, 1});
 
     //
     ASSERT_EQ(c.number_of_parasite_types(), 128);

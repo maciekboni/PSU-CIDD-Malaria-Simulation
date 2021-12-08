@@ -18,11 +18,12 @@ class DrugType;
 class Therapy;
 
 class Genotype {
+
  DISALLOW_COPY_AND_ASSIGN(Genotype)
 
  PROPERTY_REF(int, genotype_id)
 
- PROPERTY_REF(IntVector, gene_expression)
+ PROPERTY_REF(IntVector, aa_structure)
 
  PROPERTY_REF(double, daily_fitness_multiple_infection)
 

@@ -32,8 +32,8 @@ void GenotypeDatabase::initialize_matting_matrix() {
 
   for (auto m = 0; m < size; m++) {
     for (auto f = 0; f < m; f++) {
-      mating_matrix_[m][f] = generate_offspring_parasite_density((*this)[m]->gene_expression(),
-                                                                 (*this)[f]->gene_expression());
+      mating_matrix_[m][f] = generate_offspring_parasite_density((*this)[m]->aa_structure(),
+                                                                 (*this)[f]->aa_structure());
     }
   }
 }

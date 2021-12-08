@@ -28,7 +28,7 @@ void Introduce580YMutantEvent::execute() {
     for (Person* p :  pi->vPerson()[0][Person::ASYMPTOMATIC][j]) {
       total_population_count += p->all_clonal_parasite_populations()->size();
       for (ClonalParasitePopulation* pp : *p->all_clonal_parasite_populations()->parasites()) {
-        if (pp->genotype()->gene_expression()[2] == 1) {
+        if (pp->genotype()->aa_structure()[2] == 1) {
           current_580Y_fraction++;
         }
       }
