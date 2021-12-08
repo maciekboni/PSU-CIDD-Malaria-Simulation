@@ -80,55 +80,13 @@ int DrugType::select_mutation_locus() {
 }
 
 double DrugType::infer_ec50(Genotype* genotype) {
-  //compare genotype.short_name with Ccnfig to get EC50
-  for (auto &item : ec50_map_) {
-    auto key = item.first;
-    auto i = 0;
-    for (i = 0; i < genotype->aa_structure().size(); i++) {
-      if (key[i] == '.')
-        continue;
-
-      int value = key[i] >= 'A' ? key[i] - 'A' + 10 : key[i] - '0';
-
-      if (value == genotype->aa_structure()[i])
-        continue;
-      break;
-    }
-
-    if (i == genotype->aa_structure().size()) {
-      ///found match
-      return item.second;
-    }
-  }
-  //
-  //    for (const auto& item : ec50_map_) {
-  //        // if match then return ec50
-  //
-  //    }
+  // TODO: rework on this
+ 
+  return 0.65;
 
   assert(false);
   el::Logger* defaultLogger = el::Loggers::getLogger("default");
   defaultLogger->fatal("EC50 not match for genotype: %s" , *genotype);
   //hopefully it will never reach here
   return 0;
-
-  //
-  //
-  //
-  //
-  //    double minEC50 = is_artemisinin() ? 0.6 : 0.6;
-  //    double maxEC50 = is_artemisinin() ? 1.25 : 1.6;
-  //    double EC50 = minEC50;
-  //
-  //    for (int i = 0; i < affecting_loci_.size(); i++) {
-  //        auto locus = affecting_loci_[i];
-  //        for (int j = 0; j < selecting_alleles_[i].size(); j++) {
-  //            auto selected_allele = selecting_alleles_[i][j];
-  //            if (genotype->aa_structure()[locus] == selected_allele) {
-  //                EC50 += resistant_factor_[i][j]*(maxEC50 - minEC50) / affecting_loci_.size();
-  //                break;
-  //            }
-  //        }
-  //    }
-  //    return EC50;
 }

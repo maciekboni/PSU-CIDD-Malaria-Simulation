@@ -10,6 +10,7 @@
 
 #include "Core/TypeDef.h"
 #include "Core/PropertyMacro.h"
+#include <array>
 
 class DrugDatabase;
 
@@ -17,42 +18,46 @@ class DrugType;
 
 class Therapy;
 
+typedef std::array<std::string_view, 14> AA_Structure;
+
 class Genotype {
 
- DISALLOW_COPY_AND_ASSIGN(Genotype)
+DISALLOW_COPY_AND_ASSIGN(Genotype)
 
- PROPERTY_REF(int, genotype_id)
+PROPERTY_REF(int, genotype_id)
 
- PROPERTY_REF(IntVector, aa_structure)
 
- PROPERTY_REF(double, daily_fitness_multiple_infection)
+PROPERTY_REF(double, daily_fitness_multiple_infection)
 
- PROPERTY_REF(int, number_of_resistance_position)
+PROPERTY_REF(int, number_of_resistance_position)
 
- POINTER_PROPERTY(DrugDatabase, drug_db)
+POINTER_PROPERTY(DrugDatabase, drug_db)
 
- public:
-  explicit Genotype(const int &id, const GenotypeInfo &genotype_info, const IntVector &weight);
+public:
+  AA_Structure aa_structure;
+
+public:
+  explicit Genotype(const int& id, const GenotypeInfo& genotype_info, const IntVector& weight);
 
   virtual ~Genotype();
 
-  double get_EC50_power_n(DrugType *dt) const;
+  double get_EC50_power_n(DrugType* dt) const;
 
-  double get_EC50(const int &drug_id) const;
+  double get_EC50(const int& drug_id) const;
 
-  bool resist_to(DrugType *dt);
+  bool resist_to(DrugType* dt);
 
-  bool resist_to(Therapy *therapy);
+  bool resist_to(Therapy* therapy);
 
-  Genotype *combine_mutation_to(const int &locus, const int &value);
+  Genotype* combine_mutation_to(const int& locus, const int& value);
 
-  int select_mutation_allele(const int &mutation_locus);
+  int select_mutation_allele(const int& mutation_locus);
 
   std::string get_gene_string() const;
 
-  friend std::ostream &operator<<(std::ostream &os, const Genotype &e);
+  friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 
- private:
+private:
 
 };
 

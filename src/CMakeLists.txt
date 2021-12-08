@@ -19,7 +19,7 @@ file(GLOB SRC_FILES *.cpp
         Helpers/*.cpp 
         Malaria/*.cpp
         MDC/*.cpp 
-        Parasites/*.cpp 
+        Parasites/*.cpp GeneInfo.h
         Population/*.cpp
         Population/Properties/*.cpp
         Reporters/*.cpp 

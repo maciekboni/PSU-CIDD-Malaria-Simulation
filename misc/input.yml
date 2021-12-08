@@ -189,7 +189,7 @@ circulation_info:
     sd: 10
 
 
-gene_db:
+gene_info:
   - name: "Pfcrt"
     chromosome: 7
     aa_positions:

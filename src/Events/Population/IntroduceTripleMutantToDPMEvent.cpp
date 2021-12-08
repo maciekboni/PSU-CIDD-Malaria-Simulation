@@ -49,15 +49,16 @@ void IntroduceTrippleMutantToDPMEvent::execute() {
       // get random parasite population
       //mutate all
       for (auto* pp : *(p->all_clonal_parasite_populations()->parasites())) {
+        // TODO: rework on this
         auto* old_genotype = pp->genotype();
         auto* new_genotype = old_genotype->combine_mutation_to(2, 1)
                                          ->combine_mutation_to(3, 1);
 
         // mutate to double copy of PfMdr 2 copies
-        auto mdr_gene_allele_value = new_genotype->aa_structure()[1];
-        if (mdr_gene_allele_value < 4) {
-          new_genotype = new_genotype->combine_mutation_to(1, mdr_gene_allele_value + 4);
-        }
+//        auto mdr_gene_allele_value = new_genotype->aa_structure[1];
+//        if (mdr_gene_allele_value < 4) {
+//          new_genotype = new_genotype->combine_mutation_to(1, mdr_gene_allele_value + 4);
+//        }
 
         pp->set_genotype(new_genotype);
       }

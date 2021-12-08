@@ -1,0 +1,8 @@
+//
+// Created by nguyentd on 12/7/2021.
+//
+
+#ifndef POMS_SRC_PARASITES_GENEINFO_H
+#define POMS_SRC_PARASITES_GENEINFO_H
+
+#endif //POMS_SRC_PARASITES_GENEINFO_H

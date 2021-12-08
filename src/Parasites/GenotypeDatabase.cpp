@@ -27,15 +27,16 @@ void GenotypeDatabase::add(Genotype *genotype) {
 }
 
 void GenotypeDatabase::initialize_matting_matrix() {
-  const int size = static_cast<const int>(this->size());
-  mating_matrix_ = MatingMatrix(size, std::vector<std::vector<double>>(size, std::vector<double>()));
-
-  for (auto m = 0; m < size; m++) {
-    for (auto f = 0; f < m; f++) {
-      mating_matrix_[m][f] = generate_offspring_parasite_density((*this)[m]->aa_structure(),
-                                                                 (*this)[f]->aa_structure());
-    }
-  }
+// TODO: remove the use of matting matrix
+  //  const int size = static_cast<const int>(this->size());
+//  mating_matrix_ = MatingMatrix(size, std::vector<std::vector<double>>(size, std::vector<double>()));
+//
+//  for (auto m = 0; m < size; m++) {
+//    for (auto f = 0; f < m; f++) {
+//      mating_matrix_[m][f] = generate_offspring_parasite_density((*this)[m]->aa_structure(),
+//                                                                 (*this)[f]->aa_structure());
+//    }
+//  }
 }
 
 std::vector<double> GenotypeDatabase::generate_offspring_parasite_density(const IntVector &m, const IntVector &f) {

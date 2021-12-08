@@ -332,12 +332,8 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
       if (p < drug->get_mutation_probability()) {
 
         // select all locus
-        //TODO: rework here to only allow x to mutate after intervention day
-        int mutation_locus = Model::RANDOM->random_uniform_int(0, new_genotype->aa_structure().size());
-
-        auto new_allele_value = blood_parasite->genotype()->select_mutation_allele(mutation_locus);
-        //                std::cout << mutation_locus << "-" << bloodParasite->genotype()->aa_structure()[mutation_locus] << "-" << new_allele_value << std::endl;
-        auto* mutation_genotype = new_genotype->combine_mutation_to(mutation_locus, new_allele_value);
+        //TODO: rework here, remember to use mask to turn on and off mutation location for a specific time
+        auto* mutation_genotype = new_genotype;
 
         //                if (drug->drug_type()->id() == 3) {
         //                    std::cout << drug->getMutationProbability() << std::endl;

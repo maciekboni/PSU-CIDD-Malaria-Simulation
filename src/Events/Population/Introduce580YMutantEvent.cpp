@@ -17,6 +17,9 @@ Introduce580YMutantEvent::Introduce580YMutantEvent(const int &location, const in
 Introduce580YMutantEvent::~Introduce580YMutantEvent() = default;
 
 void Introduce580YMutantEvent::execute() {
+  // TODO: rework on this
+
+
   auto* pi = Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>();
 
   // get the approximate current frequency of 580Y in the population
@@ -28,9 +31,9 @@ void Introduce580YMutantEvent::execute() {
     for (Person* p :  pi->vPerson()[0][Person::ASYMPTOMATIC][j]) {
       total_population_count += p->all_clonal_parasite_populations()->size();
       for (ClonalParasitePopulation* pp : *p->all_clonal_parasite_populations()->parasites()) {
-        if (pp->genotype()->aa_structure()[2] == 1) {
-          current_580Y_fraction++;
-        }
+//        if (pp->genotype()->aa_structure()[2] == 1) {
+//          current_580Y_fraction++;
+//        }
       }
     }
   }
