@@ -1,0 +1,7 @@
+# TODO:
+
+- Rework resist_to in Genotype class
+
+
+# CHANGE LOGS:
+

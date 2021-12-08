@@ -189,6 +189,72 @@ circulation_info:
     sd: 10
 
 
+gene_db:
+  - name: "Pfcrt"
+    chromosome: 7
+    aa_positions:
+      - position: 76
+        naive_aa: 'K'
+        mutant_aa: [ 'T' ]
+      - position: 93
+        naive_aa: 'T'
+        mutant_aa: [ 'S' ]
+      - position: 97
+        naive_aa: 'H'
+        mutant_aa: [ 'T' ]
+      - position: 145
+        naive_aa: 'F'
+        mutant_aa: [ 'I' ]
+      - position: 218
+        naive_aa: 'I'
+        mutant_aa: [ 'F' ]
+  - name: "Pfmdr1"
+    chromosome: 5
+    max_copy: 2
+    aa_positions:
+      - position: 86
+        naive_aa: 'N'
+        mutant_aa: [ 'Y' ]
+      - position: 218
+        naive_aa: 'Y'
+        mutant_aa: [ 'F' ]
+  - name: "Pfkelch13"
+    chromosome: 13
+    aa_positions:
+      - position: 446
+        naive_aa: 'F'
+        mutant_aa: [ 'I' ]
+      - position: 458
+        naive_aa: 'N'
+        mutant_aa: [ 'Y' ]
+      - position: 476
+        naive_aa: 'M'
+        mutant_aa: [ 'I' ]
+      - position: 493
+        naive_aa: 'Y'
+        mutant_aa: [ 'H' ]
+      - position: 539
+        naive_aa: 'R'
+        mutant_aa: [ 'T' ]
+      - position: 543
+        naive_aa: 'I'
+        mutant_aa: [ 'T' ]
+      - position: 553
+        naive_aa: 'P'
+        mutant_aa: [ 'L' ]
+      - position: 561
+        naive_aa: 'R'
+        mutant_aa: [ 'H' ]
+      - position: 574
+        naive_aa: 'P'
+        mutant_aa: [ 'L' ]
+      - position: 580
+        naive_aa: 'C'
+        mutant_aa: [ 'Y' ]
+  - name: "Pfplasmepsin"
+    chromosome: 14
+    max_copy: 2
+    aa_positions: []
 
 genotype_info:
   loci:
