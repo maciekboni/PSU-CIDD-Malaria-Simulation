@@ -48,9 +48,6 @@ public:
   DrugType();
 
   virtual ~DrugType();
-
-  void reset(int length);
-
   virtual double get_parasite_killing_rate_by_concentration(const double &concentration, const double &EC50_power_n);
 
   virtual double n();
@@ -58,8 +55,6 @@ public:
   virtual void set_n(const double &n);
 
   int get_total_duration_of_drug_activity(const int &dosing_days) const;
-
-  int select_mutation_locus();
 
   double infer_ec50(Genotype* genotype);
 

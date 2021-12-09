@@ -12,7 +12,7 @@
 #include "Core/Random.h"
 #include "Therapies/SCTherapy.h"
 
-Genotype::Genotype(const int &id, const GenotypeInfo &genotype_info, const IntVector &weight) : genotype_id_(id) {
+Genotype::Genotype() {
 
 }
 
@@ -50,19 +50,19 @@ int Genotype::select_mutation_allele(const int &mutation_locus) {
 
 std::ostream &operator<<(std::ostream &os, const Genotype &e) {
   os << e.genotype_id_ << "\t";
-  os << e.get_gene_string();
-//    os << "\t" << e.number_of_resistance_position_;
+  os << e.get_aa_sequence();
   return os;
 }
 
-std::string Genotype::get_gene_string() const {
+std::string Genotype::get_aa_sequence() const {
   std::stringstream ss;
 
-
-//  for (auto i = 0; i < aa_structure.size(); i++) {
-//    const auto v = aa_structure[i];
-//    ss << Model::CONFIG->genotype_info().loci_vector[i].alleles[v];
-//  }
+  for (auto &chromosome : aa_structure) {
+    ss << chromosome;
+    if (&chromosome != &aa_structure.back()){
+      ss << "|";
+    }
+  }
 
   return ss.str();
 }

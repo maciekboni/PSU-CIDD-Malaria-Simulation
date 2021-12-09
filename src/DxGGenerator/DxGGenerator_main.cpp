@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 
     std::stringstream ss;
     auto p_genotype = (*Model::CONFIG->genotype_db())[genotype_id];
-    ss << p_genotype->genotype_id() << "," << p_genotype->get_gene_string() << ",";
+    ss << p_genotype->genotype_id() << "," << p_genotype->get_aa_sequence() << ",";
 
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
 

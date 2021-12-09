@@ -173,9 +173,10 @@ void genotype_db::set_value(const YAML::Node &node) {
   }
 
   for (auto i = 0; i < number_of_genotypes; i++) {
-    auto* int_genotype = new Genotype(i, config_->genotype_info(), value_->weight());
+    // TODO: rework on this
+    auto* int_genotype = new Genotype();
 //    std::cout << *int_genotype << std::endl;
-    value_->add(int_genotype);
+//    value_->add(int_genotype);
   }
 
   value_->initialize_matting_matrix();

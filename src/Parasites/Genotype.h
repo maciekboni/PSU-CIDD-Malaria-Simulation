@@ -18,14 +18,13 @@ class DrugType;
 
 class Therapy;
 
-typedef std::array<std::string_view, 14> AA_Structure;
+typedef std::array<std::string_view, 14> AaStructure;
 
 class Genotype {
 
 DISALLOW_COPY_AND_ASSIGN(Genotype)
 
 PROPERTY_REF(int, genotype_id)
-
 
 PROPERTY_REF(double, daily_fitness_multiple_infection)
 
@@ -34,10 +33,10 @@ PROPERTY_REF(int, number_of_resistance_position)
 POINTER_PROPERTY(DrugDatabase, drug_db)
 
 public:
-  AA_Structure aa_structure;
+  AaStructure aa_structure;
 
 public:
-  explicit Genotype(const int& id, const GenotypeInfo& genotype_info, const IntVector& weight);
+  explicit Genotype();
 
   virtual ~Genotype();
 
@@ -53,7 +52,7 @@ public:
 
   int select_mutation_allele(const int& mutation_locus);
 
-  std::string get_gene_string() const;
+  std::string get_aa_sequence() const;
 
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 

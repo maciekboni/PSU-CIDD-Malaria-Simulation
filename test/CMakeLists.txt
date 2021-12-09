@@ -27,7 +27,11 @@ macro(package_add_test TESTNAME)
   set_target_properties(${TESTNAME} PROPERTIES FOLDER test)
 endmacro()
 
-set(TEST_SRC_FILES main.cpp test1.cpp Spatial/CoordinateTest.cpp Spatial/LocationTest.cpp Core/StringHelpersTest.cpp
+set(TEST_SRC_FILES main.cpp test1.cpp
+  Parasites/GenotypeTest.cpp
+  Spatial/CoordinateTest.cpp
+  Spatial/LocationTest.cpp
+  Core/StringHelpersTest.cpp
   Core/TimeHelpersTest.cpp RandomTest.cpp Core/ConfigTest.cpp)
 
 set(MAIN_TEST masim_test)

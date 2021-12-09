@@ -23,25 +23,6 @@ DrugType::DrugType() : id_(0), drug_half_life_(0), maximum_parasite_killing_rate
 
 DrugType::~DrugType() = default;
 
-void DrugType::reset(int length) {
-  //    aa_structure_.resize(length);
-  //    aa_structure_.reset();
-}
-
-//void DrugType::set_resistance_position(int pos) {
-
-//
-//    aa_structure_.set(pos);
-//    mutation_positions_.push_back(pos);
-//    //    id_ = aa_structure_.to_ulong();
-//
-//}
-//
-//double DrugType::get_parasite_killing_rate_by_concentration(const double& concentration) {
-//    double conPowerN = pow(concentration, n_);
-//    return maximum_parasite_killing_rate_ * conPowerN / (conPowerN + EC50_power_n_);
-//}
-
 double DrugType::get_parasite_killing_rate_by_concentration(const double &concentration, const double &EC50_power_n) {
   const auto con_power_n = pow(concentration, n_);
   return maximum_parasite_killing_rate_ * con_power_n / (con_power_n + EC50_power_n);
@@ -56,32 +37,15 @@ void DrugType::set_n(const double &n) {
   //    set_EC50_power_n(pow(EC50_, n_));
 }
 
-//
-//double DrugType::EC50() {
-//    return EC50_;
-//}
-
-//void DrugType::set_EC50(const double& EC50) {
-//    EC50_ = EC50;
-//    set_EC50_power_n(pow(EC50_, n_));
-//}
-
 int DrugType::get_total_duration_of_drug_activity(const int &dosing_days) const {
   //CutOffPercent is 10
   //log2(100.0 / 10.0) = 3.32192809489
   return dosing_days + ceil(drug_half_life_ * LOG2_10);
 }
 
-int DrugType::select_mutation_locus() {
-
-  const int pos = Model::RANDOM->random_uniform_int(0, affecting_loci_.size());
-
-  return affecting_loci_[pos];
-}
-
 double DrugType::infer_ec50(Genotype* genotype) {
   // TODO: rework on this
- 
+
   return 0.65;
 
   assert(false);
