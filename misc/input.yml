@@ -194,66 +194,68 @@ gene_info:
     chromosome: 7
     aa_positions:
       - position: 76
-        naive_aa: 'K'
-        mutant_aa: [ 'T' ]
+        amino_acids: [ 'K', 'T' ]
+        daily_crs: [ 0, 0.0005]
       - position: 93
-        naive_aa: 'T'
-        mutant_aa: [ 'S' ]
+        amino_acids: [ 'T', 'S' ]
+        daily_crs: [ 0, 0.0005]
       - position: 97
-        naive_aa: 'H'
-        mutant_aa: [ 'T' ]
+        amino_acids: [ 'H', 'T' ]
+        daily_crs: [ 0, 0.0005]
       - position: 145
-        naive_aa: 'F'
-        mutant_aa: [ 'I' ]
+        amino_acids: [ 'F', 'I' ]
+        daily_crs: [ 0, 0.0005]
       - position: 218
-        naive_aa: 'I'
-        mutant_aa: [ 'F' ]
+        amino_acids: [ 'I', 'F' ]
+        daily_crs: [ 0, 0.0005]
   - name: "Pfmdr1"
     chromosome: 5
     max_copy: 2
+    copy_daily_crs: [0, 0.0055]
     aa_positions:
       - position: 86
-        naive_aa: 'N'
-        mutant_aa: [ 'Y' ]
+        amino_acids: [ 'N', 'Y' ]
+        daily_crs: [ 0, 0.0005]
       - position: 218
-        naive_aa: 'Y'
-        mutant_aa: [ 'F' ]
+        amino_acids: [ 'Y', 'F' ]
+        daily_crs: [ 0, 0.0005]
   - name: "Pfkelch13"
     chromosome: 13
     aa_positions:
       - position: 446
-        naive_aa: 'F'
-        mutant_aa: [ 'I' ]
+        amino_acids: [ 'F', 'I' ]
+        daily_crs: [ 0, 0.0005]
       - position: 458
-        naive_aa: 'N'
-        mutant_aa: [ 'Y' ]
+        amino_acids: [ 'N', 'Y' ]
+        daily_crs: [ 0, 0.0005]
       - position: 476
-        naive_aa: 'M'
-        mutant_aa: [ 'I' ]
+        amino_acids: [ 'M', 'I' ]
+        daily_crs: [ 0, 0.0005]
       - position: 493
-        naive_aa: 'Y'
-        mutant_aa: [ 'H' ]
+        amino_acids: [ 'Y', 'H' ]
+        daily_crs: [ 0, 0.0005]
       - position: 539
-        naive_aa: 'R'
-        mutant_aa: [ 'T' ]
+        amino_acids: [ 'R', 'T' ]
+        daily_crs: [ 0, 0.0005]
       - position: 543
-        naive_aa: 'I'
-        mutant_aa: [ 'T' ]
+        amino_acids: [ 'I', 'T' ]
+        daily_crs: [ 0, 0.0005]
       - position: 553
-        naive_aa: 'P'
-        mutant_aa: [ 'L' ]
+        amino_acids: [ 'P', 'L' ]
+        daily_crs: [ 0, 0.0005]
       - position: 561
-        naive_aa: 'R'
-        mutant_aa: [ 'H' ]
+        amino_acids: [ 'R', 'H' ]
+        daily_crs: [ 0, 0.0005]
       - position: 574
-        naive_aa: 'P'
-        mutant_aa: [ 'L' ]
+        amino_acids: [ 'P', 'L' ]
+        daily_crs: [ 0, 0.0005]
       - position: 580
-        naive_aa: 'C'
-        mutant_aa: [ 'Y' ]
+        amino_acids: [ 'C', 'Y' ]
+        daily_crs: [ 0, 0.0005]
   - name: "Pfplasmepsin"
     chromosome: 14
     max_copy: 2
+    copy_daily_crs: [0, 0.0005]
     aa_positions: []
 
 genotype_info:
