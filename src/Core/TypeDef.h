@@ -237,4 +237,32 @@ struct GenotypeInfo {
   }
 };
 
+struct AaPosition{
+  int position;
+  std::vector<char> amino_acids;
+  std::vector<double> daily_crs;
+  friend std::ostream &operator<<(std::ostream &os, const AaPosition &aa) {
+    return os;
+  }
+};
+
+struct Gene {
+  std::string name;
+  int chromosome;
+  int max_copy;
+  std::vector<double> copy_daily_crs;
+  std::vector <AaPosition> aa_positions;
+  friend std::ostream &operator<<(std::ostream &os, const Gene &aa) {
+    return os;
+  }
+};
+
+struct GeneInfo {
+  std::vector<Gene> genes;
+
+  friend std::ostream &operator<<(std::ostream &os, const GeneInfo &aa) {
+    return os;
+  }
+};
+
 #endif /* TYPEDEF_H */

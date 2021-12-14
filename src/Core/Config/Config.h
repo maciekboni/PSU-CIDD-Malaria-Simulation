@@ -89,6 +89,8 @@ class Config {
 
   CONFIG_ITEM(genotype_info, GenotypeInfo, GenotypeInfo())
 
+  CONFIG_ITEM(gene_info, GeneInfo, GeneInfo())
+
   CONFIG_ITEM(initial_strategy_id, int, -1)
 
   CONFIG_ITEM(age_bracket_prob_individual_present_at_mda, IntVector, IntVector())
