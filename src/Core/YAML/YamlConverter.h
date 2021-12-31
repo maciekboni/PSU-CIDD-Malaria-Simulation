@@ -3,13 +3,14 @@
 
 #include <date/date.h>
 #include <yaml-cpp/yaml.h>
-#include "Spatial/Location.h"
-#include "Core/TypeDef.h"
+
 #include <cmath>
 
+#include "Core/TypeDef.h"
+#include "Spatial/Location.h"
 
 namespace YAML {
-template<>
+template <>
 struct convert<date::sys_days> {
   static Node encode(const date::sys_days& rhs) {
     Node node;
@@ -18,7 +19,6 @@ struct convert<date::sys_days> {
   }
 
   static bool decode(const Node& node, date::sys_days& rhs) {
-
     if (!node.IsScalar()) {
       return false;
     }
@@ -28,7 +28,7 @@ struct convert<date::sys_days> {
   }
 };
 
-template<>
+template <>
 struct convert<date::year_month_day> {
   static Node encode(const date::year_month_day& rhs) {
     Node node;
@@ -37,7 +37,6 @@ struct convert<date::year_month_day> {
   }
 
   static bool decode(const Node& node, date::year_month_day& rhs) {
-
     if (!node.IsScalar()) {
       return false;
     }
@@ -47,7 +46,7 @@ struct convert<date::year_month_day> {
   }
 };
 
-template<>
+template <>
 struct convert<std::vector<Spatial::Location>> {
   static Node encode(const std::vector<Spatial::Location>& rhs) {
     Node node;
@@ -62,18 +61,14 @@ struct convert<std::vector<Spatial::Location>> {
     // }
     const auto number_of_locations = node["location_info"].size();
     for (std::size_t i = 0; i < number_of_locations; i++) {
-      location_db.emplace_back(
-          node["location_info"][i][0].as<int>(),
-          node["location_info"][i][1].as<float>(),
-          node["location_info"][i][2].as<float>(), 0
-      );
+      location_db.emplace_back(node["location_info"][i][0].as<int>(), node["location_info"][i][1].as<float>(),
+                               node["location_info"][i][2].as<float>(), 0);
     }
     for (std::size_t loc = 0; loc < number_of_locations; loc++) {
       auto input_loc = node["age_distribution_by_location"].size() < number_of_locations ? 0 : loc;
 
       for (std::size_t i = 0; i < node["age_distribution_by_location"][input_loc].size(); i++) {
-        location_db[loc].age_distribution.push_back(
-            node["age_distribution_by_location"][input_loc][i].as<double>());
+        location_db[loc].age_distribution.push_back(node["age_distribution_by_location"][input_loc][i].as<double>());
       }
     }
     for (std::size_t loc = 0; loc < number_of_locations; loc++) {
@@ -96,7 +91,7 @@ struct convert<std::vector<Spatial::Location>> {
   }
 };
 
-template<>
+template <>
 struct convert<ParasiteDensityLevel> {
   static Node encode(const ParasiteDensityLevel& rhs) {
     Node node;
@@ -116,16 +111,16 @@ struct convert<ParasiteDensityLevel> {
     parasite_density_level.log_parasite_density_clinical_to = node["log_parasite_density_clinical_to"].as<double>();
     parasite_density_level.log_parasite_density_detectable = node["log_parasite_density_detectable"].as<double>();
 
-    parasite_density_level.log_parasite_density_detectable_pfpr = node["log_parasite_density_detectable_pfpr"]
-                                                                  ? node["log_parasite_density_detectable_pfpr"].as<double>()
-                                                                  : node["log_parasite_density_detectable"].as<double>();
+    parasite_density_level.log_parasite_density_detectable_pfpr =
+        node["log_parasite_density_detectable_pfpr"] ? node["log_parasite_density_detectable_pfpr"].as<double>()
+                                                     : node["log_parasite_density_detectable"].as<double>();
     parasite_density_level.log_parasite_density_pyrogenic = node["log_parasite_density_pyrogenic"].as<double>();
 
     return true;
   }
 };
 
-template<>
+template <>
 struct convert<GenotypeInfo> {
   static Node encode(const GenotypeInfo& rhs) {
     Node node;
@@ -145,12 +140,10 @@ struct convert<GenotypeInfo> {
         al.name = node["loci"][i]["alleles"][j]["allele_name"].as<std::string>();
         al.short_name = node["loci"][i]["alleles"][j]["short_name"].as<std::string>();
         al.mutation_level = node["loci"][i]["alleles"][j]["mutation_level"].as<int>();
-        al.daily_cost_of_resistance = node["loci"][i]["alleles"][j]["daily_cost_of_resistance"].as<
-            double>();
+        al.daily_cost_of_resistance = node["loci"][i]["alleles"][j]["daily_cost_of_resistance"].as<double>();
         for (std::size_t c = 0; c < node["loci"][i]["alleles"][j]["can_mutate_to"].size(); c++) {
           //                al.mutation_value_up.push_back(node["loci"][i]["alleles"][j]["mutation_up"][c].as<int>());
-          al.mutation_values.push_back(
-              node["loci"][i]["alleles"][j]["can_mutate_to"][c].as<int>());
+          al.mutation_values.push_back(node["loci"][i]["alleles"][j]["can_mutate_to"][c].as<int>());
         }
 
         l.alleles.push_back(al);
@@ -162,7 +155,7 @@ struct convert<GenotypeInfo> {
   }
 };
 
-template<>
+template <>
 struct convert<RelativeInfectivity> {
   static Node encode(const RelativeInfectivity& rhs) {
     Node node;
@@ -184,7 +177,7 @@ struct convert<RelativeInfectivity> {
   }
 };
 
-template<>
+template <>
 struct convert<GeneInfo> {
   static Node encode(const GeneInfo& rhs) {
     Node node;
@@ -195,15 +188,15 @@ struct convert<GeneInfo> {
   static bool decode(const Node& node, GeneInfo& gene_info) {
     gene_info.genes.clear();
 
-    for (std::size_t i = 0; i < node.size(); i++) {
-      auto gene = node[i].as<Gene>();
+    for (const auto& gene_node : node) {
+      auto gene = gene_node.as<Gene>();
       gene_info.genes.push_back(gene);
     }
     return true;
   }
 };
 
-template<>
+template <>
 struct convert<Gene> {
   static Node encode(const Gene& rhs) {
     Node node;
@@ -215,17 +208,20 @@ struct convert<Gene> {
     gene.aa_positions.clear();
     gene.name = node["name"].as<std::string>();
     gene.chromosome = node["chromosome"].as<int>();
-// TODO: read max copy and cost of resistance
 
-    for (int zz = 0; zz < node["aa_positions"].size(); ++zz) {
-      auto aa_position = node["aa_positions"].as<AaPosition>();
+    gene.max_copy = node["max_copy"] ? node["max_copy"].as<int>() : 1;
+    gene.copy_daily_crs =
+        node["copy_daily_crs"] ? node["copy_daily_crs"].as<std::vector<double>>() : std::vector<double>();
+
+    for (const auto& aa_node : node["aa_positions"]) {
+      auto aa_position = aa_node.as<AaPosition>();
       gene.aa_positions.push_back(aa_position);
     }
     return true;
   }
 };
 
-template<>
+template <>
 struct convert<AaPosition> {
   static Node encode(const AaPosition& rhs) {
     Node node;
@@ -237,12 +233,12 @@ struct convert<AaPosition> {
     aa_pos.amino_acids.clear();
     aa_pos.daily_crs.clear();
     aa_pos.position = node["position"].as<int>();
-//    aa_pos.amino_acids = node["position"].as<std::vector<char>>();
-//    aa_pos.daily_crs = node["position"].as<std::vector<double>>();
+    aa_pos.amino_acids = node["amino_acids"].as<std::vector<char>>();
+    aa_pos.daily_crs = node["daily_crs"].as<std::vector<double>>();
 
     return true;
   }
 };
 
-}
-#endif // YAMLCONVERTER_H
+}  // namespace YAML
+#endif  // YAMLCONVERTER_H

@@ -28,11 +28,15 @@ macro(package_add_test TESTNAME)
 endmacro()
 
 set(TEST_SRC_FILES main.cpp test1.cpp
+  RandomTest.cpp
   Parasites/GenotypeTest.cpp
   Spatial/CoordinateTest.cpp
   Spatial/LocationTest.cpp
   Core/StringHelpersTest.cpp
-  Core/TimeHelpersTest.cpp RandomTest.cpp Core/ConfigTest.cpp)
+  Core/TimeHelpersTest.cpp
+  Core/ConfigTest.cpp
+  Core/Config/ReadGeneInfoTest.cpp
+  )
 
 set(MAIN_TEST masim_test)
 
@@ -40,4 +44,4 @@ package_add_test(${MAIN_TEST} ${TEST_SRC_FILES})
 
 add_custom_command(TARGET ${MAIN_TEST} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  ${POMS_SOURCE_DIR}/test/test_data/input.yml $<TARGET_FILE_DIR:${MAIN_TEST}>)
+  ${POMS_SOURCE_DIR}/misc/input.yml $<TARGET_FILE_DIR:${MAIN_TEST}>)
