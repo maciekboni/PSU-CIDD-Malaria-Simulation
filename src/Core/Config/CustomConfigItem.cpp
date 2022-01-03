@@ -404,7 +404,7 @@ void initial_parasite_info::set_value(const YAML::Node &node) {
     for (auto loc = location_from; loc < location_to; ++loc) {
       for (const auto &parasite_node :location_node["parasite_info"]) {
         auto aa_sequence = parasite_node["aa_sequence"].as<std::string>();
-        auto parasite_type_id = config_->genotype_db.get_id(aa_sequence);
+        auto parasite_type_id = config_->genotype_db.get_id(aa_sequence, &config_->pf_gene_info());
         auto prevalence = parasite_node["prevalence"].as<double>();
         value_.emplace_back(loc, parasite_type_id, prevalence);
       }

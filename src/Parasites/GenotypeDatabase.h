@@ -37,7 +37,7 @@ public:
 
   void add(Genotype* genotype);
 
-  unsigned int get_id(const std::string& aa_sequence);
+  unsigned int get_id(const std::string& aa_sequence, PfGeneInfo* pInfo);
 
   Genotype* get_genotype_from_alleles_structure(const IntVector& alleles);
 

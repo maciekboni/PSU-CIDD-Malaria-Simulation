@@ -25,20 +25,19 @@ typedef std::array<ChromosomeStr, 14> AaStructure;
 class Genotype {
   DISALLOW_COPY_AND_ASSIGN(Genotype)
 
-  PROPERTY_REF(int, genotype_id)
-
-  PROPERTY_REF(double, daily_fitness_multiple_infection)
-
   PROPERTY_REF(int, number_of_resistance_position)
 
   POINTER_PROPERTY(DrugDatabase, drug_db)
 
 public:
-  AaStructure aa_structure;
-  std::string aa_sequence;
+  int genotype_id { -1 };
+  AaStructure aa_structure {};
+  std::string aa_sequence { "" };
+  PfGeneInfo* pf_gene_info { nullptr };
+  double daily_fitness_multiple_infection { 1 };
 
 public:
-  Genotype(const std::string& aa_sequence);
+  Genotype(const std::string& aa_sequence, PfGeneInfo* pf_gene_info = nullptr);
 
   virtual ~Genotype();
 
@@ -58,9 +57,9 @@ public:
 
   bool is_valid(const PfGeneInfo& gene_info);
 
-  friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
+  void calculate_daily_fitness(const PfGeneInfo& gene_info);
 
-private:
+  friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 };
 
 #endif /* Genotype_H */

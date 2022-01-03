@@ -159,7 +159,7 @@ void SingleHostClonalParasitePopulations::update_relative_effective_parasite_den
   for (auto i = 0; i < relative_parasite_density.size(); i++) {
     if (NumberHelpers::is_equal(relative_parasite_density[i], 0.0)) { continue; }
     relative_effective_parasite_density_->at(
-        parasites_->at(i)->genotype()->genotype_id()) += relative_parasite_density[i];
+        parasites_->at(i)->genotype()->genotype_id) += relative_parasite_density[i];
 
   }
 
@@ -178,7 +178,7 @@ void SingleHostClonalParasitePopulations::update_relative_effective_parasite_den
   }
 
   for (auto i = 0; i < relative_parasite_density.size(); i++) {
-    relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id())  += relative_parasite_density[i];
+    relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id)  += relative_parasite_density[i];
   }
 }
 
@@ -338,9 +338,9 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
 //        std::cout
 //            << Model::SCHEDULER->current_time()
 //            << "\t"
-//            << blood_parasite->genotype()->genotype_id()
+//            << blood_parasite->genotype()->genotype_id
 //            << "\t"
-//            << new_genotype->genotype_id()
+//            << new_genotype->genotype_id
 //            << "\t"
 //            << blood_parasite->genotype()->get_EC50_power_n(drug->drug_type())
 //            << "\t"
@@ -349,7 +349,7 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
         blood_parasite->set_genotype(new_genotype);
       }
 
-      const auto p_temp = drug->get_parasite_killing_rate(blood_parasite->genotype()->genotype_id());
+      const auto p_temp = drug->get_parasite_killing_rate(blood_parasite->genotype()->genotype_id);
 
       percent_parasite_remove = percent_parasite_remove + p_temp - percent_parasite_remove * p_temp;
     }

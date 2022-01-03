@@ -14,7 +14,8 @@
 #include "Therapies/DrugDatabase.h"
 #include "Therapies/SCTherapy.h"
 
-Genotype::Genotype(const std::string &in_aa_sequence) : aa_sequence(in_aa_sequence) {
+Genotype::Genotype(const std::string &in_aa_sequence, PfGeneInfo *pf_gene_info)
+    : aa_sequence { in_aa_sequence }, pf_gene_info { pf_gene_info } {
   // create aa structure
   std::string chromosome_str;
   std::istringstream tokenStream(in_aa_sequence);
@@ -29,12 +30,6 @@ Genotype::Genotype(const std::string &in_aa_sequence) : aa_sequence(in_aa_sequen
     }
     ii++;
   }
-
-  // check if aa_sequence is valid
-
-  // calculate cost of resistance
-
-  // calculate ec50
 }
 
 Genotype::~Genotype() = default;
@@ -59,7 +54,7 @@ double Genotype::get_EC50_power_n(DrugType *dt) const {
 }
 
 double Genotype::get_EC50(const int &drug_id) const {
-  return Model::CONFIG->EC50_power_n_table()[genotype_id_][drug_id];
+  return Model::CONFIG->EC50_power_n_table()[genotype_id][drug_id];
 }
 
 int Genotype::select_mutation_allele(const int &mutation_locus) {
@@ -68,7 +63,7 @@ int Genotype::select_mutation_allele(const int &mutation_locus) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Genotype &e) {
-  os << e.genotype_id_ << "\t";
+  os << e.genotype_id << "\t";
   os << e.get_aa_sequence();
   return os;
 }
@@ -121,6 +116,38 @@ bool Genotype::is_valid(const PfGeneInfo &gene_info) {
       }
     }
   }
-
   return true;
+}
+void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
+  daily_fitness_multiple_infection = 1.0;
+
+  for (int chromosome_i = 0; chromosome_i < aa_structure.size(); ++chromosome_i) {
+    auto chromosome_info = gene_info.chromosome_infos[chromosome_i];
+
+    for (int gene_i = 0; gene_i < aa_structure[chromosome_i].size(); ++gene_i) {
+      auto gene_info = chromosome_info.gene_infos[gene_i];
+      auto max_aa_pos = gene_info.max_copy > 1 ? aa_structure[chromosome_i][gene_i].size() - 1
+                                               : aa_structure[chromosome_i][gene_i].size();
+      for (int aa_i = 0; aa_i < max_aa_pos; ++aa_i) {
+        // calculate cost of resistance
+        auto aa_pos_info = gene_info.aa_position_infos[aa_i];
+        auto element = aa_structure[chromosome_i][gene_i][aa_i];
+
+        auto it = std::find(aa_pos_info.amino_acids.begin(), aa_pos_info.amino_acids.end(), element);
+        auto element_id = it - aa_pos_info.amino_acids.begin();
+
+        auto cr = aa_pos_info.daily_crs[element_id];
+
+        daily_fitness_multiple_infection *= (1 - cr);
+      }
+
+      // check number copy valid or not
+      if (gene_info.max_copy > 1) {
+        auto copy_number = (int)aa_structure[chromosome_i][gene_i].back() - 48;
+        if (copy_number > 1) {
+          daily_fitness_multiple_infection *= 1 - gene_info.copy_daily_crs[copy_number - 1];
+        }
+      }
+    }
+  }
 }

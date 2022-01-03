@@ -4,8 +4,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Parasites/Genotype.h"
 #include "Core/Config/Config.h"
+#include "Parasites/Genotype.h"
 
 class GenotypeTest : public ::testing::Test {
 protected:
@@ -62,4 +62,21 @@ TEST_F(GenotypeTest, CheckInvalid) {
 
   Genotype g6("||||NY2||KTHFI,x||||||FNMYRIPRPC|Y1");
   EXPECT_FALSE(g6.is_valid(c.pf_gene_info()));
+}
+
+TEST_F(GenotypeTest, CalculateCostOfResistance) {
+  Config c;
+  c.read_from_file("input.yml");
+
+  Genotype g("||||NY1||KTHFI,x||||||FNMYRIPRPC|1");
+  g.calculate_daily_fitness(c.pf_gene_info());
+  EXPECT_EQ(g.daily_fitness_multiple_infection, 1);
+
+  Genotype g1("||||NY1||KTHFI,X||||||FNMYRIPRPC|1");
+  g1.calculate_daily_fitness(c.pf_gene_info());
+  EXPECT_EQ(g1.daily_fitness_multiple_infection, pow(1 - 0.0005, 1));
+
+  Genotype g2("||||YF2||KTHFI,X||||||FNMYRIPRPC|1");
+  g2.calculate_daily_fitness(c.pf_gene_info());
+  EXPECT_EQ(g2.daily_fitness_multiple_infection, pow(1 - 0.0005, 3) * (1 - 0.0055));
 }

@@ -10,6 +10,7 @@
 #include "Core/Config/Config.h"
 #include "Genotype.h"
 #include "Helpers/NumberHelpers.h"
+#include "Model.h"
 
 GenotypeDatabase::GenotypeDatabase() : auto_id(0) {}
 
@@ -21,10 +22,10 @@ GenotypeDatabase::~GenotypeDatabase() {
 }
 
 void GenotypeDatabase::add(Genotype *genotype) {
-  if (this->find(genotype->genotype_id()) != this->end()) {
-    delete (*this)[genotype->genotype_id()];
+  if (this->find(genotype->genotype_id) != this->end()) {
+    delete (*this)[genotype->genotype_id];
   }
-  (*this)[genotype->genotype_id()] = genotype;
+  (*this)[genotype->genotype_id] = genotype;
 }
 
 Genotype *GenotypeDatabase::get_genotype_from_alleles_structure(const IntVector &alleles) {
@@ -35,14 +36,24 @@ Genotype *GenotypeDatabase::get_genotype_from_alleles_structure(const IntVector 
   return this->at(id);
 }
 
-unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence) {
+unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, PfGeneInfo *pInfo) {
   if (aa_sequence_id_map.find(aa_sequence) == aa_sequence_id_map.end()) {
     // not yet exist then initialize new genotype
     auto new_id = auto_id;
     aa_sequence_id_map[aa_sequence] = new_id;
 
     auto new_genotype = new Genotype(aa_sequence);
-    new_genotype->set_genotype_id(auto_id);
+    new_genotype->genotype_id = new_id;
+
+    // check if aa_sequence is valid
+    if (!new_genotype->is_valid(*pInfo)) {
+      LOG(FATAL) << "Invalid genotype: " << aa_sequence;
+    }
+
+    // calculate cost of resistance
+    new_genotype->calculate_daily_fitness(*pInfo);
+
+    // calculate ec50
 
     add(new_genotype);
 

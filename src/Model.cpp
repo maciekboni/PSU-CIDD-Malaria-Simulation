@@ -187,7 +187,7 @@ void Model::initialize() {
   }
   //
   // for(auto it = CONFIG->genotype_db()->begin(); it != CONFIG->genotype_db()->end(); ++it) {
-  //   std::cout << it->first << " : " << it->second->daily_fitness_multiple_infection() << std::endl;
+  //   std::cout << it->first << " : " << it->second->daily_fitness_multiple_infection << std::endl;
   // }
 }
 

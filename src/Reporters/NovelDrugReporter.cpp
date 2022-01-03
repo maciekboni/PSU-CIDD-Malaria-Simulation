@@ -130,11 +130,11 @@ void NovelDrugReporter::output_genotype_frequency_3(
           std::map<int, int> individual_genotype_map;
 
           for (auto* parasite_population : *(person->all_clonal_parasite_populations()->parasites())) {
-            const auto g_id = parasite_population->genotype()->genotype_id();
+            const auto g_id = parasite_population->genotype()->genotype_id;
             if (individual_genotype_map.find(g_id) == individual_genotype_map.end()) {
-              individual_genotype_map[parasite_population->genotype()->genotype_id()] = 1;
+              individual_genotype_map[parasite_population->genotype()->genotype_id] = 1;
             } else {
-              individual_genotype_map[parasite_population->genotype()->genotype_id()] += 1;
+              individual_genotype_map[parasite_population->genotype()->genotype_id] += 1;
             }
           }
 

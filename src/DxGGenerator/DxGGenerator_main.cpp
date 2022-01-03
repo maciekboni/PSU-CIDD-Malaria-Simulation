@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 
     std::stringstream ss;
     auto p_genotype = (*Model::CONFIG->genotype_db)[genotype_id];
-    ss << p_genotype->genotype_id() << "," << p_genotype->get_aa_sequence() << ",";
+    ss << p_genotype->genotype_id << "," << p_genotype->get_aa_sequence() << ",";
 
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
 
@@ -176,7 +176,7 @@ EF50Key get_EC50_key(SCTherapy* p_therapy, Genotype* p_genotype) {
 
   for (int j = 0; j < p_therapy->drug_ids.size(); ++j) {
 //    drug_type->ec50_map()
-    auto ec50 = Model::CONFIG->EC50_power_n_table()[p_genotype->genotype_id()][p_therapy->drug_ids[j]];
+    auto ec50 = Model::CONFIG->EC50_power_n_table()[p_genotype->genotype_id][p_therapy->drug_ids[j]];
 //    std::cout << p_therapy->drug_ids[j] << "-" << ec50 << std::endl;
     result.push_back(p_therapy->drug_ids[j]);
     result.push_back(ec50);
@@ -224,7 +224,7 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
   p_model->add_reporter(new PkPdReporter());
   // p_model->add_reporter(new IndividualsFileReporter("out.txt"));
 
-  auto* genotype = Model::CONFIG->genotype_db.at(g->genotype_id());
+  auto* genotype = Model::CONFIG->genotype_db.at(g->genotype_id);
 
   for (auto person : Model::POPULATION->all_persons()->vPerson()) {
 

@@ -409,9 +409,9 @@ initial_parasite_info:
   - location_id: -1
     parasite_info:
       #TNY__C1x
-      - aa_sequence: "||||NY1||KTHFI||||||FNMYRIPRPC|1"
+      - aa_sequence: "||||NY1||KTHFI,x||||||FNMYRIPRPC|1"
         prevalence: 0.05
-      - aa_sequence: "||||YY1||KTHFI||||||FNMYRIPRPC|1"
+      - aa_sequence: "||||YY1||KTHFI,x||||||FNMYRIPRPC|1"
         prevalence: 0.05
 #      - parasite_type_id: 2
 #        prevalence: 0.1
