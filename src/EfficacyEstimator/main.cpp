@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
   p_model->add_reporter(new PkPdReporter(&input));
 
   // =========infect population with genotype 0================
-  auto* genotype = Model::CONFIG->genotype_db()->at(0);
+  auto* genotype = Model::CONFIG->genotype_db.at(0);
 
   for (auto person : Model::POPULATION->all_persons()->vPerson()) {
     auto density = Model::CONFIG->parasite_density_level().log_parasite_density_from_liver;

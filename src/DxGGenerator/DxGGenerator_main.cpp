@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
   }
 
   // initialEC50Table
-  std::vector<std::vector<double>> EC50_table(Model::CONFIG->genotype_db()->size(),
+  std::vector<std::vector<double>> EC50_table(Model::CONFIG->genotype_db.size(),
                                               std::vector<double>(Model::CONFIG->drug_db()->size(), 0));
   std::cout << std::setprecision(5);
   int max_therapy_id{0}, min_therapy_id{0};
@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
   for (auto genotype_id = min_genotype_id; genotype_id <= max_genotype_id; genotype_id++) {
 
     std::stringstream ss;
-    auto p_genotype = (*Model::CONFIG->genotype_db())[genotype_id];
+    auto p_genotype = (*Model::CONFIG->genotype_db)[genotype_id];
     ss << p_genotype->genotype_id() << "," << p_genotype->get_aa_sequence() << ",";
 
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
@@ -224,7 +224,7 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
   p_model->add_reporter(new PkPdReporter());
   // p_model->add_reporter(new IndividualsFileReporter("out.txt"));
 
-  auto* genotype = Model::CONFIG->genotype_db()->at(g->genotype_id());
+  auto* genotype = Model::CONFIG->genotype_db.at(g->genotype_id());
 
   for (auto person : Model::POPULATION->all_persons()->vPerson()) {
 

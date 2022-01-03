@@ -37,11 +37,11 @@ p_infection_from_an_infectious_bite: 0.1
 # the simulation itself uses explicit ages and birthdays
 # but for reporting purposes and for age-specific mortality calculations, individuals are grouped into the following age classes
 number_of_age_classes: 15
-age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 20, 60, 100]
+age_structure: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 20, 60, 100 ]
 
 # this is only used for initializing the population structure at time 0
 # the last four rows of the matrix below are ignored when the number of locations is 1
-initial_age_structure: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 25, 35, 45, 55, 65, 100]
+initial_age_structure: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 25, 35, 45, 55, 65, 100 ]
 
 artificial_rescaling_of_population_size: 1.0
 
@@ -49,48 +49,48 @@ artificial_rescaling_of_population_size: 1.0
 location_db:
   #id, latitude, longitude
   location_info: [
-  [0, 0, 0],
-  [1, 0, 1],
-  [2, 0, 2],
-  [3, 1, 0],
-  [4, 1, 1],
-  [5, 1, 2],
-  [6, 2, 0],
-  [7, 2, 1],
-  [8, 2, 2]
+    [ 0, 0, 0 ],
+    [ 1, 0, 1 ],
+    [ 2, 0, 2 ],
+    [ 3, 1, 0 ],
+    [ 4, 1, 1 ],
+    [ 5, 1, 2 ],
+    [ 6, 2, 0 ],
+    [ 7, 2, 1 ],
+    [ 8, 2, 2 ]
   ]
   #if the number of values less than number of locations, the first value will be applied for all locations
   age_distribution_by_location: [
-  [0.0334, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0334, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0335, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0335, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0336, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0336, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0337, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0337, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387],
-  [0.0338, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387]
+    [ 0.0334, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0334, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0335, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0335, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0336, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0336, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0337, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0337, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ],
+    [ 0.0338, 0.0300, 0.0329, 0.0324, 0.0332, 0.0314, 0.0316, 0.0310, 0.0285, 0.0256, 0.0298, 0.0212, 0.0321, 0.0228, 0.0230, 0.1906, 0.1403, 0.0966, 0.0605, 0.0344, 0.0387 ]
   ]
   # probability that a symptomatic and infected individual seeks and receives antimalarial treatment
   #if the number of values less than number of locations, the first value will be applied for all locations
   # this is the initial value, the modification values can be change by setting in events node
-  p_treatment_for_less_than_5_by_location: [0.600000]
-  p_treatment_for_more_than_5_by_location: [0.500000]
+  p_treatment_for_less_than_5_by_location: [ 0.600000 ]
+  p_treatment_for_more_than_5_by_location: [ 0.500000 ]
 
   #transmission intensity
   #if the number of values less than number of locations, the first value will be applied for all locations
-  beta_by_location: [0.05]
+  beta_by_location: [ 0.05 ]
 
   #if the number of values less than number of locations, the first value will be applied for all locations
-  population_size_by_location: [1000, 10020, 10030, 10040, 10050, 10060, 10070, 10080, 10090 ]
+  population_size_by_location: [ 1000, 10020, 10030, 10040, 10050, 10060, 10070, 10080, 10090 ]
   #spatial_model could be Gravity, Barabasi, or Wesolowski
 
 # seasonality parameters for all location
 seasonal_info:
   enable: true
-  a: [1]
-  phi: [250]
-  min_value: [0.1]
+  a: [ 1 ]
+  phi: [ 250 ]
+  min_value: [ 0.1 ]
   period: 365
 
 spatial_model:
@@ -112,28 +112,28 @@ spatial_model:
 # below value indicates 37.25 births per 1000 individuals per year
 birth_rate: 0.03725
 # annual death rate (probability) by age group
-death_rate_by_age_class: [0.053979329, 0.018935757, 0.006867257, 0.001124347, 0.001136455, 0.001606066, 0.001953783, 0.001530096, 0.001299153, 0.001068073, 0.000978264, 0.000978264, 0.0055, 0.0055, 0.04450]
+death_rate_by_age_class: [ 0.053979329, 0.018935757, 0.006867257, 0.001124347, 0.001136455, 0.001606066, 0.001953783, 0.001530096, 0.001299153, 0.001068073, 0.000978264, 0.000978264, 0.0055, 0.0055, 0.04450 ]
 
 # probability of death for patients who are not treated or patients who experience a treatment failure (due to drug resistance, or otherwise)
 # when received treatment, this rate drop by factor of 10 in code
-mortality_when_treatment_fail_by_age_class: [0.040, 0.020,0.020,0.020,0.020,0.004,0.004,0.004,0.004,0.004,0.004, 0.001, 0.001, 0.001, 0.001]
+mortality_when_treatment_fail_by_age_class: [ 0.040, 0.020,0.020,0.020,0.020,0.004,0.004,0.004,0.004,0.004,0.004, 0.001, 0.001, 0.001, 0.001 ]
 
 
 # definitions of some log parasite density levels
 #
 parasite_density_level:
   #  log_parasite_density_cured:        -2.699    # corresponds to 10,000 total parasites (0.002 per μl)
-  log_parasite_density_cured:        -4.699    # corresponds to 100 total parasites (0.00002 per μl)
-  log_parasite_density_from_liver:    -2.000    # corresponds to 50,000 total parasites (0.01 per μl)
+  log_parasite_density_cured: -4.699    # corresponds to 100 total parasites (0.00002 per μl)
+  log_parasite_density_from_liver: -2.000    # corresponds to 50,000 total parasites (0.01 per μl)
   #  log_parasite_density_asymptomatic: 1.301    # corresponds to 20 parasites per microliter of blood
   #  log_parasite_density_asymptomatic: 2.69    # corresponds to 500 parasites per microliter of blood
   log_parasite_density_asymptomatic: 3    # corresponds to 1000 parasites per microliter of blood
-  log_parasite_density_clinical:     4.301    # corresponds to 20,000 parasites per microliter of blood (total 10^11)
-  log_parasite_density_clinical_from:     3.301    # corresponds to 2000 parasites per microliter of blood (total 10^10)
-  log_parasite_density_clinical_to:     5.301    # corresponds to 200,000 parasites per microliter of blood (total 10^12)
-  log_parasite_density_detectable:   1.000    # corresponds to 10 parasites per microliter of blood
+  log_parasite_density_clinical: 4.301    # corresponds to 20,000 parasites per microliter of blood (total 10^11)
+  log_parasite_density_clinical_from: 3.301    # corresponds to 2000 parasites per microliter of blood (total 10^10)
+  log_parasite_density_clinical_to: 5.301    # corresponds to 200,000 parasites per microliter of blood (total 10^12)
+  log_parasite_density_detectable: 1.000    # corresponds to 10 parasites per microliter of blood
   log_parasite_density_detectable_pfpr: 1.000 # corresponds to 100 parasites per microliter of blood
-  log_parasite_density_pyrogenic:    3.398    # corresponds to 2500 parasites per microliter of blood
+  log_parasite_density_pyrogenic: 3.398    # corresponds to 2500 parasites per microliter of blood
 
 
 immune_system_information:
@@ -188,75 +188,84 @@ circulation_info:
     mean: 5
     sd: 10
 
-
+# the appearance of gene should be in order
 gene_info:
-  - name: "Pfcrt"
-    chromosome: 7
-    aa_positions:
-      - position: 76
-        amino_acids: [ 'K', 'T' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 93
-        amino_acids: [ 'T', 'S' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 97
-        amino_acids: [ 'H', 'T' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 145
-        amino_acids: [ 'F', 'I' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 218
-        amino_acids: [ 'I', 'F' ]
-        daily_crs: [ 0, 0.0005]
-  - name: "Pfmdr1"
-    chromosome: 5
-    max_copy: 2
-    copy_daily_crs: [0, 0.0055]
-    aa_positions:
-      - position: 86
-        amino_acids: [ 'N', 'Y' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 218
-        amino_acids: [ 'Y', 'F' ]
-        daily_crs: [ 0, 0.0005]
-  - name: "Pfkelch13"
-    chromosome: 13
-    aa_positions:
-      - position: 446
-        amino_acids: [ 'F', 'I' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 458
-        amino_acids: [ 'N', 'Y' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 476
-        amino_acids: [ 'M', 'I' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 493
-        amino_acids: [ 'Y', 'H' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 539
-        amino_acids: [ 'R', 'T' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 543
-        amino_acids: [ 'I', 'T' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 553
-        amino_acids: [ 'P', 'L' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 561
-        amino_acids: [ 'R', 'H' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 574
-        amino_acids: [ 'P', 'L' ]
-        daily_crs: [ 0, 0.0005]
-      - position: 580
-        amino_acids: [ 'C', 'Y' ]
-        daily_crs: [ 0, 0.0005]
-  - name: "Pfplasmepsin"
-    chromosome: 14
-    max_copy: 2
-    copy_daily_crs: [0, 0.0005]
-    aa_positions: []
+  - chromosome: 7
+    genes:
+      - name: "Pfcrt"
+        aa_positions:
+          - position: 76
+            amino_acids: [ 'K', 'T' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 93
+            amino_acids: [ 'T', 'S' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 97
+            amino_acids: [ 'H', 'T' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 145
+            amino_acids: [ 'F', 'I' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 218
+            amino_acids: [ 'I', 'F' ]
+            daily_crs: [ 0, 0.0005 ]
+      - name: "PfKaf"
+        aa_positions:
+          - position: 500
+            amino_acids: [ 'x', 'X' ]
+            daily_crs: [ 0, 0.0005 ]
+  - chromosome: 5
+    genes:
+      - name: "Pfmdr1"
+        max_copy: 2
+        copy_daily_crs: [ 0, 0.0055 ]
+        aa_positions:
+          - position: 86
+            amino_acids: [ 'N', 'Y' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 218
+            amino_acids: [ 'Y', 'F' ]
+            daily_crs: [ 0, 0.0005 ]
+  - chromosome: 13
+    genes:
+      - name: "Pfkelch13"
+        aa_positions:
+          - position: 446
+            amino_acids: [ 'F', 'I' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 458
+            amino_acids: [ 'N', 'Y' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 476
+            amino_acids: [ 'M', 'I' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 493
+            amino_acids: [ 'Y', 'H' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 539
+            amino_acids: [ 'R', 'T' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 543
+            amino_acids: [ 'I', 'T' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 553
+            amino_acids: [ 'P', 'L' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 561
+            amino_acids: [ 'R', 'H' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 574
+            amino_acids: [ 'P', 'L' ]
+            daily_crs: [ 0, 0.0005 ]
+          - position: 580
+            amino_acids: [ 'C', 'Y' ]
+            daily_crs: [ 0, 0.0005 ]
+  - chromosome: 14
+    genes:
+      - name: "Pfplasmepsin"
+        max_copy: 2
+        copy_daily_crs: [ 0, 0.0005 ]
+        aa_positions: [ ]
 
 genotype_info:
   loci:
@@ -268,13 +277,13 @@ genotype_info:
           allele_name: "K76"
           short_name: "K"
           # this is the list of "mutant values" you can mutate up to (there is no real meaning of up; down mutations are equally likely)
-          can_mutate_to: [1]
+          can_mutate_to: [ 1 ]
           mutation_level: 0
           daily_cost_of_resistance: 0.0
         - value: 1
           allele_name: "76T"
           short_name: "T"
-          can_mutate_to: [0]
+          can_mutate_to: [ 0 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
           # here we start defining the second locus
@@ -284,49 +293,49 @@ genotype_info:
         - value: 0
           allele_name: "N86 Y184 one copy of pfmdr1"
           short_name: "NY--"
-          can_mutate_to: [1,2,4]
+          can_mutate_to: [ 1,2,4 ]
           mutation_level: 0
           daily_cost_of_resistance: 0.0
         - value: 1
           allele_name: "86Y Y184 one copy of pfmdr1"
           short_name: "YY--"
-          can_mutate_to: [3,0,5]
+          can_mutate_to: [ 3,0,5 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
         - value: 2
           allele_name: "N86 184F one copy of pfmdr1"
           short_name: "NF--"
-          can_mutate_to: [3,0,6]
+          can_mutate_to: [ 3,0,6 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
         - value: 3
           allele_name: "86Y 184F one copy of pfmdr1"
           short_name: "YF--"
-          can_mutate_to: [1,2,7]
+          can_mutate_to: [ 1,2,7 ]
           mutation_level: 2
           daily_cost_of_resistance: 0.00099975
         - value: 4
           allele_name: "N86 Y184 2 copies of pfmdr1"
           short_name: "NYNY"
-          can_mutate_to: [0]
+          can_mutate_to: [ 0 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.005
         - value: 5
           allele_name: "86Y Y184 2 copies of pfmdr1"
           short_name: "YYYY"
-          can_mutate_to: [1]
+          can_mutate_to: [ 1 ]
           mutation_level: 2
           daily_cost_of_resistance: 0.0055
         - value: 6
           allele_name: "N86 184F 2 copies of pfmdr1"
           short_name: "NFNF"
-          can_mutate_to: [2]
+          can_mutate_to: [ 2 ]
           mutation_level: 2
           daily_cost_of_resistance: 0.0055
         - value: 7
           allele_name: "86Y 184F 2 copies of pfmdr1"
           short_name: "YFYF"
-          can_mutate_to: [3]
+          can_mutate_to: [ 3 ]
           mutation_level: 3
           daily_cost_of_resistance: 0.006
     - locus_name: "K13 Propeller"
@@ -335,13 +344,13 @@ genotype_info:
         - value: 0
           allele_name: "C580"
           short_name: "C"
-          can_mutate_to: [1]
+          can_mutate_to: [ 1 ]
           mutation_level: 0
           daily_cost_of_resistance: 0.0
         - value: 1
           allele_name: "580Y"
           short_name: "Y"
-          can_mutate_to: [0]
+          can_mutate_to: [ 0 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
     - locus_name: "Plasmepsin 2-3"
@@ -350,13 +359,13 @@ genotype_info:
         - value: 0
           allele_name: "Plasmepsin 2-3 one copy"
           short_name: "1"
-          can_mutate_to: [1]
+          can_mutate_to: [ 1 ]
           mutation_level: 0
           daily_cost_of_resistance: 0.0
         - value: 1
           allele_name: "Plasmepsin 2-3 2 copies"
           short_name: "2"
-          can_mutate_to: [0]
+          can_mutate_to: [ 0 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
     - locus_name: "Hypothetical locus for multiple use"
@@ -365,13 +374,13 @@ genotype_info:
         - value: 0
           allele_name: "naive"
           short_name: "x"
-          can_mutate_to: [1]
+          can_mutate_to: [ 1 ]
           mutation_level: 0
           daily_cost_of_resistance: 0.0
         - value: 1
           allele_name: "mutant"
           short_name: "X"
-          can_mutate_to: [0]
+          can_mutate_to: [ 0 ]
           mutation_level: 1
           daily_cost_of_resistance: 0.0005
 
@@ -400,9 +409,9 @@ initial_parasite_info:
   - location_id: -1
     parasite_info:
       #TNY__C1x
-      - parasite_type_id: 64
+      - aa_sequence: "||||NY1||KTHFI||||||FNMYRIPRPC|1"
         prevalence: 0.05
-      - parasite_type_id: 72
+      - aa_sequence: "||||YY1||KTHFI||||||FNMYRIPRPC|1"
         prevalence: 0.05
 #      - parasite_type_id: 2
 #        prevalence: 0.1
@@ -438,10 +447,10 @@ drug_db:
     half_life: 0.0
     maximum_parasite_killing_rate: 0.999
     n: 25
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
-    affecting_loci: [2]
-    selecting_alleles: [[1]]
+    affecting_loci: [ 2 ]
+    selecting_alleles: [ [ 1 ] ]
     k: 4
     EC50:
       ..0..: 0.75
@@ -451,11 +460,11 @@ drug_db:
     half_life: 4.5
     maximum_parasite_killing_rate: 0.99
     n: 20
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
-    age_specific_drug_absorption: [0.7,0.7,0.85,0.85,0.85,0.85,0.85,0.85,0.85,0.85,1.0,1.0,1.0,1.0,1.0]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
+    age_specific_drug_absorption: [ 0.7,0.7,0.85,0.85,0.85,0.85,0.85,0.85,0.85,0.85,1.0,1.0,1.0,1.0,1.0 ]
     mutation_probability: 0.005
-    affecting_loci: [0,1]
-    selecting_alleles: [[0],[0,2,3,4,6,7]]
+    affecting_loci: [ 0,1 ]
+    selecting_alleles: [ [ 0 ],[ 0,2,3,4,6,7 ] ]
     k: 4
     EC50:
       #KNY--
@@ -495,10 +504,10 @@ drug_db:
     half_life: 9.0
     maximum_parasite_killing_rate: 0.95
     n: 19
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
-    affecting_loci: [0,1]
-    selecting_alleles: [[1],[0,1,3,4,5,7]]
+    affecting_loci: [ 0,1 ]
+    selecting_alleles: [ [ 1 ],[ 0,1,3,4,5,7 ] ]
     k: 4
     EC50:
       #KNY--
@@ -538,11 +547,11 @@ drug_db:
     half_life: 28.0
     maximum_parasite_killing_rate: 0.9
     n: 15
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
-    affecting_loci: [3]
-    selecting_alleles: [[1]]
-    resistant_factor: [[1]]
+    affecting_loci: [ 3 ]
+    selecting_alleles: [ [ 1 ] ]
+    resistant_factor: [ [ 1 ] ]
     k: 4
     EC50:
       ...0.: 0.58
@@ -553,29 +562,29 @@ drug_db:
     half_life: 21.0
     maximum_parasite_killing_rate: 0.9
     n: 15
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
-    affecting_loci: [1]
-    selecting_alleles: [[4,5,6,7]]
+    affecting_loci: [ 1 ]
+    selecting_alleles: [ [ 4,5,6,7 ] ]
     k: 4
     EC50:
-       .0... : 0.45
-       .1... : 0.45
-       .2... : 0.45
-       .3... : 0.45
-       .4... : 1.1
-       .5... : 1.1
-       .6... : 1.1
-       .7... : 1.1
+      .0...: 0.45
+      .1...: 0.45
+      .2...: 0.45
+      .3...: 0.45
+      .4...: 1.1
+      .5...: 1.1
+      .6...: 1.1
+      .7...: 1.1
   5:
     name: "SP"
     half_life: 6.5
     maximum_parasite_killing_rate: 0.9
     n: 15
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.000
-    affecting_loci: []
-    selecting_alleles: []
+    affecting_loci: [ ]
+    selecting_alleles: [ ]
     k: 4
     EC50:
       .....: 1.08
@@ -584,10 +593,10 @@ drug_db:
     half_life: 10
     maximum_parasite_killing_rate: 0.95
     n: 19
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
-    affecting_loci: [0,1]
-    selecting_alleles: [[1],[1,3,5,7]]
+    affecting_loci: [ 0,1 ]
+    selecting_alleles: [ [ 1 ],[ 1,3,5,7 ] ]
     k: 4
     EC50:
       #KNY--
@@ -635,64 +644,64 @@ tf_testing_day: 28
 therapy_db:
   #mono as
   0:
-    drug_id: [0]
-    dosing_days: [3]
+    drug_id: [ 0 ]
+    dosing_days: [ 3 ]
   #mono Lumefaltrine
   1:
-    drug_id: [1]
-    dosing_days: [3]
+    drug_id: [ 1 ]
+    dosing_days: [ 3 ]
   #mono AQ
   2:
-    drug_id: [2]
-    dosing_days: [3]
+    drug_id: [ 2 ]
+    dosing_days: [ 3 ]
   #mono PPQ
   3:
-    drug_id: [3]
-    dosing_days: [3]
+    drug_id: [ 3 ]
+    dosing_days: [ 3 ]
   #mono MQ
   4:
-    drug_id: [4]
-    dosing_days: [3]
+    drug_id: [ 4 ]
+    dosing_days: [ 3 ]
   #mono SP
   5:
-    drug_id: [5]
-    dosing_days: [3]
+    drug_id: [ 5 ]
+    dosing_days: [ 3 ]
   #AL
   6:
-    drug_id: [0,1]
-    dosing_days: [3]
+    drug_id: [ 0,1 ]
+    dosing_days: [ 3 ]
   #AS-AQ
   7:
-    drug_id: [0,2]
-    dosing_days: [3]
+    drug_id: [ 0,2 ]
+    dosing_days: [ 3 ]
   # DHA-PPQ
   8:
-    drug_id: [0,3]
-    dosing_days: [3]
+    drug_id: [ 0,3 ]
+    dosing_days: [ 3 ]
   #AS-MQ
   9:
-    drug_id: [0,4]
-    dosing_days: [3]
+    drug_id: [ 0,4 ]
+    dosing_days: [ 3 ]
   #TACT DHA-PPQ-MQ
   10:
-    drug_id: [0,3,4]
-    dosing_days: [3]
+    drug_id: [ 0,3,4 ]
+    dosing_days: [ 3 ]
   #TACT AL-AQ
   11:
-    drug_id: [0,1,2]
-    dosing_days: [3]
+    drug_id: [ 0,1,2 ]
+    dosing_days: [ 3 ]
   #CQ
   12:
-    drug_id: [6]
-    dosing_days: [3]
+    drug_id: [ 6 ]
+    dosing_days: [ 3 ]
 
 # drug-deployment strategy - simply uncomment below to turn on a particular strategy
 strategy_db:
   0:
     name: SP-AQ-CQ-AL-MFTStrategy
     type: MFT
-    therapy_ids: [5,2,12,6]
-    distribution: [0.3,0.3,0.3,0.1]
+    therapy_ids: [ 5,2,12,6 ]
+    distribution: [ 0.3,0.3,0.3,0.1 ]
   1:
     name: AL-SFTStrategy
     type: SFT
@@ -704,39 +713,39 @@ strategy_db:
   3:
     name: CyclingStrategy
     type: Cycling
-    therapy_ids: [8,7,6]
+    therapy_ids: [ 8,7,6 ]
     cycling_time: 1825
   4:
     name: AdaptiveCyclingStrategy
     type: AdaptiveCycling
-    therapy_ids: [8,7,6]
+    therapy_ids: [ 8,7,6 ]
     trigger_value: 0.1
     delay_until_actual_trigger: 365
     turn_off_days: 365
   5:
     name: MFTStrategy
     type: MFT
-    therapy_ids: [8,7,6]
-    distribution: [0.333333,0.333333,0.333334]
+    therapy_ids: [ 8,7,6 ]
+    distribution: [ 0.333333,0.333333,0.333334 ]
   6:
     name: AL-ASAQ-DP-MFTRebalancingStrategy1
     type: MFTRebalancing
-    therapy_ids: [8,7,6]
-    distribution: [0.333333,0.333333,0.333334]
+    therapy_ids: [ 8,7,6 ]
+    distribution: [ 0.333333,0.333333,0.333334 ]
     delay_until_actual_trigger: 365
     update_duration_after_rebalancing: 365
   7:
     name: AL-ASAQ-DP-MFTRebalancingStrategy2
     type: MFTRebalancing
-    therapy_ids: [8,7,6]
-    distribution: [0.333333,0.333333,0.333334]
+    therapy_ids: [ 8,7,6 ]
+    distribution: [ 0.333333,0.333333,0.333334 ]
     delay_until_actual_trigger: 365
     update_duration_after_rebalancing: 730
   8:
     name: AL-ASAQ-DP-MFTRebalancingStrategy4
     type: MFTRebalancing
-    therapy_ids: [8,7,6]
-    distribution: [0.333333,0.333333,0.333334]
+    therapy_ids: [ 8,7,6 ]
+    distribution: [ 0.333333,0.333333,0.333334 ]
     delay_until_actual_trigger: 365
     update_duration_after_rebalancing: 1460
   9:
@@ -750,23 +759,23 @@ strategy_db:
   11:
     name: AL-BaseLineStrategy
     type: NestedMFT
-    strategy_ids: [1,0]
-    start_distribution: [0.05, 0.95]
-    peak_distribution: [0.8,0.2]
+    strategy_ids: [ 1,0 ]
+    start_distribution: [ 0.05, 0.95 ]
+    peak_distribution: [ 0.8,0.2 ]
     peak_after: 3650
   12:
     name: ASAQ-BaseLineStrategy
     type: NestedMFT
-    strategy_ids: [2,0]
-    start_distribution: [0.05, 0.95]
-    peak_distribution: [0.8,0.2]
+    strategy_ids: [ 2,0 ]
+    start_distribution: [ 0.05, 0.95 ]
+    peak_distribution: [ 0.8,0.2 ]
     peak_after: 3650
   13:
     name: MFTMultiLocation
     type: MFTMultiLocation
-    therapy_ids: [6,8,10,7,9]
+    therapy_ids: [ 6,8,10,7,9 ]
     start_distribution: [
-    [0.84,0.06,0.05,0.03,0.02]
+      [ 0.84,0.06,0.05,0.03,0.02 ]
       #    [0.84,0.06,0.05,0.03,0.03],
       #    [0.84,0.06,0.05,0.03,0.04],
       #    [0.84,0.06,0.05,0.03,0.05],
@@ -777,7 +786,7 @@ strategy_db:
       #    [0.84,0.06,0.05,0.03,0.10]
     ]
     peak_distribution: [
-    [0.84,0.06,0.05,0.03,0.02]
+      [ 0.84,0.06,0.05,0.03,0.02 ]
       #    [0.84,0.06,0.05,0.03,0.03],
       #    [0.84,0.06,0.05,0.03,0.04],
       #    [0.84,0.06,0.05,0.03,0.05],
@@ -791,9 +800,9 @@ strategy_db:
   14:
     name: BaseLineStrategy
     type: NestedMFTMultiLocation
-    strategy_ids: [0,1]
-    start_distribution: [[0.05, 0.95]]
-    peak_distribution: [[0.8,0.2]]
+    strategy_ids: [ 0,1 ]
+    start_distribution: [ [ 0.05, 0.95 ] ]
+    peak_distribution: [ [ 0.8,0.2 ] ]
     peak_after: 3650
 
 initial_strategy_id: 5
@@ -883,15 +892,15 @@ external_population_circulation_information:
     Gamma:
       mean: 5
       sd: 10
-  circulation_percent: [0.0, 0.01, 0.01, 0.01, 0.01 ]
+  circulation_percent: [ 0.0, 0.01, 0.01, 0.01, 0.01 ]
   length_of_stay:
     # drawn from gamma distribution?
     mean: 5
     sd: 10
-  daily_EIR: [0.01,0.01,0.01,0.01,0.1]
+  daily_EIR: [ 0.01,0.01,0.01,0.01,0.1 ]
   seasonal_EIR:
-    a: [1]
-    phi: [180]
+    a: [ 1 ]
+    phi: [ 180 ]
     period: 360
     min_value: 0.1
 
@@ -950,34 +959,34 @@ events:
             number_of_cases: 1
             start_day: 1990/6/2
 
-#  - name: introduce_parasites_periodically_v2
-#    info:
-#    - location: 0
-#      parasite_info:
-#      - duration: 10
-#        number_of_cases: 1
-#        start_day: 2008/2/1
-# # if there is no end_day, the end_date will be the end_date of the simulation
-#        end_day: 2008/2/1
-#        allele_distributions:
-#          # If the position is not defined here, uniform distribution will be applied
-#          - position: 0
-#            distribution: [ 0.5, 0.5 ]
-#          - position: 1
-#            distribution: [ 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125 ]
-#          - position: 2
-#            distribution: [ 0.5, 0.5 ]
-#          - position: 3
-#            distribution: [ 0.5, 0.5 ]
-#          - position: 4
-#            distribution: [ 0.5, 0.5 ]
+  #  - name: introduce_parasites_periodically_v2
+  #    info:
+  #    - location: 0
+  #      parasite_info:
+  #      - duration: 10
+  #        number_of_cases: 1
+  #        start_day: 2008/2/1
+  # # if there is no end_day, the end_date will be the end_date of the simulation
+  #        end_day: 2008/2/1
+  #        allele_distributions:
+  #          # If the position is not defined here, uniform distribution will be applied
+  #          - position: 0
+  #            distribution: [ 0.5, 0.5 ]
+  #          - position: 1
+  #            distribution: [ 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125 ]
+  #          - position: 2
+  #            distribution: [ 0.5, 0.5 ]
+  #          - position: 3
+  #            distribution: [ 0.5, 0.5 ]
+  #          - position: 4
+  #            distribution: [ 0.5, 0.5 ]
 
   - name: change_treatment_coverage
     info:
       - type: SteadyTCM
         day: 1990/2/1
-        p_treatment_for_less_than_5_by_location: [0.600000]
-        p_treatment_for_more_than_5_by_location: [0.550000]
+        p_treatment_for_less_than_5_by_location: [ 0.600000 ]
+        p_treatment_for_more_than_5_by_location: [ 0.550000 ]
       - type: InflatedTCM
         day: 1990/3/1
         annual_inflation_rate: 0.01
@@ -988,8 +997,8 @@ events:
         to_day: 1990/12/1
         #p_treatment_for_less_than_5_by_location_from: [0.600000]
         #p_treatment_for_more_than_5_by_location_from: [0.500000]
-        p_treatment_for_less_than_5_by_location_to: [0.900000]
-        p_treatment_for_more_than_5_by_location_to: [0.90000]
+        p_treatment_for_less_than_5_by_location_to: [ 0.900000 ]
+        p_treatment_for_more_than_5_by_location_to: [ 0.90000 ]
   - name: change_treatment_strategy
     info:
       - day: 1990/3/2
@@ -1001,20 +1010,20 @@ events:
   - name: single_round_MDA
     info:
       - day: 2020/1/1
-        fraction_population_targeted: [1.0]
+        fraction_population_targeted: [ 1.0 ]
         days_to_complete_all_treatments: 14
       - day: 2020/2/8
-        fraction_population_targeted: [0.03333333]
+        fraction_population_targeted: [ 0.03333333 ]
         days_to_complete_all_treatments: 14
       - day: 2020/3/14
-        fraction_population_targeted: [0.7]
+        fraction_population_targeted: [ 0.7 ]
         days_to_complete_all_treatments: 14
 
 
 mda_therapy_id: 8
 
-age_bracket_prob_individual_present_at_mda: [10, 40]
+age_bracket_prob_individual_present_at_mda: [ 10, 40 ]
 
-mean_prob_individual_present_at_mda: [0.85, 0.75, 0.85]
+mean_prob_individual_present_at_mda: [ 0.85, 0.75, 0.85 ]
 
-sd_prob_individual_present_at_mda: [0.3, 0.3, 0.3]
+sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]

@@ -149,42 +149,8 @@ void immune_system_information::set_value(const YAML::Node &node) {
                          value_.duration_for_naive);
 }
 
-genotype_db::~genotype_db() {
-  ObjectHelpers::delete_pointer<GenotypeDatabase>(value_);
-}
-
-void genotype_db::set_value(const YAML::Node &node) {
-
-  value_ = new GenotypeDatabase();
-
-  value_->weight().clear();
-  value_->weight().assign(config_->genotype_info().loci_vector.size(), 1);
-
-//  std::cout << value_->weight().size()-2<< std::endl;
-  auto temp = 1;
-  for (int i = static_cast<int>(value_->weight().size() - 2); i >= 0; i--) {
-    temp *= (int) config_->genotype_info().loci_vector[i + 1].alleles.size();
-    value_->weight()[i] = temp;
-  }
-  auto number_of_genotypes = 1;
-  // std::cout << config_->genotype_info().loci_vector.size() << std::endl;
-  for (auto &locus : config_->genotype_info().loci_vector) {
-    number_of_genotypes *= (int) locus.alleles.size();
-  }
-
-  for (auto i = 0; i < number_of_genotypes; i++) {
-    // TODO: rework on this
-    auto* int_genotype = new Genotype();
-//    std::cout << *int_genotype << std::endl;
-//    value_->add(int_genotype);
-  }
-
-  value_->initialize_matting_matrix();
-
-}
-
 void number_of_parasite_types::set_value(const YAML::Node &node) {
-  value_ = static_cast<int>(config_->genotype_db()->size());
+  // TODO: remove this
 }
 
 drug_db::~drug_db() {
@@ -257,22 +223,8 @@ void drug_db::set_value(const YAML::Node &node) {
 }
 
 void EC50_power_n_table::set_value(const YAML::Node &node) {
-  //get EC50 table and compute EC50^n
-  value_.clear();
-  value_.assign(config_->genotype_db()->size(), std::vector<double>());
+  // TODO: remove this
 
-  for (auto g_id = 0; g_id < config_->genotype_db()->size(); g_id++) {
-    for (auto i = 0; i < config_->drug_db()->size(); i++) {
-      value_[g_id].push_back(config_->drug_db()->at(i)->infer_ec50(config_->genotype_db()->at(g_id)));
-    }
-  }
-
-
-  for (auto g_id = 0; g_id < config_->genotype_db()->size(); g_id++) {
-    for (auto i = 0; i < config_->drug_db()->size(); i++) {
-      value_[g_id][i] = pow(value_[g_id][i], config_->drug_db()->at(i)->n());
-    }
-  }
 }
 
 void circulation_info::set_value(const YAML::Node &node) {
@@ -442,19 +394,18 @@ void initial_parasite_info::set_value(const YAML::Node &node) {
 
   const auto &info_node = node[name_];
 
-  for (size_t index = 0; index < info_node.size(); index++) {
-    const auto location = info_node[index]["location_id"].as<int>();
+  for (const auto &location_node : info_node) {
+    const auto location = location_node["location_id"].as<int>();
     const auto location_from = location == -1 ? 0 : location;
     const auto location_to = location == -1 ? config_->number_of_locations() : std::min<int>(location + 1,
                                                                                              config_->number_of_locations());
 
     //apply for all location
     for (auto loc = location_from; loc < location_to; ++loc) {
-      for (std::size_t j = 0; j < info_node[index]["parasite_info"].size(); j++) {
-        //            InitialParasiteInfo ipi;
-        //            ipi.location = location;
-        auto parasite_type_id = info_node[index]["parasite_info"][j]["parasite_type_id"].as<int>();
-        auto prevalence = info_node[index]["parasite_info"][j]["prevalence"].as<double>();
+      for (const auto &parasite_node :location_node["parasite_info"]) {
+        auto aa_sequence = parasite_node["aa_sequence"].as<std::string>();
+        auto parasite_type_id = config_->genotype_db.get_id(aa_sequence);
+        auto prevalence = parasite_node["prevalence"].as<double>();
         value_.emplace_back(loc, parasite_type_id, prevalence);
       }
     }

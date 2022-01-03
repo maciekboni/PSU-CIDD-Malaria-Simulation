@@ -186,11 +186,13 @@ struct convert<GeneInfo> {
   }
 
   static bool decode(const Node& node, GeneInfo& gene_info) {
-    gene_info.genes.clear();
-
-    for (const auto& gene_node : node) {
-      auto gene = gene_node.as<Gene>();
-      gene_info.genes.push_back(gene);
+    for (const auto& chromosome_node: node) {
+      auto chromosome = chromosome_node["chromosome"].as<int>();
+      for (const auto& gene_node : chromosome_node["genes"]) {
+        auto gene = gene_node.as<Gene>();
+        gene.chromosome = chromosome;
+        gene_info.chromosomes[chromosome - 1].genes.push_back(gene);
+      }
     }
     return true;
   }
@@ -207,7 +209,6 @@ struct convert<Gene> {
   static bool decode(const Node& node, Gene& gene) {
     gene.aa_positions.clear();
     gene.name = node["name"].as<std::string>();
-    gene.chromosome = node["chromosome"].as<int>();
 
     gene.max_copy = node["max_copy"] ? node["max_copy"].as<int>() : 1;
     gene.copy_daily_crs =

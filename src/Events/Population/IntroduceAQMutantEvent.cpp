@@ -50,7 +50,7 @@ void IntroduceAQMutantEvent::execute() {
 //        new_genotype = new_genotype->combine_mutation_to(1, mutant_alleles[allele_index]);
 
         //5b scenarios
-        auto* new_genotype = Model::CONFIG->genotype_db()->at(72);
+        auto* new_genotype = Model::CONFIG->genotype_db.at(72);
 
         pp->set_genotype(new_genotype);
       }

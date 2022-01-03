@@ -96,15 +96,15 @@ void ImportationPeriodicallyEvent::execute() {
         if (random_id % 2 == 1) {
           random_id -= 1;
         }
-        imported_genotype = Model::CONFIG->genotype_db()->at(random_id);
+        imported_genotype = Model::CONFIG->genotype_db.at(random_id);
         break;
       case -2:
         // all random even last xX locus new genotype will have
         // 50% chance of 580Y and 50% plasmepsin-2 copy and %50 X ....
-        imported_genotype = Model::CONFIG->genotype_db()->at(random_id);
+        imported_genotype = Model::CONFIG->genotype_db.at(random_id);
         break;
       default:
-        imported_genotype = Model::CONFIG->genotype_db()->at(genotype_id_);
+        imported_genotype = Model::CONFIG->genotype_db.at(genotype_id_);
     }
 
     auto* blood_parasite = p->add_new_parasite_to_blood(imported_genotype);

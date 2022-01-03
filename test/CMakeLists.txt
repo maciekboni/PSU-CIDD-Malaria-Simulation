@@ -36,6 +36,7 @@ set(TEST_SRC_FILES main.cpp test1.cpp
   Core/TimeHelpersTest.cpp
   Core/ConfigTest.cpp
   Core/Config/ReadGeneInfoTest.cpp
+  Core/Config/ReadInitialParasiteInfoTest.cpp
   )
 
 set(MAIN_TEST masim_test)

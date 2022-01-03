@@ -23,7 +23,7 @@ void MMCReporter::initialize() {
 
 void MMCReporter::before_run() {
   // // std::cout << "MMC Reporter" << std::endl;
-  // for (auto genotype : (*Model::CONFIG->genotype_db())){
+  // for (auto genotype : (*Model::CONFIG->genotype_db)){
   //   std::cout << *genotype.second << std::endl;
   // }
 

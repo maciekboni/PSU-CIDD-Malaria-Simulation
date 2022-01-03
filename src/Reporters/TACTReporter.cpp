@@ -26,7 +26,7 @@ void TACTReporter::before_run() {
      << "NUMBER_OF_TREATMENTS" << sep
      << "NUMBER_OF_TREATMENT_FAILURES" << sep
      << "NUMBER_OF_SYMPTOMATIC_CASES" << sep;
-  for (auto i = 0; i < Model::CONFIG->genotype_db()->size(); i++) {
+  for (auto i = 0; i < Model::CONFIG->genotype_db.size(); i++) {
     ss << "GENOTYPE_ID_" << i << sep;
   }
   ss << group_sep;

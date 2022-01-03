@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   Genotype.cpp
  * Author: Merlin
- * 
+ *
  * Created on March 17, 2014, 2:33 PM
  */
 
@@ -12,9 +12,27 @@
 #include "Core/Random.h"
 #include "Therapies/SCTherapy.h"
 
-Genotype::Genotype() {
+Genotype::Genotype(const std::string &in_aa_sequence): aa_sequence(in_aa_sequence) {
+
+  // create aa structure
+  std::vector<std::string> tokens;
+  std::string token;
+  std::istringstream tokenStream(aa_sequence);
+  auto i = 0;
+  while (std::getline(tokenStream, token, '|'))
+  {
+    aa_structure[i] = token;
+    i++;
+  }
+
+  // check if aa_sequence is valid
+
+  // calculate cost of resistance
+
+  // calculate ec50
 
 }
+
 
 Genotype::~Genotype() = default;
 
@@ -55,14 +73,15 @@ std::ostream &operator<<(std::ostream &os, const Genotype &e) {
 }
 
 std::string Genotype::get_aa_sequence() const {
-  std::stringstream ss;
-
-  for (auto &chromosome : aa_structure) {
-    ss << chromosome;
-    if (&chromosome != &aa_structure.back()){
-      ss << "|";
-    }
-  }
-
-  return ss.str();
+  return aa_sequence;
+//  std::stringstream ss;
+//
+//  for (auto &chromosome : aa_structure) {
+//    ss << chromosome;
+//    if (&chromosome != &aa_structure.back()){
+//      ss << "|";
+//    }
+//  }
+//
+//  return ss.str();
 }

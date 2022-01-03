@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   ParasitePopulation.cpp
  * Author: Merlin
- * 
+ *
  * Created on July 11, 2013, 1:53 PM
  */
 
@@ -178,24 +178,7 @@ void SingleHostClonalParasitePopulations::update_relative_effective_parasite_den
   }
 
   for (auto i = 0; i < relative_parasite_density.size(); i++) {
-    if (NumberHelpers::is_equal(relative_parasite_density[i], 0.0)) { continue; }
-    for (auto j = i; j < relative_parasite_density.size(); j++) {
-      if (NumberHelpers::is_equal(relative_parasite_density[j], 0.0)) { continue; }
-      if (i == j) {
-        const auto weight = relative_parasite_density[i] * relative_parasite_density[i];
-        relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id()) += weight;
-
-      } else {
-        const auto weight = 2 * relative_parasite_density[i] * relative_parasite_density[j];
-        const auto id_f = parasites_->at(i)->genotype()->genotype_id();
-        const auto id_m = parasites_->at(j)->genotype()->genotype_id();
-        for (auto p = 0; p < Model::CONFIG->number_of_parasite_types(); p++) {
-          if (Model::CONFIG->genotype_db()->get_offspring_density(id_f, id_m, p) == 0) { continue; }
-          relative_effective_parasite_density_->at(p) +=
-              weight * Model::CONFIG->genotype_db()->get_offspring_density(id_f, id_m, p);
-        }
-      }
-    }
+    relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id())  += relative_parasite_density[i];
   }
 }
 

@@ -128,16 +128,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
     ASSERT_EQ(c.immune_system_information().acquire_rate, 0.00125);
     ASSERT_EQ(c.immune_system_information().decay_rate, 0.0025);
 
-  // TODO: rework on this
-  ASSERT_NE(c.genotype_db(), nullptr);
-//    ASSERT_EQ(c.genotype_db()->size(), 128);
-    //ASSERT_EQ(c.genotype_db()->at(0)->aa_structure(), IntVector{0, 0, 0, 0, 0});
-    //ASSERT_EQ(c.genotype_db()->at(127)->aa_structure(), IntVector{1, 7, 1, 1, 1});
-
-    //
-//    ASSERT_EQ(c.number_of_parasite_types(), 128);
-    //
-
 
     ASSERT_EQ(c.drug_db()->size(), 7);
     ASSERT_EQ(c.drug_db()->at(0)->n(), 25);
@@ -148,7 +138,7 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
 
 //    ASSERT_EQ(c.EC50_power_n_table().size(), 128);
 //    ASSERT_EQ(c.EC50_power_n_table()[0].size(), 7);
-    //
+
     ASSERT_EQ(c.circulation_info().max_relative_moving_value, 35);
     //
     ASSERT_EQ(c.relative_bitting_info().max_relative_biting_value, 35);
@@ -169,16 +159,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
     ASSERT_EQ(c.strategy_db()[14]->get_type(), IStrategy::NestedMFTMultiLocation);
 
     ASSERT_EQ(c.initial_strategy_id(), 5);
-
-    ASSERT_EQ(c.initial_parasite_info().size(), 18);
-    for (auto i = 0; i < 18; i += 2) {
-        ASSERT_EQ(c.initial_parasite_info()[i].parasite_type_id, 64);
-        ASSERT_EQ(c.initial_parasite_info()[i].prevalence, 0.05);
-    }
-    for (auto i = 1; i < 18; i += 2) {
-        ASSERT_EQ(c.initial_parasite_info()[i].parasite_type_id, 72);
-        ASSERT_EQ(c.initial_parasite_info()[i].prevalence, 0.05);
-    }
 
     // ASSERT_EQ(c.initial_parasite_info()[18].parasite_type_id, 15);
     // ASSERT_EQ(c.initial_parasite_info()[18].prevalence, 0.05);

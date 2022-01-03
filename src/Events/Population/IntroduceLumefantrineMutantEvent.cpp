@@ -49,7 +49,7 @@ void IntroduceLumefantrineMutantEvent::execute() {
 //        new_genotype = new_genotype->combine_mutation_to(1, mutant_alleles[allele_index]);
 
         auto* old_genotype = pp->genotype();
-        auto* new_genotype = Model::CONFIG->genotype_db()->at(48);
+        auto* new_genotype = Model::CONFIG->genotype_db.at(48);
 
         pp->set_genotype(new_genotype);
       }

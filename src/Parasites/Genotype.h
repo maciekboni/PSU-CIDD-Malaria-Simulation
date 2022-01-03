@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Genotype.h
  * Author: Merlin
  *
@@ -8,9 +8,10 @@
 #ifndef Genotype_H
 #define Genotype_H
 
-#include "Core/TypeDef.h"
-#include "Core/PropertyMacro.h"
 #include <array>
+
+#include "Core/PropertyMacro.h"
+#include "Core/TypeDef.h"
 
 class DrugDatabase;
 
@@ -18,25 +19,25 @@ class DrugType;
 
 class Therapy;
 
-typedef std::array<std::string_view, 14> AaStructure;
+typedef std::array<std::string, 14> AaStructure;
 
 class Genotype {
+  DISALLOW_COPY_AND_ASSIGN(Genotype)
 
-DISALLOW_COPY_AND_ASSIGN(Genotype)
+  PROPERTY_REF(int, genotype_id)
 
-PROPERTY_REF(int, genotype_id)
+  PROPERTY_REF(double, daily_fitness_multiple_infection)
 
-PROPERTY_REF(double, daily_fitness_multiple_infection)
+  PROPERTY_REF(int, number_of_resistance_position)
 
-PROPERTY_REF(int, number_of_resistance_position)
-
-POINTER_PROPERTY(DrugDatabase, drug_db)
+  POINTER_PROPERTY(DrugDatabase, drug_db)
 
 public:
   AaStructure aa_structure;
+  std::string aa_sequence;
 
 public:
-  explicit Genotype();
+  Genotype(const std::string& aa_sequence);
 
   virtual ~Genotype();
 
@@ -57,7 +58,6 @@ public:
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 
 private:
-
 };
 
 #endif /* Genotype_H */

@@ -298,9 +298,6 @@ void Model::daily_update(const int& current_time) {
   //update / calculate daily UTL
   data_collector_->end_of_time_step();
 
-  //update force of infection
-  population_->update_force_of_infection(current_time);
-
   //check to switch strategy
   treatment_strategy_->update_end_of_time_step();
 }

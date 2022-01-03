@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   IntParasiteDatabase.h
  * Author: Merlin
  *
@@ -6,12 +6,13 @@
  */
 
 #ifndef INTPARASITEDATABASE_H
-#define    INTPARASITEDATABASE_H
+#define INTPARASITEDATABASE_H
+
+#include <map>
 
 #include "Core/PropertyMacro.h"
 #include "Core/TypeDef.h"
 #include "Genotype.h"
-#include <map>
 
 class Genotype;
 
@@ -19,33 +20,29 @@ typedef std::map<ul, Genotype*> GenotypePtrMap;
 typedef std::vector<std::vector<std::vector<double>>> MatingMatrix;
 
 class GenotypeDatabase : public GenotypePtrMap {
- DISALLOW_COPY_AND_ASSIGN(GenotypeDatabase)
+  DISALLOW_COPY_AND_ASSIGN(GenotypeDatabase)
 
- DISALLOW_MOVE(GenotypeDatabase)
+  DISALLOW_MOVE(GenotypeDatabase)
 
- VIRTUAL_PROPERTY_REF(MatingMatrix, mating_matrix)
+  VIRTUAL_PROPERTY_REF(MatingMatrix, mating_matrix)
 
- VIRTUAL_PROPERTY_REF(IntVector, weight)
+  VIRTUAL_PROPERTY_REF(IntVector, weight)
+public:
+  std::map<std::string, unsigned int> aa_sequence_id_map;
 
- public:
+public:
   GenotypeDatabase();
 
   virtual ~GenotypeDatabase();
 
   void add(Genotype* genotype);
 
-  int get_id(const IntVector &gene);
+  unsigned int get_id(const std::string& aa_sequence);
 
-  Genotype* get_genotype_from_alleles_structure(const IntVector &alleles);
+  Genotype* get_genotype_from_alleles_structure(const IntVector& alleles);
 
-  void initialize_matting_matrix();
-
-  std::vector<double> generate_offspring_parasite_density(const IntVector &m, const IntVector &f);
-
-  double get_offspring_density(const int &m, const int &f, const int &p);
-
- private:
-
+private:
+  unsigned int auto_id;
 };
 
-#endif    /* INTPARASITEDATABASE_H */
+#endif /* INTPARASITEDATABASE_H */
