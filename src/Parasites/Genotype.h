@@ -18,8 +18,9 @@ class DrugDatabase;
 class DrugType;
 
 class Therapy;
-
-typedef std::array<std::string, 14> AaStructure;
+typedef std::string GeneStr;
+typedef std::vector<GeneStr> ChromosomeStr;
+typedef std::array<ChromosomeStr, 14> AaStructure;
 
 class Genotype {
   DISALLOW_COPY_AND_ASSIGN(Genotype)

@@ -230,31 +230,31 @@ struct GenotypeInfo {
   }
 };
 
-struct AaPosition {
+struct AaPositionInfo {
   int position;
   std::vector<char> amino_acids;
   std::vector<double> daily_crs;
-  friend std::ostream &operator<<(std::ostream &os, const AaPosition &aa) { return os; }
+  friend std::ostream &operator<<(std::ostream &os, const AaPositionInfo &aa) { return os; }
 };
 
-struct Gene {
+struct GeneInfo {
   std::string name;
   int chromosome;
   int max_copy;
   std::vector<double> copy_daily_crs;
-  std::vector<AaPosition> aa_positions;
-  friend std::ostream &operator<<(std::ostream &os, const Gene &aa) { return os; }
+  std::vector<AaPositionInfo> aa_position_infos;
+  friend std::ostream &operator<<(std::ostream &os, const GeneInfo &aa) { return os; }
 };
 
-struct Chromosome {
-  std::vector<Gene> genes;
+struct ChromosomeInfo {
+  std::vector<GeneInfo> gene_infos;
 
-  friend std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) { return os; }
+  friend std::ostream &operator<<(std::ostream &os, const ChromosomeInfo &chromosome) { return os; }
 };
-struct GeneInfo {
-  std::array<Chromosome, 14> chromosomes {};
+struct PfGeneInfo {
+  std::array<ChromosomeInfo, 14> chromosome_infos {};
 
-  friend std::ostream &operator<<(std::ostream &os, const GeneInfo &geneInfo) { return os; }
+  friend std::ostream &operator<<(std::ostream &os, const PfGeneInfo &geneInfo) { return os; }
 };
 
 #endif /* TYPEDEF_H */

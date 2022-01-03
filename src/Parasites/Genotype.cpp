@@ -21,7 +21,7 @@ Genotype::Genotype(const std::string &in_aa_sequence): aa_sequence(in_aa_sequenc
   auto i = 0;
   while (std::getline(tokenStream, token, '|'))
   {
-    aa_structure[i] = token;
+    aa_structure[i].push_back(token);
     i++;
   }
 

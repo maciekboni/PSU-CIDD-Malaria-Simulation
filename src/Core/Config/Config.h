@@ -91,7 +91,7 @@ public:
 
   CONFIG_ITEM(genotype_info, GenotypeInfo, GenotypeInfo())
 
-  CONFIG_ITEM(gene_info, GeneInfo, GeneInfo())
+  CONFIG_ITEM(pf_gene_info, PfGeneInfo, PfGeneInfo())
 
   CONFIG_ITEM(initial_strategy_id, int, -1)
 

@@ -189,7 +189,7 @@ circulation_info:
     sd: 10
 
 # the appearance of gene should be in order
-gene_info:
+pf_gene_info:
   - chromosome: 7
     genes:
       - name: "Pfcrt"

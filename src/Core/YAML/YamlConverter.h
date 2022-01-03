@@ -178,20 +178,20 @@ struct convert<RelativeInfectivity> {
 };
 
 template <>
-struct convert<GeneInfo> {
-  static Node encode(const GeneInfo& rhs) {
+struct convert<PfGeneInfo> {
+  static Node encode(const PfGeneInfo& rhs) {
     Node node;
     node.push_back("GeneInfo");
     return node;
   }
 
-  static bool decode(const Node& node, GeneInfo& gene_info) {
+  static bool decode(const Node& node, PfGeneInfo& gene_info) {
     for (const auto& chromosome_node: node) {
       auto chromosome = chromosome_node["chromosome"].as<int>();
       for (const auto& gene_node : chromosome_node["genes"]) {
-        auto gene = gene_node.as<Gene>();
+        auto gene = gene_node.as<GeneInfo>();
         gene.chromosome = chromosome;
-        gene_info.chromosomes[chromosome - 1].genes.push_back(gene);
+        gene_info.chromosome_infos[chromosome - 1].gene_infos.push_back(gene);
       }
     }
     return true;
@@ -199,15 +199,15 @@ struct convert<GeneInfo> {
 };
 
 template <>
-struct convert<Gene> {
-  static Node encode(const Gene& rhs) {
+struct convert<GeneInfo> {
+  static Node encode(const GeneInfo& rhs) {
     Node node;
     node.push_back("Gene");
     return node;
   }
 
-  static bool decode(const Node& node, Gene& gene) {
-    gene.aa_positions.clear();
+  static bool decode(const Node& node, GeneInfo& gene) {
+    gene.aa_position_infos.clear();
     gene.name = node["name"].as<std::string>();
 
     gene.max_copy = node["max_copy"] ? node["max_copy"].as<int>() : 1;
@@ -215,22 +215,22 @@ struct convert<Gene> {
         node["copy_daily_crs"] ? node["copy_daily_crs"].as<std::vector<double>>() : std::vector<double>();
 
     for (const auto& aa_node : node["aa_positions"]) {
-      auto aa_position = aa_node.as<AaPosition>();
-      gene.aa_positions.push_back(aa_position);
+      auto aa_position = aa_node.as<AaPositionInfo>();
+      gene.aa_position_infos.push_back(aa_position);
     }
     return true;
   }
 };
 
 template <>
-struct convert<AaPosition> {
-  static Node encode(const AaPosition& rhs) {
+struct convert<AaPositionInfo> {
+  static Node encode(const AaPositionInfo& rhs) {
     Node node;
     node.push_back("AaPosition");
     return node;
   }
 
-  static bool decode(const Node& node, AaPosition& aa_pos) {
+  static bool decode(const Node& node, AaPositionInfo& aa_pos) {
     aa_pos.amino_acids.clear();
     aa_pos.daily_crs.clear();
     aa_pos.position = node["position"].as<int>();

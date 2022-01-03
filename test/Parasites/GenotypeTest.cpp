@@ -16,11 +16,11 @@ protected:
 TEST_F(GenotypeTest, InitializeWithAASeuquence) {
   Genotype g("||||NY1||KTHFI||||||FNMYRIPRPC|1");
 
-  EXPECT_EQ(g.aa_structure[0], "");
-  EXPECT_EQ(g.aa_structure[4], "NY1");
-  EXPECT_EQ(g.aa_structure[6], "KTHFI");
-  EXPECT_EQ(g.aa_structure[12], "FNMYRIPRPC");
-  EXPECT_EQ(g.aa_structure[13], "1");
+  EXPECT_EQ(g.aa_structure[0][0], "");
+  EXPECT_EQ(g.aa_structure[4][0], "NY1");
+  EXPECT_EQ(g.aa_structure[6][0], "KTHFI");
+  EXPECT_EQ(g.aa_structure[12][0], "FNMYRIPRPC");
+  EXPECT_EQ(g.aa_structure[13][0], "1");
 
   EXPECT_EQ(g.get_aa_sequence(), "||||NY1||KTHFI||||||FNMYRIPRPC|1");
 }
