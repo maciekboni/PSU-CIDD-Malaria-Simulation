@@ -56,6 +56,8 @@ public:
 
   std::string get_aa_sequence() const;
 
+  bool is_valid(const PfGeneInfo& gene_info);
+
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 
 private:
