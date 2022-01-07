@@ -193,43 +193,6 @@ struct RelativeInfectivity {
   }
 };
 
-struct Allele {
-  int value;  // we can do char later or map from char to int
-  std::string name;
-  std::string short_name;
-  IntVector mutation_values;
-  int mutation_level;
-  double daily_cost_of_resistance;
-
-  friend std::ostream &operator<<(std::ostream &os, const Allele &e) {
-    os << e.short_name;
-    return os;
-  }
-};
-
-struct Locus {
-  std::vector<Allele> alleles;
-  int position {};
-
-  friend std::ostream &operator<<(std::ostream &os, const Locus &l) {
-    for (const auto &allele : l.alleles) {
-      os << allele;
-    }
-    return os;
-  }
-};
-
-struct GenotypeInfo {
-  std::vector<Locus> loci_vector;
-
-  friend std::ostream &operator<<(std::ostream &os, const GenotypeInfo &genotype_info) {
-    for (const auto &loci : genotype_info.loci_vector) {
-      os << loci;
-    }
-    return os;
-  }
-};
-
 struct AaPositionInfo {
   int position;
   std::vector<char> amino_acids;

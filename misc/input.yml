@@ -233,6 +233,8 @@ pf_gene_info:
           - position: 446
             amino_acids: [ 'F', 'I' ]
             daily_crs: [ 0, 0.0005 ]
+            cost_of_EC50:
+              0: [ 0, 0.6 ]
           - position: 458
             amino_acids: [ 'N', 'Y' ]
             daily_crs: [ 0, 0.0005 ]
@@ -266,124 +268,6 @@ pf_gene_info:
         max_copy: 2
         copy_daily_crs: [ 0, 0.0005 ]
         aa_positions: [ ]
-
-genotype_info:
-  loci:
-    # here we start defining the first locus
-    - locus_name: "pfcrt"
-      position: 0
-      alleles:
-        - value: 0
-          allele_name: "K76"
-          short_name: "K"
-          # this is the list of "mutant values" you can mutate up to (there is no real meaning of up; down mutations are equally likely)
-          can_mutate_to: [ 1 ]
-          mutation_level: 0
-          daily_cost_of_resistance: 0.0
-        - value: 1
-          allele_name: "76T"
-          short_name: "T"
-          can_mutate_to: [ 0 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-          # here we start defining the second locus
-    - locus_name: "pfmdr1"
-      position: 1
-      alleles:
-        - value: 0
-          allele_name: "N86 Y184 one copy of pfmdr1"
-          short_name: "NY--"
-          can_mutate_to: [ 1,2,4 ]
-          mutation_level: 0
-          daily_cost_of_resistance: 0.0
-        - value: 1
-          allele_name: "86Y Y184 one copy of pfmdr1"
-          short_name: "YY--"
-          can_mutate_to: [ 3,0,5 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-        - value: 2
-          allele_name: "N86 184F one copy of pfmdr1"
-          short_name: "NF--"
-          can_mutate_to: [ 3,0,6 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-        - value: 3
-          allele_name: "86Y 184F one copy of pfmdr1"
-          short_name: "YF--"
-          can_mutate_to: [ 1,2,7 ]
-          mutation_level: 2
-          daily_cost_of_resistance: 0.00099975
-        - value: 4
-          allele_name: "N86 Y184 2 copies of pfmdr1"
-          short_name: "NYNY"
-          can_mutate_to: [ 0 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.005
-        - value: 5
-          allele_name: "86Y Y184 2 copies of pfmdr1"
-          short_name: "YYYY"
-          can_mutate_to: [ 1 ]
-          mutation_level: 2
-          daily_cost_of_resistance: 0.0055
-        - value: 6
-          allele_name: "N86 184F 2 copies of pfmdr1"
-          short_name: "NFNF"
-          can_mutate_to: [ 2 ]
-          mutation_level: 2
-          daily_cost_of_resistance: 0.0055
-        - value: 7
-          allele_name: "86Y 184F 2 copies of pfmdr1"
-          short_name: "YFYF"
-          can_mutate_to: [ 3 ]
-          mutation_level: 3
-          daily_cost_of_resistance: 0.006
-    - locus_name: "K13 Propeller"
-      position: 2
-      alleles:
-        - value: 0
-          allele_name: "C580"
-          short_name: "C"
-          can_mutate_to: [ 1 ]
-          mutation_level: 0
-          daily_cost_of_resistance: 0.0
-        - value: 1
-          allele_name: "580Y"
-          short_name: "Y"
-          can_mutate_to: [ 0 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-    - locus_name: "Plasmepsin 2-3"
-      position: 3
-      alleles:
-        - value: 0
-          allele_name: "Plasmepsin 2-3 one copy"
-          short_name: "1"
-          can_mutate_to: [ 1 ]
-          mutation_level: 0
-          daily_cost_of_resistance: 0.0
-        - value: 1
-          allele_name: "Plasmepsin 2-3 2 copies"
-          short_name: "2"
-          can_mutate_to: [ 0 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-    - locus_name: "Hypothetical locus for multiple use"
-      position: 4
-      alleles:
-        - value: 0
-          allele_name: "naive"
-          short_name: "x"
-          can_mutate_to: [ 1 ]
-          mutation_level: 0
-          daily_cost_of_resistance: 0.0
-        - value: 1
-          allele_name: "mutant"
-          short_name: "X"
-          can_mutate_to: [ 0 ]
-          mutation_level: 1
-          daily_cost_of_resistance: 0.0005
-
 
 #
 # initialize parasite population
@@ -452,9 +336,7 @@ drug_db:
     affecting_loci: [ 2 ]
     selecting_alleles: [ [ 1 ] ]
     k: 4
-    EC50:
-      ..0..: 0.75
-      ..1..: 1.2
+    naive_EC50: 0.75
   1:
     name: "lumefantrine"
     half_life: 4.5

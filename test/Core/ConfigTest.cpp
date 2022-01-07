@@ -108,8 +108,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
     ASSERT_EQ(c.parasite_density_level().log_parasite_density_detectable, 1.000);
     ASSERT_EQ(c.parasite_density_level().log_parasite_density_pyrogenic, 3.398);
 
-    ASSERT_EQ(c.genotype_info().loci_vector.size(), 5);
-
     ASSERT_EQ(c.relative_infectivity().sigma, log(10) / 3.91);
 
     ASSERT_EQ(c.number_of_age_classes(), 15);

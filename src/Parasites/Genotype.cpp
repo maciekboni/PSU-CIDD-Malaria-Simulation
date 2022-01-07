@@ -14,8 +14,8 @@
 #include "Therapies/DrugDatabase.h"
 #include "Therapies/SCTherapy.h"
 
-Genotype::Genotype(const std::string &in_aa_sequence, PfGeneInfo *pf_gene_info)
-    : aa_sequence { in_aa_sequence }, pf_gene_info { pf_gene_info } {
+Genotype::Genotype(const std::string &in_aa_sequence)
+    : aa_sequence { in_aa_sequence } {
   // create aa structure
   std::string chromosome_str;
   std::istringstream tokenStream(in_aa_sequence);
@@ -50,11 +50,7 @@ Genotype *Genotype::combine_mutation_to(const int &locus, const int &value) {
 }
 
 double Genotype::get_EC50_power_n(DrugType *dt) const {
-  return get_EC50(dt->id());
-}
-
-double Genotype::get_EC50(const int &drug_id) const {
-  return Model::CONFIG->EC50_power_n_table()[genotype_id][drug_id];
+  return EC50_power_n[dt->id()];
 }
 
 int Genotype::select_mutation_allele(const int &mutation_locus) {
@@ -150,4 +146,8 @@ void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
       }
     }
   }
+}
+void Genotype::calculate_EC50_power_n(const PfGeneInfo &info, DrugDatabase *drug_db) {
+  EC50_power_n.resize(drug_db->size());
+  // TODO: calculate EC50_power_n
 }

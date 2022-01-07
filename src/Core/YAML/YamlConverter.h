@@ -121,41 +121,6 @@ struct convert<ParasiteDensityLevel> {
 };
 
 template <>
-struct convert<GenotypeInfo> {
-  static Node encode(const GenotypeInfo& rhs) {
-    Node node;
-    node.push_back("GenotypeInfo");
-    return node;
-  }
-
-  static bool decode(const Node& node, GenotypeInfo& genotype_info) {
-    genotype_info.loci_vector.clear();
-    for (std::size_t i = 0; i < node["loci"].size(); i++) {
-      Locus l;
-      l.position = node["loci"][i]["position"].as<int>();
-
-      for (std::size_t j = 0; j < node["loci"][i]["alleles"].size(); j++) {
-        Allele al;
-        al.value = node["loci"][i]["alleles"][j]["value"].as<int>();
-        al.name = node["loci"][i]["alleles"][j]["allele_name"].as<std::string>();
-        al.short_name = node["loci"][i]["alleles"][j]["short_name"].as<std::string>();
-        al.mutation_level = node["loci"][i]["alleles"][j]["mutation_level"].as<int>();
-        al.daily_cost_of_resistance = node["loci"][i]["alleles"][j]["daily_cost_of_resistance"].as<double>();
-        for (std::size_t c = 0; c < node["loci"][i]["alleles"][j]["can_mutate_to"].size(); c++) {
-          //                al.mutation_value_up.push_back(node["loci"][i]["alleles"][j]["mutation_up"][c].as<int>());
-          al.mutation_values.push_back(node["loci"][i]["alleles"][j]["can_mutate_to"][c].as<int>());
-        }
-
-        l.alleles.push_back(al);
-      }
-
-      genotype_info.loci_vector.push_back(l);
-    }
-    return true;
-  }
-};
-
-template <>
 struct convert<RelativeInfectivity> {
   static Node encode(const RelativeInfectivity& rhs) {
     Node node;

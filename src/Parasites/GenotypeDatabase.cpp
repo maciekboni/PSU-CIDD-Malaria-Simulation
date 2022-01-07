@@ -36,7 +36,7 @@ Genotype *GenotypeDatabase::get_genotype_from_alleles_structure(const IntVector 
   return this->at(id);
 }
 
-unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, PfGeneInfo *pInfo) {
+unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, Config *config) {
   if (aa_sequence_id_map.find(aa_sequence) == aa_sequence_id_map.end()) {
     // not yet exist then initialize new genotype
     auto new_id = auto_id;
@@ -46,15 +46,15 @@ unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, PfGeneInfo
     new_genotype->genotype_id = new_id;
 
     // check if aa_sequence is valid
-    if (!new_genotype->is_valid(*pInfo)) {
+    if (!new_genotype->is_valid(config->pf_gene_info())) {
       LOG(FATAL) << "Invalid genotype: " << aa_sequence;
     }
 
     // calculate cost of resistance
-    new_genotype->calculate_daily_fitness(*pInfo);
+    new_genotype->calculate_daily_fitness(config->pf_gene_info());
 
     // calculate ec50
-
+    new_genotype->calculate_EC50_power_n(config->pf_gene_info(), config->drug_db());
     add(new_genotype);
 
     auto_id++;

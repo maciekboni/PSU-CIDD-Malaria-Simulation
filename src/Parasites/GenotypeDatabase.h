@@ -15,6 +15,7 @@
 #include "Genotype.h"
 
 class Genotype;
+class Config;
 
 typedef std::map<ul, Genotype*> GenotypePtrMap;
 typedef std::vector<std::vector<std::vector<double>>> MatingMatrix;
@@ -37,7 +38,7 @@ public:
 
   void add(Genotype* genotype);
 
-  unsigned int get_id(const std::string& aa_sequence, PfGeneInfo* pInfo);
+  unsigned int get_id(const std::string& aa_sequence, Config* config);
 
   Genotype* get_genotype_from_alleles_structure(const IntVector& alleles);
 

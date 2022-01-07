@@ -89,8 +89,6 @@ public:
 
   CONFIG_ITEM(relative_infectivity, RelativeInfectivity, RelativeInfectivity())
 
-  CONFIG_ITEM(genotype_info, GenotypeInfo, GenotypeInfo())
-
   CONFIG_ITEM(pf_gene_info, PfGeneInfo, PfGeneInfo())
 
   CONFIG_ITEM(initial_strategy_id, int, -1)
@@ -122,8 +120,6 @@ public:
   CUSTOM_CONFIG_ITEM(number_of_parasite_types, 0)
 
   CUSTOM_CONFIG_ITEM(drug_db, nullptr)
-
-  CUSTOM_CONFIG_ITEM(EC50_power_n_table, DoubleVector2())
 
   CUSTOM_CONFIG_ITEM(circulation_info, RelativeMovingInformation())
 

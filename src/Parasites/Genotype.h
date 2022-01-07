@@ -25,25 +25,19 @@ typedef std::array<ChromosomeStr, 14> AaStructure;
 class Genotype {
   DISALLOW_COPY_AND_ASSIGN(Genotype)
 
-  PROPERTY_REF(int, number_of_resistance_position)
-
-  POINTER_PROPERTY(DrugDatabase, drug_db)
-
 public:
   int genotype_id { -1 };
   AaStructure aa_structure {};
-  std::string aa_sequence { "" };
-  PfGeneInfo* pf_gene_info { nullptr };
+  std::string aa_sequence;
   double daily_fitness_multiple_infection { 1 };
+  std::vector<double> EC50_power_n {};
 
 public:
-  Genotype(const std::string& aa_sequence, PfGeneInfo* pf_gene_info = nullptr);
+  explicit Genotype(const std::string& aa_sequence);
 
   virtual ~Genotype();
 
   double get_EC50_power_n(DrugType* dt) const;
-
-  double get_EC50(const int& drug_id) const;
 
   bool resist_to(DrugType* dt);
 
@@ -60,6 +54,7 @@ public:
   void calculate_daily_fitness(const PfGeneInfo& gene_info);
 
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
+  void calculate_EC50_power_n(const PfGeneInfo& info, DrugDatabase* pDatabase);
 };
 
 #endif /* Genotype_H */

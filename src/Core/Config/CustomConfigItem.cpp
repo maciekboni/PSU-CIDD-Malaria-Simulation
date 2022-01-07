@@ -204,27 +204,9 @@ void drug_db::set_value(const YAML::Node &node) {
       }
     }
 
-    dt->set_ec50_map(dt_node["EC50"].as<std::map<std::string, double>>());
-
-    //    auto ec50Node = node["EC50"];
-    //    for (YAML::const_iterator it = ec50Node.begin(); it != ec50Node.end(); it++) {
-    //        std::string key = it->first.as<std::string>();
-    //        double value = it->second.as<double>();
-    //        std::cout << key << ":::::" << value << std::endl;
-    //    }
-
     dt->set_k(dt_node["k"].as<double>());
-
-    // auto* dt = read_drugtype(config, i);
-    //        std::cout << i << std::endl;
     value_->add(dt);
-
   }
-}
-
-void EC50_power_n_table::set_value(const YAML::Node &node) {
-  // TODO: remove this
-
 }
 
 void circulation_info::set_value(const YAML::Node &node) {
@@ -404,7 +386,7 @@ void initial_parasite_info::set_value(const YAML::Node &node) {
     for (auto loc = location_from; loc < location_to; ++loc) {
       for (const auto &parasite_node :location_node["parasite_info"]) {
         auto aa_sequence = parasite_node["aa_sequence"].as<std::string>();
-        auto parasite_type_id = config_->genotype_db.get_id(aa_sequence, &config_->pf_gene_info());
+        auto parasite_type_id = config_->genotype_db.get_id(aa_sequence, config_);
         auto prevalence = parasite_node["prevalence"].as<double>();
         value_.emplace_back(loc, parasite_type_id, prevalence);
       }
