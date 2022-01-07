@@ -49,12 +49,6 @@ class ClonalParasitePopulation : public IndexHandler {
 
   double get_log10_relative_density() const;
 
-  void mutate_to(Genotype *genotype);
-
-  bool resist_to(Therapy *therapy) const;
-
-  bool resist_to(DrugType *dt) const;
-
   bool resist_to(const int &drug_id) const;
 
   void update();

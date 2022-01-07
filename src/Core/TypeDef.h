@@ -218,6 +218,28 @@ struct PfGeneInfo {
   std::array<ChromosomeInfo, 14> chromosome_infos {};
 
   friend std::ostream &operator<<(std::ostream &os, const PfGeneInfo &geneInfo) { return os; }
+  int calculate_aa_pos(int chromosome_id, int gene_id, int aa_pos_id, int aa_id) {
+    auto result = 0;
+    for (int ii = 0; ii < chromosome_id; ++ii) {
+      result += chromosome_infos[ii].gene_infos.size() > 1 ? chromosome_infos[ii].gene_infos.size() - 1 : 0;  // for ','
+      for (auto &gene_info : chromosome_infos[ii].gene_infos) {
+        result += gene_info.aa_position_infos.size();
+        result += gene_info.max_copy > 1 ? 1 : 0;  // for copy number
+      }
+    }
+    result += chromosome_id;  // for "|"
+
+    // final chromosome
+    for (int ii = 0; ii < gene_id; ++ii) {
+      result += chromosome_infos[chromosome_id].gene_infos[ii].aa_position_infos.size();
+      result += chromosome_infos[chromosome_id].gene_infos[ii].max_copy > 1 ? 1 : 0;  // for copy number
+      result += 1;                                                                    // for ","
+    }
+
+    // final gene
+    result += aa_id;
+    return result;
+  }
 };
 
 #endif /* TYPEDEF_H */

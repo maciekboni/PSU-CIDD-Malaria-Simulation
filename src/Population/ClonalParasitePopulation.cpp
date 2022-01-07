@@ -41,11 +41,6 @@ double ClonalParasitePopulation::get_current_parasite_density(const int &current
   return update_function_->get_current_parasite_density(this, duration);
 }
 
-void ClonalParasitePopulation::mutate_to(Genotype *genotype) {
-  //TODO:: do other statistic things
-  set_genotype(genotype);
-}
-
 double ClonalParasitePopulation::get_log10_relative_density() const {
 
   if (NumberHelpers::is_equal(last_update_log10_parasite_density_, LOG_ZERO_PARASITE_DENSITY) ||
@@ -90,14 +85,6 @@ void ClonalParasitePopulation::set_genotype(Genotype *value) {
     genotype_ = value;
     parasite_population_->add_all_infection_force();
   }
-}
-
-bool ClonalParasitePopulation::resist_to(Therapy *therapy) const {
-  return genotype_->resist_to(therapy);
-}
-
-bool ClonalParasitePopulation::resist_to(DrugType *dt) const {
-  return genotype_->resist_to(dt);
 }
 
 bool ClonalParasitePopulation::resist_to(const int &drug_id) const {

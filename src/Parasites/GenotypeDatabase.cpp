@@ -37,13 +37,16 @@ Genotype *GenotypeDatabase::get_genotype_from_alleles_structure(const IntVector 
 }
 
 unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, Config *config) {
+  return get_genotype(aa_sequence, config)->genotype_id;
+}
+Genotype *GenotypeDatabase::get_genotype(const std::string &aa_sequence, Config *config) {
   if (aa_sequence_id_map.find(aa_sequence) == aa_sequence_id_map.end()) {
     // not yet exist then initialize new genotype
     auto new_id = auto_id;
-    aa_sequence_id_map[aa_sequence] = new_id;
-
     auto new_genotype = new Genotype(aa_sequence);
     new_genotype->genotype_id = new_id;
+
+    aa_sequence_id_map[aa_sequence] = new_genotype;
 
     // check if aa_sequence is valid
     if (!new_genotype->is_valid(config->pf_gene_info())) {
@@ -58,7 +61,7 @@ unsigned int GenotypeDatabase::get_id(const std::string &aa_sequence, Config *co
     add(new_genotype);
 
     auto_id++;
-    return new_id;
+    return new_genotype;
   } else {
     return aa_sequence_id_map[aa_sequence];
   }

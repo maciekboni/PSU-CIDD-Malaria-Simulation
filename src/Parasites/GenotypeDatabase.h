@@ -29,7 +29,7 @@ class GenotypeDatabase : public GenotypePtrMap {
 
   VIRTUAL_PROPERTY_REF(IntVector, weight)
 public:
-  std::map<std::string, unsigned int> aa_sequence_id_map;
+  std::map<std::string, Genotype*> aa_sequence_id_map;
 
 public:
   GenotypeDatabase();
@@ -37,6 +37,8 @@ public:
   virtual ~GenotypeDatabase();
 
   void add(Genotype* genotype);
+
+  Genotype* get_genotype(const std::string& aa_sequence, Config* pConfig);
 
   unsigned int get_id(const std::string& aa_sequence, Config* config);
 

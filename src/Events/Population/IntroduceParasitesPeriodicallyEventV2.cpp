@@ -49,6 +49,8 @@ void IntroduceParasitesPeriodicallyEventV2::schedule_event(
 }
 
 void IntroduceParasitesPeriodicallyEventV2::execute() {
+  // TODO: rework this
+
   // std::cout << date::year_month_day{ Model::SCHEDULER->calendar_date } << ":import periodically event" << std::endl;
   //schedule importation for the next day
   if (Model::SCHEDULER->current_time() < end_day) {

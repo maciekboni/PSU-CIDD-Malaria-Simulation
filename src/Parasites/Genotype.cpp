@@ -10,12 +10,12 @@
 
 #include "Core/Config/Config.h"
 #include "Core/Random.h"
+#include "Helpers/NumberHelpers.h"
 #include "Model.h"
 #include "Therapies/DrugDatabase.h"
 #include "Therapies/SCTherapy.h"
 
-Genotype::Genotype(const std::string &in_aa_sequence)
-    : aa_sequence { in_aa_sequence } {
+Genotype::Genotype(const std::string &in_aa_sequence) : aa_sequence { in_aa_sequence } {
   // create aa structure
   std::string chromosome_str;
   std::istringstream tokenStream(in_aa_sequence);
@@ -51,11 +51,6 @@ Genotype *Genotype::combine_mutation_to(const int &locus, const int &value) {
 
 double Genotype::get_EC50_power_n(DrugType *dt) const {
   return EC50_power_n[dt->id()];
-}
-
-int Genotype::select_mutation_allele(const int &mutation_locus) {
-  // TODO: rework on this
-  return 0;
 }
 
 std::ostream &operator<<(std::ostream &os, const Genotype &e) {
@@ -105,7 +100,7 @@ bool Genotype::is_valid(const PfGeneInfo &gene_info) {
 
       // check number copy valid or not
       if (gene_info.max_copy > 1) {
-        auto copy_number = (int)aa_structure[chromosome_i][gene_i].back() - 48;
+        auto copy_number = NumberHelpers::char_to_single_digit_number(aa_structure[chromosome_i][gene_i].back());
         if (copy_number > gene_info.max_copy) {
           return false;
         }
@@ -149,5 +144,38 @@ void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
 }
 void Genotype::calculate_EC50_power_n(const PfGeneInfo &info, DrugDatabase *drug_db) {
   EC50_power_n.resize(drug_db->size());
+  std::fill(EC50_power_n.begin(), EC50_power_n.end(), 0);
+
   // TODO: calculate EC50_power_n
+}
+Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType) const {
+  std::string new_aa_sequence { aa_sequence };
+
+  // draw random aa position
+  auto aa_pos_id = pRandom->random_uniform(pDrugType->resistant_aa_location.size());
+  auto aa_pos = pDrugType->resistant_aa_location[aa_pos_id];
+
+  if (aa_pos.is_copy_number) {
+    // draw a random copy number
+    auto new_copy_number =
+        pRandom->random_uniform(
+            pConfig->pf_gene_info().chromosome_infos[aa_pos.chromosome_id].gene_infos[aa_pos.gene_id].max_copy)
+        + 1;
+    new_aa_sequence[aa_pos.aa_pos_in_aa_sequence] = NumberHelpers::single_digit_number_to_char(new_copy_number);
+  } else {
+    // draw random aa perform mutation to get new aa structure
+    auto new_aa_id = pRandom->random_uniform(pConfig->pf_gene_info()
+                                                 .chromosome_infos[aa_pos.chromosome_id]
+                                                 .gene_infos[aa_pos.gene_id]
+                                                 .aa_position_infos[aa_pos.aa_id]
+                                                 .amino_acids.size());
+    auto new_aa = pConfig->pf_gene_info()
+                      .chromosome_infos[aa_pos.chromosome_id]
+                      .gene_infos[aa_pos.gene_id]
+                      .aa_position_infos[aa_pos.aa_id]
+                      .amino_acids[new_aa_id];
+    new_aa_sequence[aa_pos.aa_pos_in_aa_sequence] = new_aa;
+  }
+  // get genotype pointer from gene database based on aa sequence
+  return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
 }

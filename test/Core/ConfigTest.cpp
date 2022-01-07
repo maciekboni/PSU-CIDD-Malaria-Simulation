@@ -127,15 +127,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile){
     ASSERT_EQ(c.immune_system_information().decay_rate, 0.0025);
 
 
-    ASSERT_EQ(c.drug_db()->size(), 7);
-    ASSERT_EQ(c.drug_db()->at(0)->n(), 25);
-    ASSERT_EQ(c.drug_db()->at(6)->n(), 19);
-
-    //
-  // TODO: rework on this
-
-//    ASSERT_EQ(c.EC50_power_n_table().size(), 128);
-//    ASSERT_EQ(c.EC50_power_n_table()[0].size(), 7);
 
     ASSERT_EQ(c.circulation_info().max_relative_moving_value, 35);
     //

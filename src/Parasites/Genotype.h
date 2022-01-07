@@ -18,6 +18,11 @@ class DrugDatabase;
 class DrugType;
 
 class Therapy;
+
+class Config;
+
+class Random;
+
 typedef std::string GeneStr;
 typedef std::vector<GeneStr> ChromosomeStr;
 typedef std::array<ChromosomeStr, 14> AaStructure;
@@ -45,16 +50,17 @@ public:
 
   Genotype* combine_mutation_to(const int& locus, const int& value);
 
-  int select_mutation_allele(const int& mutation_locus);
-
   std::string get_aa_sequence() const;
 
   bool is_valid(const PfGeneInfo& gene_info);
 
   void calculate_daily_fitness(const PfGeneInfo& gene_info);
 
-  friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
   void calculate_EC50_power_n(const PfGeneInfo& info, DrugDatabase* pDatabase);
+
+  Genotype* perform_mutation_by_drug(Config* pConfig, Random* pRandom, DrugType* pDrugType) const;
+
+  friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 };
 
 #endif /* Genotype_H */

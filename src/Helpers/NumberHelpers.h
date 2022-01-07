@@ -6,19 +6,19 @@
 #define PCMS_NUMBERHELPERS_H
 
 #include <cmath>
-#include <limits>
-#include <string>
-#include <sstream>
 #include <fstream>
+#include <limits>
+#include <sstream>
+#include <string>
 
 class NumberHelpers {
- public:
-  template<typename T>
+public:
+  template <typename T>
   static bool is_equal(T a, T b, const T epsilon = std::numeric_limits<T>::epsilon()) {
     return std::fabs(a - b) < epsilon;
   }
 
-  template<typename T>
+  template <typename T>
   static bool is_enot_qual(T a, T b, const T epsilon = std::numeric_limits<T>::epsilon()) {
     return !is_equal<T>(a, b, epsilon);
   }
@@ -33,7 +33,7 @@ class NumberHelpers {
   static unsigned long good_seed(unsigned long a, unsigned long b, unsigned long c) {
     std::ifstream file("/dev/urandom", std::ios::binary);
     if (file.is_open()) {
-      //for unix
+      // for unix
       const int size = sizeof(int);
       auto* memblock = new char[size];
       file.read(memblock, size);
@@ -42,7 +42,7 @@ class NumberHelpers {
       delete[] memblock;
       return random_seed_a ^ b;
     }
-    //for windows
+    // for windows
     a = a - b;
     a = a - c;
     a = a ^ (c >> 13);
@@ -73,12 +73,21 @@ class NumberHelpers {
     return c;
   }
 
-  template<typename T>
+  template <typename T>
   static std::string number_to_string(T number) {
     std::ostringstream ss;
     ss << number;
     return ss.str();
   }
+
+  static char single_digit_number_to_char(int number) {
+    return char(number + 48);
+  }
+
+  static int char_to_single_digit_number(char c) {
+    return (int)c - 48;
+  }
+
 };
 
-#endif //PCMS_NUMBERHELPERS_H
+#endif  // PCMS_NUMBERHELPERS_H

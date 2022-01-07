@@ -2,22 +2,25 @@
 #define NOMINMAX
 
 #include "CustomConfigItem.h"
+
+#include <date/date.h>
+#include <gsl/gsl_cdf.h>
+
+#include <algorithm>
+#include <cmath>
+
 #include "Config.h"
-#include "Spatial/SpatialModelBuilder.h"
-#include "Helpers/ObjectHelpers.h"
+#include "Events/Population/PopulationEventBuilder.h"
 #include "Helpers/NumberHelpers.h"
-#include "Therapies/Therapy.h"
-#include "Therapies/TherapyBuilder.h"
+#include "Helpers/ObjectHelpers.h"
+#include "Spatial/SpatialModelBuilder.h"
 #include "Strategies/IStrategy.h"
 #include "Strategies/StrategyBuilder.h"
-#include "Events/Population/PopulationEventBuilder.h"
-#include <gsl/gsl_cdf.h>
-#include <cmath>
-#include <date/date.h>
-#include <algorithm>
+#include "Therapies/Therapy.h"
+#include "Therapies/TherapyBuilder.h"
 
 void total_time::set_value(const YAML::Node &node) {
-  value_ = (date::sys_days{config_->ending_date()} - date::sys_days(config_->starting_date())).count();
+  value_ = (date::sys_days { config_->ending_date() } - date::sys_days(config_->starting_date())).count();
 }
 
 void number_of_age_classes::set_value(const YAML::Node &node) {
@@ -34,14 +37,12 @@ void spatial_distance_matrix::set_value(const YAML::Node &node) {
     value_[from_location].resize(static_cast<unsigned long long int>(config_->number_of_locations()));
     for (auto to_location = 0ul; to_location < config_->number_of_locations(); to_location++) {
       value_[from_location][to_location] = Spatial::Coordinate::calculate_distance_in_km(
-        *config_->location_db()[from_location].coordinate,
-        *config_->location_db()[to_location].coordinate);
+          *config_->location_db()[from_location].coordinate, *config_->location_db()[to_location].coordinate);
       //
       //            std::cout << "distance[" << from_location << "," << to_location << "]: "
       //                      << spatial_distance_matrix_[from_location][to_location] << std::endl;
     }
   }
-
 }
 
 void seasonal_info::set_value(const YAML::Node &node) {
@@ -79,7 +80,7 @@ spatial_model::~spatial_model() {
 }
 
 void spatial_model::set_value(const YAML::Node &node) {
-  //read spatial_model
+  // read spatial_model
   const auto sm_name = node[name_]["name"].as<std::string>();
   // std::cout << sm_name << std::endl;
   value_ = Spatial::SpatialModelBuilder::Build(sm_name, node[name_][sm_name]);
@@ -100,11 +101,10 @@ void immune_system_information::set_value(const YAML::Node &node) {
     value_.alpha_immune = mean_initial_condition;
     value_.beta_immune = 0.0;
   } else {
-    value_.alpha_immune =
-      mean_initial_condition * mean_initial_condition * (1 - mean_initial_condition) /
-      (sd_initial_condition * sd_initial_condition) - mean_initial_condition;
-    value_.beta_immune = value_.alpha_immune / mean_initial_condition -
-                         value_.alpha_immune;
+    value_.alpha_immune = mean_initial_condition * mean_initial_condition * (1 - mean_initial_condition)
+                              / (sd_initial_condition * sd_initial_condition)
+                          - mean_initial_condition;
+    value_.beta_immune = value_.alpha_immune / mean_initial_condition - value_.alpha_immune;
   }
 
   value_.immune_inflation_rate = is_node["immune_inflation_rate"].as<double>();
@@ -112,12 +112,10 @@ void immune_system_information::set_value(const YAML::Node &node) {
   value_.min_clinical_probability = is_node["min_clinical_probability"].as<double>();
   value_.max_clinical_probability = is_node["max_clinical_probability"].as<double>();
 
-  value_.immune_effect_on_progression_to_clinical = is_node[
-    "immune_effect_on_progression_to_clinical"].as<double>();
+  value_.immune_effect_on_progression_to_clinical = is_node["immune_effect_on_progression_to_clinical"].as<double>();
 
   //    std::cout << value_.c_min << std::endl;
   //    std::cout << value_.c_max << std::endl;
-
 
   value_.age_mature_immunity = is_node["age_mature_immunity"].as<double>();
   value_.factor_effect_age_mature_immunity = is_node["factor_effect_age_mature_immunity"].as<double>();
@@ -141,12 +139,12 @@ void immune_system_information::set_value(const YAML::Node &node) {
   }
   assert(value_.acquire_rate_by_age.size() == 81);
 
-  value_.c_min = pow(10, -(config_->parasite_density_level().log_parasite_density_asymptomatic -
-                           config_->parasite_density_level().log_parasite_density_cured) /
-                         value_.duration_for_fully_immune);
-  value_.c_max = pow(10, -(config_->parasite_density_level().log_parasite_density_asymptomatic -
-                           config_->parasite_density_level().log_parasite_density_cured) /
-                         value_.duration_for_naive);
+  value_.c_min = pow(10, -(config_->parasite_density_level().log_parasite_density_asymptomatic
+                           - config_->parasite_density_level().log_parasite_density_cured)
+                             / value_.duration_for_fully_immune);
+  value_.c_max = pow(10, -(config_->parasite_density_level().log_parasite_density_asymptomatic
+                           - config_->parasite_density_level().log_parasite_density_cured)
+                             / value_.duration_for_naive);
 }
 
 void number_of_parasite_types::set_value(const YAML::Node &node) {
@@ -162,7 +160,7 @@ void drug_db::set_value(const YAML::Node &node) {
   value_ = new DrugDatabase();
 
   for (auto drug_id = 0; drug_id < node[name_].size(); drug_id++) {
-    auto* dt = new DrugType();
+    auto *dt = new DrugType();
     dt->set_id(drug_id);
 
     const auto i_s = NumberHelpers::number_to_string<int>(drug_id);
@@ -174,37 +172,59 @@ void drug_db::set_value(const YAML::Node &node) {
     dt->set_n(dt_node["n"].as<double>());
     //    dt->set_EC50(node["EC50"].as<double>());
 
-    //    std::cout <<dt->drug_half_life() << "-" << dt->maximum_parasite_killing_rate() << "-" << dt->n() << "-" << dt->EC50() << std::endl;
+    //    std::cout <<dt->drug_half_life() << "-" << dt->maximum_parasite_killing_rate() << "-" << dt->n() << "-" <<
+    //    dt->EC50() << std::endl;
     for (std::size_t i = 0; i < dt_node["age_specific_drug_concentration_sd"].size(); i++) {
       dt->age_group_specific_drug_concentration_sd().push_back(
-        dt_node["age_specific_drug_concentration_sd"][i].as<double>());
+          dt_node["age_specific_drug_concentration_sd"][i].as<double>());
       dt->age_specific_drug_absorption().push_back(1.0);
     }
     //    assert(dt->age_group_specific_drug_concentration_sd().size() == 15);
 
-    if ( dt_node["age_specific_drug_absorption"]){
+    if (dt_node["age_specific_drug_absorption"]) {
       for (std::size_t i = 0; i < dt_node["age_specific_drug_absorption"].size(); i++) {
         dt->age_specific_drug_absorption()[i] = dt_node["age_specific_drug_absorption"][i].as<double>();
       }
     }
 
     dt->set_p_mutation(dt_node["mutation_probability"].as<double>());
+    dt->set_k(dt_node["k"].as<double>());
 
-    dt->affecting_loci().clear();
-    for (std::size_t i = 0; i < dt_node["affecting_loci"].size(); i++) {
-      dt->affecting_loci().push_back(dt_node["affecting_loci"][i].as<int>());
-    }
+    dt->base_EC50 = dt_node["base_EC50"].as<double>();
+    for (auto gene : dt_node["resistant_genes"].as<std::vector<std::string>>()) {
+      auto found = false;
 
-    dt->selecting_alleles().clear();
-    dt->selecting_alleles().assign(dt_node["affecting_loci"].size(), IntVector());
-    for (std::size_t i = 0; i < dt_node["affecting_loci"].size(); i++) {
-      for (std::size_t j = 0; j < dt_node["selecting_alleles"][i].size(); j++) {
-        dt->selecting_alleles()[i].push_back(dt_node["selecting_alleles"][i][j].as<int>());
+      for (const auto &chromosome_info : config_->pf_gene_info().chromosome_infos) {
+        auto gene_info_it = std::find_if(chromosome_info.gene_infos.begin(), chromosome_info.gene_infos.end(),
+                                         [&gene](const GeneInfo &gene_info) { return gene_info.name == gene; });
+        if (gene_info_it != chromosome_info.gene_infos.end()) {
+          auto aa_pos_in_sequence = config_->pf_gene_info().calculate_aa_pos(
+              (*gene_info_it).chromosome - 1,
+              static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)),
+              static_cast<int>((*gene_info_it).aa_position_infos.size()), 0);
+          for (int aa_id = 0; aa_id < (*gene_info_it).aa_position_infos.size(); ++aa_id) {
+            dt->resistant_aa_location.push_back(
+                { (*gene_info_it).chromosome - 1,
+                  static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)), aa_id,
+                  aa_pos_in_sequence, false });
+            aa_pos_in_sequence++;
+          }
+          if ((*gene_info_it).max_copy > 1) {
+            dt->resistant_aa_location.push_back(
+                { (*gene_info_it).chromosome - 1,
+                  static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)),
+                  static_cast<int>((*gene_info_it).aa_position_infos.size()), aa_pos_in_sequence, true });
+          }
 
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        LOG(FATAL) << "Incorrect resistant genes in Drug DB";
       }
     }
 
-    dt->set_k(dt_node["k"].as<double>());
     value_->add(dt);
   }
 }
@@ -220,17 +240,17 @@ void circulation_info::set_value(const YAML::Node &node) {
   value_.mean = info_node["moving_level_distribution"]["Gamma"]["mean"].as<double>();
   value_.sd = info_node["moving_level_distribution"]["Gamma"]["sd"].as<double>();
 
-  //calculate density and level value here
+  // calculate density and level value here
 
   const auto var = value_.sd * value_.sd;
 
-  const auto b = var / (value_.mean - 1); //theta
-  const auto a = (value_.mean - 1) / b; //k
+  const auto b = var / (value_.mean - 1);  // theta
+  const auto a = (value_.mean - 1) / b;    // k
 
   value_.v_moving_level_density.clear();
   value_.v_moving_level_value.clear();
 
-  const auto max = value_.max_relative_moving_value - 1; //maxRelativeBiting -1
+  const auto max = value_.max_relative_moving_value - 1;  // maxRelativeBiting -1
   const auto number_of_level = value_.number_of_moving_levels;
 
   const auto step = max / static_cast<double>(number_of_level - 1);
@@ -238,7 +258,7 @@ void circulation_info::set_value(const YAML::Node &node) {
   auto j = 0;
   double old_p = 0;
   double sum = 0;
-  //TODO: fix it
+  // TODO: fix it
   for (double i = 0; i <= max + 0.0001; i += step) {
     const auto p = gsl_cdf_gamma_P(i + step, a, b);
     double value = 0;
@@ -248,10 +268,9 @@ void circulation_info::set_value(const YAML::Node &node) {
     value_.v_moving_level_value.push_back(i + 1);
     sum += value;
     j++;
-
   }
 
-  //normalized
+  // normalized
   double t = 0;
   for (auto &i : value_.v_moving_level_density) {
     i = i + (1 - sum) / value_.v_moving_level_density.size();
@@ -268,8 +287,8 @@ void circulation_info::set_value(const YAML::Node &node) {
   const auto length_of_stay_sd = info_node["length_of_stay"]["sd"].as<double>();
 
   const auto stay_variance = length_of_stay_sd * length_of_stay_sd;
-  const auto k = stay_variance / length_of_stay_mean; //k
-  const auto theta = length_of_stay_mean / k; //theta
+  const auto k = stay_variance / length_of_stay_mean;  // k
+  const auto theta = length_of_stay_mean / k;          // theta
 
   value_.length_of_stay_mean = length_of_stay_mean;
   value_.length_of_stay_sd = length_of_stay_sd;
@@ -289,13 +308,13 @@ void relative_bitting_info::set_value(const YAML::Node &node) {
   value_.sd = info_node["biting_level_distribution"]["Gamma"]["sd"].as<double>();
 
   const auto var = value_.sd * value_.sd;
-  const auto b = var / (value_.mean - 1); //theta
-  const auto a = (value_.mean - 1) / b; //k
+  const auto b = var / (value_.mean - 1);  // theta
+  const auto a = (value_.mean - 1) / b;    // k
 
   value_.v_biting_level_density.clear();
   value_.v_biting_level_value.clear();
 
-  const auto max = value_.max_relative_biting_value - 1; //maxRelativeBiting -1
+  const auto max = value_.max_relative_biting_value - 1;  // maxRelativeBiting -1
   const auto number_of_level = value_.number_of_biting_levels;
 
   const auto step = max / static_cast<double>(number_of_level - 1);
@@ -313,11 +332,9 @@ void relative_bitting_info::set_value(const YAML::Node &node) {
     value_.v_biting_level_value.push_back(i + 1);
     sum += value;
     j++;
-
   }
 
-
-  //normalized
+  // normalized
   double t = 0;
   for (auto &i : value_.v_biting_level_density) {
     i = i + (1 - sum) / value_.v_biting_level_density.size();
@@ -327,7 +344,6 @@ void relative_bitting_info::set_value(const YAML::Node &node) {
   assert(value_.number_of_biting_levels == value_.v_biting_level_density.size());
   assert(value_.number_of_biting_levels == value_.v_biting_level_value.size());
   assert(fabs(t - 1) < 0.0001);
-
 }
 
 therapy_db::~therapy_db() {
@@ -337,16 +353,16 @@ therapy_db::~therapy_db() {
   value_.clear();
 }
 
-Therapy* read_therapy(const YAML::Node &n, const int &therapy_id) {
+Therapy *read_therapy(const YAML::Node &n, const int &therapy_id) {
   const auto t_id = NumberHelpers::number_to_string<int>(therapy_id);
-  auto* t = TherapyBuilder::build(n[t_id], therapy_id);
+  auto *t = TherapyBuilder::build(n[t_id], therapy_id);
   return t;
 }
 
 void therapy_db::set_value(const YAML::Node &node) {
   //    read_all_therapy
   for (std::size_t i = 0; i < node[name_].size(); i++) {
-    auto* t = read_therapy(node[name_], (int) i);
+    auto *t = read_therapy(node[name_], (int)i);
     value_.push_back(t);
   }
 }
@@ -358,40 +374,38 @@ strategy_db::~strategy_db() {
   value_.clear();
 }
 
-IStrategy* read_strategy(const YAML::Node &n, const int &strategy_id, Config* config) {
+IStrategy *read_strategy(const YAML::Node &n, const int &strategy_id, Config *config) {
   const auto s_id = NumberHelpers::number_to_string<int>(strategy_id);
-  auto* result = StrategyBuilder::build(n[s_id], strategy_id, config);
+  auto *result = StrategyBuilder::build(n[s_id], strategy_id, config);
   LOG(INFO) << result->to_string();
   return result;
 }
 
 void strategy_db::set_value(const YAML::Node &node) {
   for (std::size_t i = 0; i < node[name_].size(); i++) {
-    auto* s = read_strategy(node[name_], (int) i, config_);
+    auto *s = read_strategy(node[name_], (int)i, config_);
     value_.push_back(s);
   }
 }
 
 void initial_parasite_info::set_value(const YAML::Node &node) {
-
   const auto &info_node = node[name_];
 
   for (const auto &location_node : info_node) {
     const auto location = location_node["location_id"].as<int>();
     const auto location_from = location == -1 ? 0 : location;
-    const auto location_to = location == -1 ? config_->number_of_locations() : std::min<int>(location + 1,
-                                                                                             config_->number_of_locations());
+    const auto location_to =
+        location == -1 ? config_->number_of_locations() : std::min<int>(location + 1, config_->number_of_locations());
 
-    //apply for all location
+    // apply for all location
     for (auto loc = location_from; loc < location_to; ++loc) {
-      for (const auto &parasite_node :location_node["parasite_info"]) {
+      for (const auto &parasite_node : location_node["parasite_info"]) {
         auto aa_sequence = parasite_node["aa_sequence"].as<std::string>();
         auto parasite_type_id = config_->genotype_db.get_id(aa_sequence, config_);
         auto prevalence = parasite_node["prevalence"].as<double>();
         value_.emplace_back(loc, parasite_type_id, prevalence);
       }
     }
-
   }
 }
 
@@ -412,7 +426,7 @@ void preconfig_population_events::set_value(const YAML::Node &node) {
 
 void start_of_comparison_period::set_value(const YAML::Node &node) {
   const auto ymd = node[name_].as<date::year_month_day>();
-  value_ = (date::sys_days{ymd} - date::sys_days(config_->starting_date())).count();
+  value_ = (date::sys_days { ymd } - date::sys_days(config_->starting_date())).count();
 }
 
 void prob_individual_present_at_mda_distribution::set_value(const YAML::Node &node) {
@@ -421,7 +435,7 @@ void prob_individual_present_at_mda_distribution::set_value(const YAML::Node &no
     const auto mean = config_->mean_prob_individual_present_at_mda()[i];
     const auto sd = config_->sd_prob_individual_present_at_mda()[i];
 
-    beta_distribution_params params{};
+    beta_distribution_params params {};
 
     if (NumberHelpers::is_equal(sd, 0.0)) {
       params.alpha = mean;
