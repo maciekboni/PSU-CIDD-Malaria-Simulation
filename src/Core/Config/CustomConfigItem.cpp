@@ -209,7 +209,7 @@ void drug_db::set_value(const YAML::Node &node) {
                   aa_pos_in_sequence, false });
             aa_pos_in_sequence++;
           }
-          if ((*gene_info_it).max_copy > 1) {
+          if ((*gene_info_it).max_copies > 1) {
             dt->resistant_aa_location.push_back(
                 { (*gene_info_it).chromosome - 1,
                   static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)),

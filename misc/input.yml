@@ -188,85 +188,150 @@ circulation_info:
     mean: 5
     sd: 10
 
+mutation_mask: "||||111||11111,0||||||0000001001|1"
+# 4 combinations 4 ec50
+
 # the appearance of gene should be in order
 pf_gene_info:
   - chromosome: 7
     genes:
       - name: "Pfcrt"
+        multiplicative_effect_on_EC50_for_2_or_more_mutations: 1.1
         aa_positions:
           - position: 76
             amino_acids: [ 'K', 'T' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 93
             amino_acids: [ 'T', 'S' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 97
             amino_acids: [ 'H', 'T' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 145
             amino_acids: [ 'F', 'I' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 218
             amino_acids: [ 'I', 'F' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
       - name: "Pfkaf"
         aa_positions:
           - position: 500
             amino_acids: [ 'x', 'X' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
   - chromosome: 5
     genes:
       - name: "Pfmdr1"
-        max_copy: 2
-        copy_daily_crs: [ 0, 0.0055 ]
+        max_copies: 2
+        # copy number variation cost of resistances
+        cnv_daily_crs: [ 0, 0.0055 ]
+        cnv_multiplicative_effect_on_EC50:
+          - drug_id: 0
+            factors: [ 1, 1.6 ]
+        multiplicative_effect_on_EC50_for_2_or_more_mutations: 1.1
         aa_positions:
           - position: 86
             amino_acids: [ 'N', 'Y' ]
             daily_crs: [ 0, 0.0005 ]
-          - position: 218
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
+          - position: 184
             amino_acids: [ 'Y', 'F' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
   - chromosome: 13
     genes:
       - name: "Pfkelch13"
+        multiplicative_effect_on_EC50_for_2_or_more_mutations: 1.1
         aa_positions:
           - position: 446
             amino_acids: [ 'F', 'I' ]
             daily_crs: [ 0, 0.0005 ]
-            cost_of_EC50:
-              0: [ 0, 0.6 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 458
             amino_acids: [ 'N', 'Y' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 476
             amino_acids: [ 'M', 'I' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 493
             amino_acids: [ 'Y', 'H' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 539
             amino_acids: [ 'R', 'T' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 543
             amino_acids: [ 'I', 'T' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 553
             amino_acids: [ 'P', 'L' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 561
             amino_acids: [ 'R', 'H' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 574
             amino_acids: [ 'P', 'L' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 580
             amino_acids: [ 'C', 'Y' ]
             daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
   - chromosome: 14
     genes:
       - name: "Pfplasmepsin"
-        max_copy: 2
-        copy_daily_crs: [ 0, 0.0005 ]
+        max_copies: 2
+        cnv_daily_crs: [ 0, 0.0005 ]
+        cnv_multiplicative_effect_on_EC50:
+          - drug_id: 0
+            factors: [ 1, 1.6 ]
         aa_positions: [ ]
 
 #
@@ -327,7 +392,7 @@ initial_parasite_info:
 #
 drug_db:
   0:
-    name: "artmisinin"
+    name: "artemisinin"
     half_life: 0.0
     maximum_parasite_killing_rate: 0.999
     n: 25

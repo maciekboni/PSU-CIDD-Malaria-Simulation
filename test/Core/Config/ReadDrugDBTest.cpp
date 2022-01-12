@@ -80,7 +80,7 @@ TEST(ConfigTest, ReadPiperaquineResistantAALocation) {
   ASSERT_EQ(c.drug_db()->at(3)->resistant_aa_location[0].is_copy_number, true);
 
   ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfplasmepsin");
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].max_copy, 2);
+  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].max_copies, 2);
 }
 
 TEST(ConfigTest, ReadAAPostInAASequence) {

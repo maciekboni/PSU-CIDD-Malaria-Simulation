@@ -151,7 +151,7 @@ struct convert<PfGeneInfo> {
   }
 
   static bool decode(const Node& node, PfGeneInfo& gene_info) {
-    for (const auto& chromosome_node: node) {
+    for (const auto& chromosome_node : node) {
       auto chromosome = chromosome_node["chromosome"].as<int>();
       for (const auto& gene_node : chromosome_node["genes"]) {
         auto gene = gene_node.as<GeneInfo>();
@@ -175,9 +175,21 @@ struct convert<GeneInfo> {
     gene.aa_position_infos.clear();
     gene.name = node["name"].as<std::string>();
 
-    gene.max_copy = node["max_copy"] ? node["max_copy"].as<int>() : 1;
-    gene.copy_daily_crs =
-        node["copy_daily_crs"] ? node["copy_daily_crs"].as<std::vector<double>>() : std::vector<double>();
+    gene.max_copies = node["max_copies"] ? node["max_copies"].as<int>() : 1;
+    gene.cnv_daily_crs =
+        node["cnv_daily_crs"] ? node["cnv_daily_crs"].as<std::vector<double>>() : std::vector<double>();
+
+    if (node["cnv_multiplicative_effect_on_EC50"]) {
+      for (const auto& drug_node : node["cnv_multiplicative_effect_on_EC50"]) {
+        gene.cnv_multiplicative_effect_on_EC50[drug_node["drug_id"].as<int>()] =
+            drug_node["factors"].as<std::vector<double>>();
+      }
+    }
+
+    gene.multiplicative_effect_on_EC50_for_2_or_more_mutations =
+        node["multiplicative_effect_on_EC50_for_2_or_more_mutations"]
+            ? node["multiplicative_effect_on_EC50_for_2_or_more_mutations"].as<double>()
+            : 1;
 
     for (const auto& aa_node : node["aa_positions"]) {
       auto aa_position = aa_node.as<AaPositionInfo>();
@@ -201,6 +213,11 @@ struct convert<AaPositionInfo> {
     aa_pos.position = node["position"].as<int>();
     aa_pos.amino_acids = node["amino_acids"].as<std::vector<char>>();
     aa_pos.daily_crs = node["daily_crs"].as<std::vector<double>>();
+
+    for (const auto& drug_node : node["multiplicative_effect_on_EC50"]) {
+      aa_pos.multiplicative_effect_on_EC50[drug_node["drug_id"].as<int>()] =
+          drug_node["factors"].as<std::vector<double>>();
+    }
 
     return true;
   }

@@ -194,18 +194,21 @@ struct RelativeInfectivity {
 };
 
 struct AaPositionInfo {
-  int position;
+  int position { -1 };
   std::vector<char> amino_acids;
   std::vector<double> daily_crs;
+  std::map<int, std::vector<double>> multiplicative_effect_on_EC50;
   friend std::ostream &operator<<(std::ostream &os, const AaPositionInfo &aa) { return os; }
 };
 
 struct GeneInfo {
   std::string name;
-  int chromosome;
-  int max_copy;
-  std::vector<double> copy_daily_crs;
+  int chromosome { -1 };
+  int max_copies { 1 };
+  std::vector<double> cnv_daily_crs;
+  std::map<int, std::vector<double>> cnv_multiplicative_effect_on_EC50;
   std::vector<AaPositionInfo> aa_position_infos;
+  double multiplicative_effect_on_EC50_for_2_or_more_mutations { 1 };
   friend std::ostream &operator<<(std::ostream &os, const GeneInfo &aa) { return os; }
 };
 
@@ -224,7 +227,7 @@ struct PfGeneInfo {
       result += chromosome_infos[ii].gene_infos.size() > 1 ? chromosome_infos[ii].gene_infos.size() - 1 : 0;  // for ','
       for (auto &gene_info : chromosome_infos[ii].gene_infos) {
         result += gene_info.aa_position_infos.size();
-        result += gene_info.max_copy > 1 ? 1 : 0;  // for copy number
+        result += gene_info.max_copies > 1 ? 1 : 0;  // for copy number
       }
     }
     result += chromosome_id;  // for "|"
@@ -232,8 +235,8 @@ struct PfGeneInfo {
     // final chromosome
     for (int ii = 0; ii < gene_id; ++ii) {
       result += chromosome_infos[chromosome_id].gene_infos[ii].aa_position_infos.size();
-      result += chromosome_infos[chromosome_id].gene_infos[ii].max_copy > 1 ? 1 : 0;  // for copy number
-      result += 1;                                                                    // for ","
+      result += chromosome_infos[chromosome_id].gene_infos[ii].max_copies > 1 ? 1 : 0;  // for copy number
+      result += 1;                                                                      // for ","
     }
 
     // final gene

@@ -25,7 +25,7 @@ Genotype::Genotype(const std::string &in_aa_sequence) : aa_sequence { in_aa_sequ
     std::istringstream chromosomeTokenStream(chromosome_str);
     auto jj = 0;
     while (std::getline(chromosomeTokenStream, gene_str, ',')) {
-      aa_structure[ii].push_back(gene_str);
+      pf_genotype_str[ii].push_back(gene_str);
       jj++;
     }
     ii++;
@@ -75,23 +75,23 @@ std::string Genotype::get_aa_sequence() const {
 bool Genotype::is_valid(const PfGeneInfo &gene_info) {
   for (int chromosome_i = 0; chromosome_i < 14; ++chromosome_i) {
     auto chromosome_info = gene_info.chromosome_infos[chromosome_i];
-    if (chromosome_info.gene_infos.size() != aa_structure[chromosome_i].size()) return false;
+    if (chromosome_info.gene_infos.size() != pf_genotype_str[chromosome_i].size()) return false;
 
-    for (int gene_i = 0; gene_i < aa_structure[chromosome_i].size(); ++gene_i) {
+    for (int gene_i = 0; gene_i < pf_genotype_str[chromosome_i].size(); ++gene_i) {
       auto gene_info = chromosome_info.gene_infos[gene_i];
-      auto max_aa_pos = gene_info.max_copy > 1 ? aa_structure[chromosome_i][gene_i].size() - 1
-                                               : aa_structure[chromosome_i][gene_i].size();
+      auto max_aa_pos = gene_info.max_copies > 1 ? pf_genotype_str[chromosome_i][gene_i].size() - 1
+                                                 : pf_genotype_str[chromosome_i][gene_i].size();
 
       // check same size with aa postions info
       if (gene_info.aa_position_infos.size() != max_aa_pos) {
-        std::cout << aa_structure[chromosome_i][gene_i] << std::endl;
+        std::cout << pf_genotype_str[chromosome_i][gene_i] << std::endl;
         std::cout << gene_info.aa_position_infos.size() << std::endl;
         return false;
       }
 
       for (int aa_i = 0; aa_i < max_aa_pos; ++aa_i) {
         auto aa_pos_info = gene_info.aa_position_infos[aa_i];
-        auto element = aa_structure[chromosome_i][gene_i][aa_i];
+        auto element = pf_genotype_str[chromosome_i][gene_i][aa_i];
 
         if (std::find(aa_pos_info.amino_acids.begin(), aa_pos_info.amino_acids.end(), element)
             == aa_pos_info.amino_acids.end())
@@ -99,9 +99,9 @@ bool Genotype::is_valid(const PfGeneInfo &gene_info) {
       }
 
       // check number copy valid or not
-      if (gene_info.max_copy > 1) {
-        auto copy_number = NumberHelpers::char_to_single_digit_number(aa_structure[chromosome_i][gene_i].back());
-        if (copy_number > gene_info.max_copy) {
+      if (gene_info.max_copies > 1) {
+        auto copy_number = NumberHelpers::char_to_single_digit_number(pf_genotype_str[chromosome_i][gene_i].back());
+        if (copy_number > gene_info.max_copies) {
           return false;
         }
       }
@@ -112,17 +112,17 @@ bool Genotype::is_valid(const PfGeneInfo &gene_info) {
 void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
   daily_fitness_multiple_infection = 1.0;
 
-  for (int chromosome_i = 0; chromosome_i < aa_structure.size(); ++chromosome_i) {
+  for (int chromosome_i = 0; chromosome_i < pf_genotype_str.size(); ++chromosome_i) {
     auto chromosome_info = gene_info.chromosome_infos[chromosome_i];
 
-    for (int gene_i = 0; gene_i < aa_structure[chromosome_i].size(); ++gene_i) {
-      auto gene_info = chromosome_info.gene_infos[gene_i];
-      auto max_aa_pos = gene_info.max_copy > 1 ? aa_structure[chromosome_i][gene_i].size() - 1
-                                               : aa_structure[chromosome_i][gene_i].size();
+    for (int gene_i = 0; gene_i < pf_genotype_str[chromosome_i].size(); ++gene_i) {
+      auto res_gene_info = chromosome_info.gene_infos[gene_i];
+      auto max_aa_pos = res_gene_info.max_copies > 1 ? pf_genotype_str[chromosome_i][gene_i].size() - 1
+                                                     : pf_genotype_str[chromosome_i][gene_i].size();
       for (int aa_i = 0; aa_i < max_aa_pos; ++aa_i) {
         // calculate cost of resistance
-        auto aa_pos_info = gene_info.aa_position_infos[aa_i];
-        auto element = aa_structure[chromosome_i][gene_i][aa_i];
+        auto aa_pos_info = res_gene_info.aa_position_infos[aa_i];
+        auto element = pf_genotype_str[chromosome_i][gene_i][aa_i];
 
         auto it = std::find(aa_pos_info.amino_acids.begin(), aa_pos_info.amino_acids.end(), element);
         auto element_id = it - aa_pos_info.amino_acids.begin();
@@ -132,21 +132,70 @@ void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
         daily_fitness_multiple_infection *= (1 - cr);
       }
 
-      // check number copy valid or not
-      if (gene_info.max_copy > 1) {
-        auto copy_number = (int)aa_structure[chromosome_i][gene_i].back() - 48;
+      // calculate for number copy variation
+      if (res_gene_info.max_copies > 1) {
+        auto copy_number = (int)pf_genotype_str[chromosome_i][gene_i].back() - 48;
         if (copy_number > 1) {
-          daily_fitness_multiple_infection *= 1 - gene_info.copy_daily_crs[copy_number - 1];
+          daily_fitness_multiple_infection *= 1 - res_gene_info.cnv_daily_crs[copy_number - 1];
         }
       }
     }
   }
 }
-void Genotype::calculate_EC50_power_n(const PfGeneInfo &info, DrugDatabase *drug_db) {
+void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase *drug_db) {
   EC50_power_n.resize(drug_db->size());
-  std::fill(EC50_power_n.begin(), EC50_power_n.end(), 0);
+  for (const auto &[drug_id, dt] : *drug_db) {
+    EC50_power_n[drug_id] = dt->base_EC50;
+  }
 
-  // TODO: calculate EC50_power_n
+  for (int chromosome_i = 0; chromosome_i < pf_genotype_str.size(); ++chromosome_i) {
+    auto chromosome_info = gene_info.chromosome_infos[chromosome_i];
+
+    for (int gene_i = 0; gene_i < pf_genotype_str[chromosome_i].size(); ++gene_i) {
+      auto res_gene_info = chromosome_info.gene_infos[gene_i];
+      auto max_aa_pos = res_gene_info.max_copies > 1 ? pf_genotype_str[chromosome_i][gene_i].size() - 1
+                                                     : pf_genotype_str[chromosome_i][gene_i].size();
+      for (int aa_i = 0; aa_i < max_aa_pos; ++aa_i) {
+        // calculate cost of resistance
+        auto aa_pos_info = res_gene_info.aa_position_infos[aa_i];
+        auto element = pf_genotype_str[chromosome_i][gene_i][aa_i];
+        auto it = std::find(aa_pos_info.amino_acids.begin(), aa_pos_info.amino_acids.end(), element);
+        auto element_id = it - aa_pos_info.amino_acids.begin();
+
+        for (const auto &[drug_id, dt] : *drug_db) {
+          if (aa_pos_info.multiplicative_effect_on_EC50.find(drug_id)
+              != aa_pos_info.multiplicative_effect_on_EC50.end()) {
+            auto multiplicative_effect_factor = aa_pos_info.multiplicative_effect_on_EC50[drug_id][element_id];
+
+            if (multiplicative_effect_factor > 1 && EC50_power_n[drug_id] > drug_db->at(drug_id)->base_EC50) {
+              multiplicative_effect_factor = res_gene_info.multiplicative_effect_on_EC50_for_2_or_more_mutations;
+            }
+
+            EC50_power_n[drug_id] *= multiplicative_effect_factor;
+          }
+        }
+      }
+
+      // calculate for number copy variation
+      if (res_gene_info.max_copies > 1) {
+        auto copy_number = (int)pf_genotype_str[chromosome_i][gene_i].back() - 48;
+        if (copy_number > 1) {
+          for (const auto &[drug_id, dt] : *drug_db) {
+            if (res_gene_info.cnv_multiplicative_effect_on_EC50.find(drug_id)
+                != res_gene_info.cnv_multiplicative_effect_on_EC50.end()) {
+              daily_fitness_multiple_infection *=
+                  res_gene_info.cnv_multiplicative_effect_on_EC50[drug_id][copy_number - 1];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // power n
+  for (const auto &[drug_id, dt] : *drug_db) {
+    EC50_power_n[drug_id] = pow(EC50_power_n[drug_id], dt->n());
+  }
 }
 Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType) const {
   std::string new_aa_sequence { aa_sequence };
@@ -159,7 +208,7 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
     // draw a random copy number
     auto new_copy_number =
         pRandom->random_uniform(
-            pConfig->pf_gene_info().chromosome_infos[aa_pos.chromosome_id].gene_infos[aa_pos.gene_id].max_copy)
+            pConfig->pf_gene_info().chromosome_infos[aa_pos.chromosome_id].gene_infos[aa_pos.gene_id].max_copies)
         + 1;
     new_aa_sequence[aa_pos.aa_pos_in_aa_sequence] = NumberHelpers::single_digit_number_to_char(new_copy_number);
   } else {

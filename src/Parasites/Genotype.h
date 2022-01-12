@@ -24,15 +24,15 @@ class Config;
 class Random;
 
 typedef std::string GeneStr;
-typedef std::vector<GeneStr> ChromosomeStr;
-typedef std::array<ChromosomeStr, 14> AaStructure;
+typedef std::vector<GeneStr> ChromosomalGenotypeStr;
+typedef std::array<ChromosomalGenotypeStr, 14> PfGenotypeStr;
 
 class Genotype {
   DISALLOW_COPY_AND_ASSIGN(Genotype)
 
 public:
   int genotype_id { -1 };
-  AaStructure aa_structure {};
+  PfGenotypeStr pf_genotype_str {};
   std::string aa_sequence;
   double daily_fitness_multiple_infection { 1 };
   std::vector<double> EC50_power_n {};
