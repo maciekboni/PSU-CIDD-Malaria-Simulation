@@ -142,6 +142,7 @@ void Genotype::calculate_daily_fitness(const PfGeneInfo &gene_info) {
     }
   }
 }
+
 void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase *drug_db) {
   EC50_power_n.resize(drug_db->size());
   for (const auto &[drug_id, dt] : *drug_db) {
@@ -155,6 +156,8 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
       auto res_gene_info = chromosome_info.gene_infos[gene_i];
       auto max_aa_pos = res_gene_info.max_copies > 1 ? pf_genotype_str[chromosome_i][gene_i].size() - 1
                                                      : pf_genotype_str[chromosome_i][gene_i].size();
+      std::vector<int> number_of_effective_mutations_in_same_genes(drug_db->size(), 0);
+
       for (int aa_i = 0; aa_i < max_aa_pos; ++aa_i) {
         // calculate cost of resistance
         auto aa_pos_info = res_gene_info.aa_position_infos[aa_i];
@@ -165,12 +168,21 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
         for (const auto &[drug_id, dt] : *drug_db) {
           if (aa_pos_info.multiplicative_effect_on_EC50.find(drug_id)
               != aa_pos_info.multiplicative_effect_on_EC50.end()) {
+            if (aa_pos_info.multiplicative_effect_on_EC50[drug_id][element_id] > 1) {
+            }
             auto multiplicative_effect_factor = aa_pos_info.multiplicative_effect_on_EC50[drug_id][element_id];
 
-            if (multiplicative_effect_factor > 1 && EC50_power_n[drug_id] > drug_db->at(drug_id)->base_EC50) {
-              multiplicative_effect_factor = res_gene_info.multiplicative_effect_on_EC50_for_2_or_more_mutations;
+            if (multiplicative_effect_factor > 1) {
+              // encounter resistant aa
+              number_of_effective_mutations_in_same_genes[drug_id] += 1;
+              if (number_of_effective_mutations_in_same_genes[drug_id] > 1
+                  && res_gene_info.multiplicative_effect_on_EC50_for_2_or_more_mutations.find(drug_id)
+                         != res_gene_info.multiplicative_effect_on_EC50_for_2_or_more_mutations.end()) {
+                // if multiplicative effect can apply to this drug
+                multiplicative_effect_factor =
+                    res_gene_info.multiplicative_effect_on_EC50_for_2_or_more_mutations[drug_id];
+              }
             }
-
             EC50_power_n[drug_id] *= multiplicative_effect_factor;
           }
         }
@@ -183,8 +195,7 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
           for (const auto &[drug_id, dt] : *drug_db) {
             if (res_gene_info.cnv_multiplicative_effect_on_EC50.find(drug_id)
                 != res_gene_info.cnv_multiplicative_effect_on_EC50.end()) {
-              daily_fitness_multiple_infection *=
-                  res_gene_info.cnv_multiplicative_effect_on_EC50[drug_id][copy_number - 1];
+              EC50_power_n[drug_id] *= res_gene_info.cnv_multiplicative_effect_on_EC50[drug_id][copy_number - 1];
             }
           }
         }
@@ -210,9 +221,9 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
         pRandom->random_uniform(
             pConfig->pf_gene_info().chromosome_infos[aa_pos.chromosome_id].gene_infos[aa_pos.gene_id].max_copies)
         + 1;
-    new_aa_sequence[aa_pos.aa_pos_in_aa_sequence] = NumberHelpers::single_digit_number_to_char(new_copy_number);
+    new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
   } else {
-    // draw random aa perform mutation to get new aa structure
+    // draw random aa id
     auto new_aa_id = pRandom->random_uniform(pConfig->pf_gene_info()
                                                  .chromosome_infos[aa_pos.chromosome_id]
                                                  .gene_infos[aa_pos.gene_id]
@@ -223,8 +234,9 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
                       .gene_infos[aa_pos.gene_id]
                       .aa_position_infos[aa_pos.aa_id]
                       .amino_acids[new_aa_id];
-    new_aa_sequence[aa_pos.aa_pos_in_aa_sequence] = new_aa;
+    new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
   }
+  
   // get genotype pointer from gene database based on aa sequence
   return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
 }

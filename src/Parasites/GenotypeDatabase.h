@@ -45,7 +45,7 @@ public:
   Genotype* get_genotype_from_alleles_structure(const IntVector& alleles);
 
 private:
-  unsigned int auto_id;
+  unsigned int auto_id {0};
 };
 
 #endif /* INTPARASITEDATABASE_H */

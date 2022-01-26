@@ -80,15 +80,15 @@ TEST(ConfigTest, ReadEC50Test) {
   auto plasmepsin_info = c.pf_gene_info().chromosome_infos[13].gene_infos[0];
   EXPECT_EQ(plasmepsin_info.cnv_multiplicative_effect_on_EC50.size(), 1);
 
-  EXPECT_EQ(plasmepsin_info.cnv_multiplicative_effect_on_EC50[0].size(), 2);
-  ASSERT_THAT(plasmepsin_info.cnv_multiplicative_effect_on_EC50[0], ElementsAre(1.0, 1.6));
+  EXPECT_EQ(plasmepsin_info.cnv_multiplicative_effect_on_EC50[3].size(), 2);
+  ASSERT_THAT(plasmepsin_info.cnv_multiplicative_effect_on_EC50[3], ElementsAre(1.0, 2.4137931));
 
   auto mdr1_info = c.pf_gene_info().chromosome_infos[4].gene_infos[0];
-  EXPECT_EQ(mdr1_info.cnv_multiplicative_effect_on_EC50.size(), 1);
-  EXPECT_EQ(mdr1_info.multiplicative_effect_on_EC50_for_2_or_more_mutations, 1.1);
+  EXPECT_EQ(mdr1_info.cnv_multiplicative_effect_on_EC50.size(), 2);
+  EXPECT_EQ(mdr1_info.multiplicative_effect_on_EC50_for_2_or_more_mutations[1], 1.05);
 
-  EXPECT_EQ(mdr1_info.cnv_multiplicative_effect_on_EC50[0].size(), 2);
-  ASSERT_THAT(mdr1_info.cnv_multiplicative_effect_on_EC50[0], ElementsAre(1.0, 1.6));
+  EXPECT_EQ(mdr1_info.cnv_multiplicative_effect_on_EC50[1].size(), 2);
+  ASSERT_THAT(mdr1_info.cnv_multiplicative_effect_on_EC50[1], ElementsAre(1.0, 1.3));
 
-  ASSERT_THAT(mdr1_info.aa_position_infos[0].multiplicative_effect_on_EC50[0], ElementsAre(1.0, 1.6));
+  ASSERT_THAT(mdr1_info.aa_position_infos[0].multiplicative_effect_on_EC50[1], ElementsAre(1.25, 1));
 }

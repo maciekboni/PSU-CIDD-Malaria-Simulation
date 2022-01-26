@@ -208,7 +208,7 @@ struct GeneInfo {
   std::vector<double> cnv_daily_crs;
   std::map<int, std::vector<double>> cnv_multiplicative_effect_on_EC50;
   std::vector<AaPositionInfo> aa_position_infos;
-  double multiplicative_effect_on_EC50_for_2_or_more_mutations { 1 };
+  std::map<int,double> multiplicative_effect_on_EC50_for_2_or_more_mutations;
   friend std::ostream &operator<<(std::ostream &os, const GeneInfo &aa) { return os; }
 };
 

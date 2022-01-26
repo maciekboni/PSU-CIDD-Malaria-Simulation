@@ -15,7 +15,7 @@ struct ResistantAALocation {
   int chromosome_id { -1 };
   int gene_id { -1 };
   int aa_id { -1 };
-  int aa_pos_in_aa_sequence { -1 };
+  int aa_index_in_aa_string { -1 };
   bool is_copy_number { false };
 };
 

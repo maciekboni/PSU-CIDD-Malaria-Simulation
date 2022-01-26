@@ -89,21 +89,21 @@ TEST(ConfigTest, ReadAAPostInAASequence) {
 
   // as
   auto aa_sequence = "||||NY1||KTHFI,x||||||FNMYRIPRPC|1";
-  auto aa_pos1 = c.drug_db()->at(0)->resistant_aa_location[0].aa_pos_in_aa_sequence;
+  auto aa_pos1 = c.drug_db()->at(0)->resistant_aa_location[0].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos1], 'F');
 
   // pip
-  auto aa_pos2 = c.drug_db()->at(3)->resistant_aa_location[0].aa_pos_in_aa_sequence;
+  auto aa_pos2 = c.drug_db()->at(3)->resistant_aa_location[0].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos2], '1');
 
   // lm
-  auto aa_pos3 = c.drug_db()->at(1)->resistant_aa_location[2].aa_pos_in_aa_sequence;
+  auto aa_pos3 = c.drug_db()->at(1)->resistant_aa_location[2].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos3], '1');
 
-  auto aa_pos4 = c.drug_db()->at(1)->resistant_aa_location[7].aa_pos_in_aa_sequence;
+  auto aa_pos4 = c.drug_db()->at(1)->resistant_aa_location[7].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos4], 'I');
 
   // kaf
-  auto aa_pos5 = c.drug_db()->at(7)->resistant_aa_location[0].aa_pos_in_aa_sequence;
+  auto aa_pos5 = c.drug_db()->at(7)->resistant_aa_location[0].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos5], 'x');
 }

@@ -186,10 +186,12 @@ struct convert<GeneInfo> {
       }
     }
 
-    gene.multiplicative_effect_on_EC50_for_2_or_more_mutations =
-        node["multiplicative_effect_on_EC50_for_2_or_more_mutations"]
-            ? node["multiplicative_effect_on_EC50_for_2_or_more_mutations"].as<double>()
-            : 1;
+    if (node["multiplicative_effect_on_EC50_for_2_or_more_mutations"]) {
+      for (const auto& drug_node : node["multiplicative_effect_on_EC50_for_2_or_more_mutations"]) {
+        gene.multiplicative_effect_on_EC50_for_2_or_more_mutations[drug_node["drug_id"].as<int>()] =
+            drug_node["factor"].as<double>();
+      }
+    }
 
     for (const auto& aa_node : node["aa_positions"]) {
       auto aa_position = aa_node.as<AaPositionInfo>();
