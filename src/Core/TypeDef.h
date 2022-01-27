@@ -208,7 +208,7 @@ struct GeneInfo {
   std::vector<double> cnv_daily_crs;
   std::map<int, std::vector<double>> cnv_multiplicative_effect_on_EC50;
   std::vector<AaPositionInfo> aa_position_infos;
-  std::map<int,double> multiplicative_effect_on_EC50_for_2_or_more_mutations;
+  std::map<int, double> multiplicative_effect_on_EC50_for_2_or_more_mutations;
   friend std::ostream &operator<<(std::ostream &os, const GeneInfo &aa) { return os; }
 };
 
@@ -244,5 +244,22 @@ struct PfGeneInfo {
     return result;
   }
 };
+
+struct OverrideEC50Pattern {
+  std::string pattern;
+  int drug_id;
+  double ec50;
+
+  friend std::ostream &operator<<(std::ostream &os, const OverrideEC50Pattern &pattern) {
+    os << "[";
+    os << pattern.pattern << ", ";
+    os << pattern.drug_id << ", ";
+    os << pattern.ec50;
+    return os << "]";
+  }
+};
+
+typedef std::vector<OverrideEC50Pattern> OverrideEC50Patterns;
+
 
 #endif /* TYPEDEF_H */

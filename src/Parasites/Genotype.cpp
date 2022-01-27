@@ -208,6 +208,7 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
     EC50_power_n[drug_id] = pow(EC50_power_n[drug_id], dt->n());
   }
 }
+
 Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType) const {
   std::string new_aa_sequence { aa_sequence };
 
@@ -236,7 +237,28 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
                       .amino_acids[new_aa_id];
     new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
   }
-  
+
   // get genotype pointer from gene database based on aa sequence
   return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
+}
+
+void Genotype::override_EC50_power_n(const std::vector<OverrideEC50Pattern> &override_patterns, DrugDatabase *drug_db) {
+  if (EC50_power_n.size() != drug_db->size()) {
+    EC50_power_n.resize(drug_db->size());
+  }
+
+  for (const auto &pattern : override_patterns) {
+    if (match_pattern(pattern.pattern)) {
+      // override ec50 power n
+      EC50_power_n[pattern.drug_id] = pow(pattern.ec50, drug_db->at(pattern.drug_id)->n());
+    }
+  }
+}
+
+bool Genotype::match_pattern(const std::string &pattern) {
+  int id = 0;
+  while (id < aa_sequence.length() && (aa_sequence[id] == pattern[id] || pattern[id] == '.')) {
+    id++;
+  }
+  return id >= aa_sequence.length();
 }

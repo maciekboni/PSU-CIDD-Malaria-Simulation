@@ -225,5 +225,22 @@ struct convert<AaPositionInfo> {
   }
 };
 
+template <>
+struct convert<OverrideEC50Patterns> {
+  static Node encode(const OverrideEC50Patterns& rhs) {
+    Node node;
+    node.push_back("OverrideEC50Patterns");
+    return node;
+  }
+
+  static bool decode(const Node& node, OverrideEC50Patterns& patterns) {
+    for (const auto& pattern_node : node) {
+      patterns.push_back(OverrideEC50Pattern { pattern_node["pattern"].as<std::string>(),
+                                               pattern_node["drug_id"].as<int>(), pattern_node["ec50"].as<double>() });
+    }
+    return true;
+  }
+};
+
 }  // namespace YAML
 #endif  // YAMLCONVERTER_H

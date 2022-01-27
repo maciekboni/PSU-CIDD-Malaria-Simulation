@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Random.h
  * Author: nguyentran
  *
@@ -6,22 +6,23 @@
  */
 
 #ifndef RANDOM_H
-#define    RANDOM_H
+#define RANDOM_H
 
 #include <gsl/gsl_rng.h>
+
 #include "PropertyMacro.h"
 #include "Strategies/AdaptiveCyclingStrategy.h"
 
 class Model;
 
 class Random {
- DISALLOW_COPY_AND_ASSIGN(Random)
+  DISALLOW_COPY_AND_ASSIGN(Random)
 
- DISALLOW_MOVE(Random)
+  DISALLOW_MOVE(Random)
 
- VIRTUAL_PROPERTY(unsigned long, seed)
+  VIRTUAL_PROPERTY(unsigned long, seed)
 
- public:
+public:
   gsl_rng *G_RNG;
 
   explicit Random(gsl_rng *g_rng = nullptr);
@@ -34,16 +35,16 @@ class Random {
 
   virtual int random_poisson(const double &poisson_mean);
 
-  virtual unsigned long random_uniform(unsigned long range);
-
-  virtual unsigned long random_uniform_int(const unsigned long &from, const unsigned long &to);
-
   virtual double random_uniform_double(const double &from, const double &to);
 
   /*
    * This function will return a random number in [0,1)
    */
   virtual double random_uniform();
+
+  virtual unsigned long random_uniform(unsigned long range);
+
+  virtual unsigned long random_uniform_int(const unsigned long &from, const unsigned long &to);
 
   virtual double random_normal(const double &mean, const double &sd);
 
@@ -74,4 +75,4 @@ class Random {
   void shuffle(void *base, const size_t &n, const size_t &size);
 };
 
-#endif    /* RANDOM_H */
+#endif /* RANDOM_H */

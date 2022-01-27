@@ -27,9 +27,13 @@ macro(package_add_test TESTNAME)
   set_target_properties(${TESTNAME} PROPERTIES FOLDER test)
 endmacro()
 
-set(TEST_SRC_FILES main.cpp test1.cpp
+set(TEST_SRC_FILES
+  MockRandom.h
+  main.cpp test1.cpp
   RandomTest.cpp
   Parasites/GenotypeTest.cpp
+  Parasites/GenotypeMatchPatternTest.cpp
+  Parasites/GenotypeOverrideEC50Test.cpp
   Spatial/CoordinateTest.cpp
   Spatial/LocationTest.cpp
   Core/StringHelpersTest.cpp
@@ -38,6 +42,7 @@ set(TEST_SRC_FILES main.cpp test1.cpp
   Core/Config/ReadGeneInfoTest.cpp
   Core/Config/ReadInitialParasiteInfoTest.cpp
   Core/Config/ReadDrugDBTest.cpp
+  Core/Config/ReadOverrideEC50.cpp
   )
 
 set(MAIN_TEST masim_test)

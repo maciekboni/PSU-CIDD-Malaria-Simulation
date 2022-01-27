@@ -61,6 +61,10 @@ public:
   Genotype* perform_mutation_by_drug(Config* pConfig, Random* pRandom, DrugType* pDrugType) const;
 
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
+
+  void override_EC50_power_n(const std::vector<OverrideEC50Pattern>& override_patterns, DrugDatabase* drug_db);
+
+  bool match_pattern(const std::string& pattern);
 };
 
 #endif /* Genotype_H */

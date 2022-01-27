@@ -103,6 +103,8 @@ public:
 
   CONFIG_ITEM(artificial_rescaling_of_population_size, double, 1.0)
 
+  CONFIG_ITEM(override_ec50_patterns, OverrideEC50Patterns, OverrideEC50Patterns())
+
   CUSTOM_CONFIG_ITEM(start_of_comparison_period, 0)
 
   CUSTOM_CONFIG_ITEM(number_of_age_classes, 0)

@@ -349,36 +349,90 @@ pf_gene_info:
             factors: [ 1, 2.4137931 ]
         aa_positions: [ ]
 
-#
-# initialize parasite population
-# day-location - id - number
-# day= 0 is 7 days ago
-#
-# this is all currently based on the fact that development inside the moquito takes 7 days (DiM=7)
-# but, we will want to do sensitivity analyses that allow us to look at DiM=10, DiM=14 and so on.
-#
-# so, for the IC (inital conditions) below we can just assume that if we had 600 infected persons 3 days ago,
-# that the number of infected persons 1 day ago and 5 days ago wa salso 600; in other words, we can remove column
-# one from here
-#
-override_ec50:
+override_ec50_patterns:
   - pattern: "||||NY1||K....,.||||||..........|."
     drug_id: 1
     ec50 : 0.8
-#
-#  "||||NY2||KTHFI,X,CCC||||||FNMYRIPRPC|1"
-#  "||||NY1||TTHFI,x,ccc||||||FNMYRIPRPC|1"
+  - pattern: "||||YY1||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.67
+  - pattern: "||||NF1||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.9
+  - pattern: "||||YF1||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.8
+  - pattern: "||||NY2||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 1.0
+  - pattern: "||||YY2||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.87
+  - pattern: "||||NF2||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 1.1
+  - pattern: "||||YF2||K....,.||||||..........|."
+    drug_id: 1
+    ec50 : 1.0
+  - pattern: "||||NY1||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.75
+  - pattern: "||||YY1||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.6
+  - pattern: "||||NF1||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.85
+  - pattern: "||||YF1||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.75
+  - pattern: "||||NY2||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.95
+  - pattern: "||||YY2||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.8
+  - pattern: "||||NF2||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 1.05
+  - pattern: "||||YF2||T....,.||||||..........|."
+    drug_id: 1
+    ec50 : 0.95
+  - pattern: "||||NY.||K....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.62
+  - pattern: "||||YY.||K....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.85
+  - pattern: "||||NF.||K....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.5
+  - pattern: "||||YF.||K....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.775
+  - pattern: "||||NY.||T....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.7
+  - pattern: "||||YY.||T....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.9
+  - pattern: "||||NF.||T....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.65
+  - pattern: "||||YF.||T....,.||||||..........|."
+    drug_id: 2
+    ec50 : 0.82
+
+
+  #
+  #  "||||NY2||KTHFI,X,CCC||||||FNMYRIPRPC|1"
+  #  "||||NY1||TTHFI,x,ccc||||||FNMYRIPRPC|1"
 
   # within chromosome recombination rate: 0
   # within chromosome recombination rate: 0.1
   # bottom-top vs top-bottom
 
-#
-#
-# NOV 19 2009: the new input method should look like this
-# so that we don't have to put DiM explicitly into the input file
-#
-#1. loc 2. id (this is the resistance type of the parasite) 3. prevalence unweighted by biting rate
+
 initial_parasite_info:
   #if location id is -1 all location will have the same initial parasites
   - location_id: -1
