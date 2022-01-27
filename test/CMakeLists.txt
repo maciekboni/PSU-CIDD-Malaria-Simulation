@@ -34,6 +34,7 @@ set(TEST_SRC_FILES
   Parasites/GenotypeTest.cpp
   Parasites/GenotypeMatchPatternTest.cpp
   Parasites/GenotypeOverrideEC50Test.cpp
+  Parasites/GenotypePerformMutationTest.cpp
   Spatial/CoordinateTest.cpp
   Spatial/LocationTest.cpp
   Core/StringHelpersTest.cpp
@@ -43,6 +44,7 @@ set(TEST_SRC_FILES
   Core/Config/ReadInitialParasiteInfoTest.cpp
   Core/Config/ReadDrugDBTest.cpp
   Core/Config/ReadOverrideEC50.cpp
+  Core/Config/UpdateMutationMaskTest.cpp
   )
 
 set(MAIN_TEST masim_test)

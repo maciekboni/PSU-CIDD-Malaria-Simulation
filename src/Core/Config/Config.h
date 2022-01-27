@@ -105,6 +105,8 @@ public:
 
   CONFIG_ITEM(override_ec50_patterns, OverrideEC50Patterns, OverrideEC50Patterns())
 
+  CONFIG_ITEM(mutation_mask, std::string, "")
+
   CUSTOM_CONFIG_ITEM(start_of_comparison_period, 0)
 
   CUSTOM_CONFIG_ITEM(number_of_age_classes, 0)
@@ -160,6 +162,8 @@ public:
   virtual ~Config();
 
   void read_from_file(const std::string &config_file_name = "config.yml");
+
+  virtual void update_mutation_mask(const std::string &new_mask);
 };
 
 #endif /* CONFIG_H */

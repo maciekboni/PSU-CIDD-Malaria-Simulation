@@ -52,6 +52,8 @@ TEST(RandomTest, TestMockRandom) {
   ON_CALL(random, random_uniform())  // #3
       .WillByDefault(Return(0.4));
 
+  EXPECT_CALL(random, random_uniform()).Times(10);
+
   random.initialize();
   for (int i = 0; i < 10; ++i) {
     EXPECT_EQ(random.random_uniform(), 0.4);

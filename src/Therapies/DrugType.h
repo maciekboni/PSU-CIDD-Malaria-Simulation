@@ -20,6 +20,7 @@ struct ResistantAALocation {
 };
 
 class Genotype;
+class Config;
 
 class DrugType {
 public:
@@ -45,12 +46,14 @@ public:
 
 public:
   double base_EC50 { 0 };
-  std::vector<ResistantAALocation> resistant_aa_location {};
+  std::vector<std::string> resistant_genes;
+  std::vector<ResistantAALocation> resistant_aa_locations {};
 
 public:
   DrugType();
 
   virtual ~DrugType();
+
   virtual double get_parasite_killing_rate_by_concentration(const double &concentration, const double &EC50_power_n);
 
   virtual double n();
@@ -60,6 +63,8 @@ public:
   int get_total_duration_of_drug_activity(const int &dosing_days) const;
 
   double infer_ec50(Genotype *genotype);
+
+  void populate_resistant_aa_locations(Config *config_);
 
 private:
   double n_;

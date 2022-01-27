@@ -191,39 +191,9 @@ void drug_db::set_value(const YAML::Node &node) {
     dt->set_k(dt_node["k"].as<double>());
 
     dt->base_EC50 = dt_node["base_EC50"].as<double>();
-    for (auto gene : dt_node["resistant_genes"].as<std::vector<std::string>>()) {
-      auto found = false;
 
-      for (const auto &chromosome_info : config_->pf_gene_info().chromosome_infos) {
-        auto gene_info_it = std::find_if(chromosome_info.gene_infos.begin(), chromosome_info.gene_infos.end(),
-                                         [&gene](const GeneInfo &gene_info) { return gene_info.name == gene; });
-        if (gene_info_it != chromosome_info.gene_infos.end()) {
-          auto aa_pos_in_sequence = config_->pf_gene_info().calculate_aa_pos(
-              (*gene_info_it).chromosome - 1,
-              static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)),
-              static_cast<int>((*gene_info_it).aa_position_infos.size()), 0);
-          for (int aa_id = 0; aa_id < (*gene_info_it).aa_position_infos.size(); ++aa_id) {
-            dt->resistant_aa_location.push_back(
-                { (*gene_info_it).chromosome - 1,
-                  static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)), aa_id,
-                  aa_pos_in_sequence, false });
-            aa_pos_in_sequence++;
-          }
-          if ((*gene_info_it).max_copies > 1) {
-            dt->resistant_aa_location.push_back(
-                { (*gene_info_it).chromosome - 1,
-                  static_cast<int>(std::distance(chromosome_info.gene_infos.begin(), gene_info_it)),
-                  static_cast<int>((*gene_info_it).aa_position_infos.size()), aa_pos_in_sequence, true });
-          }
-
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        LOG(FATAL) << "Incorrect resistant genes in Drug DB";
-      }
-    }
+    dt->resistant_genes = dt_node["resistant_genes"].as<std::vector<std::string>>();
+    dt->populate_resistant_aa_locations(config_);
 
     value_->add(dt);
   }

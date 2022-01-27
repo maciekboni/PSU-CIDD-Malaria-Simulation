@@ -213,8 +213,8 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
   std::string new_aa_sequence { aa_sequence };
 
   // draw random aa position
-  auto aa_pos_id = pRandom->random_uniform(pDrugType->resistant_aa_location.size());
-  auto aa_pos = pDrugType->resistant_aa_location[aa_pos_id];
+  auto aa_pos_id = pRandom->random_uniform(pDrugType->resistant_aa_locations.size());
+  auto aa_pos = pDrugType->resistant_aa_locations[aa_pos_id];
 
   if (aa_pos.is_copy_number) {
     // draw a random copy number
@@ -224,17 +224,20 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
         + 1;
     new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
   } else {
+    auto &aa_list = pConfig->pf_gene_info()
+                        .chromosome_infos[aa_pos.chromosome_id]
+                        .gene_infos[aa_pos.gene_id]
+                        .aa_position_infos[aa_pos.aa_id]
+                        .amino_acids;
     // draw random aa id
-    auto new_aa_id = pRandom->random_uniform(pConfig->pf_gene_info()
-                                                 .chromosome_infos[aa_pos.chromosome_id]
-                                                 .gene_infos[aa_pos.gene_id]
-                                                 .aa_position_infos[aa_pos.aa_id]
-                                                 .amino_acids.size());
-    auto new_aa = pConfig->pf_gene_info()
-                      .chromosome_infos[aa_pos.chromosome_id]
-                      .gene_infos[aa_pos.gene_id]
-                      .aa_position_infos[aa_pos.aa_id]
-                      .amino_acids[new_aa_id];
+    auto new_aa_id = pRandom->random_uniform(aa_list.size() - 1);
+
+    auto old_aa = aa_sequence[aa_pos.aa_index_in_aa_string];
+    auto new_aa = aa_list[new_aa_id];
+    if (new_aa == old_aa) {
+      new_aa = aa_list[new_aa_id + 1];
+    }
+
     new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
   }
 

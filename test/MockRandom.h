@@ -8,4 +8,5 @@
 class MockRandom : public Random {
 public:
   MOCK_METHOD(double, random_uniform, (), (override));
+  MOCK_METHOD(unsigned long, random_uniform, (unsigned long range), (override));
 };
