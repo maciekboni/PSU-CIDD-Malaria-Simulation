@@ -50,18 +50,6 @@ int DrugType::get_total_duration_of_drug_activity(const int &dosing_days) const 
   return dosing_days + ceil(drug_half_life_ * LOG2_10);
 }
 
-double DrugType::infer_ec50(Genotype *genotype) {
-  // TODO: rework on this
-
-  return 0.65;
-
-  assert(false);
-  el::Logger *defaultLogger = el::Loggers::getLogger("default");
-  defaultLogger->fatal("EC50 not match for genotype: %s", *genotype);
-  // hopefully it will never reach here
-  return 0;
-}
-
 void DrugType::populate_resistant_aa_locations(Config *config_) {
   resistant_aa_locations.clear();
   for (const auto &chromosome_info : config_->pf_gene_info().chromosome_infos) {

@@ -46,7 +46,6 @@ public:
 
 public:
   double base_EC50 { 0 };
-  std::vector<std::string> resistant_genes;
   std::vector<ResistantAALocation> resistant_aa_locations {};
 
 public:
@@ -61,8 +60,6 @@ public:
   virtual void set_n(const double &n);
 
   int get_total_duration_of_drug_activity(const int &dosing_days) const;
-
-  double infer_ec50(Genotype *genotype);
 
   void populate_resistant_aa_locations(Config *config_);
 

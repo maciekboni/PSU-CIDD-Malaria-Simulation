@@ -192,7 +192,6 @@ void drug_db::set_value(const YAML::Node &node) {
 
     dt->base_EC50 = dt_node["base_EC50"].as<double>();
 
-    dt->resistant_genes = dt_node["resistant_genes"].as<std::vector<std::string>>();
     dt->populate_resistant_aa_locations(config_);
 
     value_->add(dt);

@@ -195,7 +195,7 @@ pf_gene_info:
   - chromosome: 7
     genes:
       - name: "Pfcrt"
-#        multiplicative_effect_on_EC50_for_2_or_more_mutations: 1.1
+        #        multiplicative_effect_on_EC50_for_2_or_more_mutations: 1.1
         aa_positions:
           - position: 76
             amino_acids: [ 'K', 'T' ]
@@ -247,7 +247,7 @@ pf_gene_info:
         cnv_daily_crs: [ 0, 0.0055 ]
         cnv_multiplicative_effect_on_EC50:
           - drug_id: 4
-            factors: [1, 2.44444444]
+            factors: [ 1, 2.44444444 ]
           - drug_id: 1
             factors: [ 1, 1.3 ]
         multiplicative_effect_on_EC50_for_2_or_more_mutations:
@@ -259,7 +259,7 @@ pf_gene_info:
             daily_crs: [ 0, 0.0005 ]
             multiplicative_effect_on_EC50:
               - drug_id: 6
-                factors: [1, 1.25]
+                factors: [ 1, 1.25 ]
               - drug_id: 1
                 factors: [ 1.25, 1 ]
               - drug_id: 2
@@ -269,9 +269,9 @@ pf_gene_info:
             daily_crs: [ 0, 0.0005 ]
             multiplicative_effect_on_EC50:
               - drug_id: 1
-                factors: [ 1, 1.25] # base*1.25*1.25 0.9375 > 0.8xxx (old value)
+                factors: [ 1, 1.25 ] # base*1.25*1.25 0.9375 > 0.8xxx (old value)
               - drug_id: 2
-                factors: [ 1.2, 1]
+                factors: [ 1.2, 1 ]
   - chromosome: 13
     genes:
       - name: "Pfkelch13"
@@ -352,76 +352,76 @@ pf_gene_info:
 override_ec50_patterns:
   - pattern: "||||NY1||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.8
+    ec50: 0.8
   - pattern: "||||YY1||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.67
+    ec50: 0.67
   - pattern: "||||NF1||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.9
+    ec50: 0.9
   - pattern: "||||YF1||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.8
+    ec50: 0.8
   - pattern: "||||NY2||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 1.0
+    ec50: 1.0
   - pattern: "||||YY2||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.87
+    ec50: 0.87
   - pattern: "||||NF2||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 1.1
+    ec50: 1.1
   - pattern: "||||YF2||K....,.||||||..........|."
     drug_id: 1
-    ec50 : 1.0
+    ec50: 1.0
   - pattern: "||||NY1||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.75
+    ec50: 0.75
   - pattern: "||||YY1||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.6
+    ec50: 0.6
   - pattern: "||||NF1||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.85
+    ec50: 0.85
   - pattern: "||||YF1||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.75
+    ec50: 0.75
   - pattern: "||||NY2||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.95
+    ec50: 0.95
   - pattern: "||||YY2||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.8
+    ec50: 0.8
   - pattern: "||||NF2||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 1.05
+    ec50: 1.05
   - pattern: "||||YF2||T....,.||||||..........|."
     drug_id: 1
-    ec50 : 0.95
+    ec50: 0.95
   - pattern: "||||NY.||K....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.62
+    ec50: 0.62
   - pattern: "||||YY.||K....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.85
+    ec50: 0.85
   - pattern: "||||NF.||K....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.5
+    ec50: 0.5
   - pattern: "||||YF.||K....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.775
+    ec50: 0.775
   - pattern: "||||NY.||T....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.7
+    ec50: 0.7
   - pattern: "||||YY.||T....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.9
+    ec50: 0.9
   - pattern: "||||NF.||T....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.65
+    ec50: 0.65
   - pattern: "||||YF.||T....,.||||||..........|."
     drug_id: 2
-    ec50 : 0.82
+    ec50: 0.82
 
 within_chromosome_recombination_rate: 0.1
 
@@ -467,7 +467,6 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.75
-    resistant_genes: ["Pfkelch13"]
   1:
     name: "lumefantrine"
     half_life: 4.5
@@ -478,7 +477,6 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.6
-    resistant_genes: ["Pfmdr1", "Pfcrt"]
   2:
     name: "amodiaquine"
     half_life: 9.0
@@ -488,7 +486,6 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.5
-    resistant_genes: ["Pfmdr1", "Pfcrt"]
   3:
     name: "piperaquine"
     half_life: 28.0
@@ -498,7 +495,6 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.58
-    resistant_genes: ["Pfplasmepsin"]
   #MQ
   4:
     name: "Mefloquine"
@@ -509,7 +505,7 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.45
-    resistant_genes: ["Pfmdr1"]
+    resistant_genes: [ "Pfmdr1" ]
   5:
     name: "SP"
     half_life: 6.5
@@ -519,7 +515,7 @@ drug_db:
     mutation_probability: 0.000
     k: 4
     base_EC50: 1.08
-    resistant_genes: []
+    resistant_genes: [ ]
   6:
     name: "CQ"
     half_life: 10
@@ -529,17 +525,15 @@ drug_db:
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.72
-    resistant_genes: ["Pfmdr1", "Pfcrt"]
   7:
     name: "KAF156"
     half_life: 1.6
     maximum_parasite_killing_rate: 0.99
     n: 15
-    age_specific_drug_concentration_sd: [0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
+    age_specific_drug_concentration_sd: [ 0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4 ]
     mutation_probability: 0.005
     k: 4
     base_EC50: 0.55
-    resistant_genes: ["Pfkaf"]
 
 
 lumefantrine_drug_id: 2

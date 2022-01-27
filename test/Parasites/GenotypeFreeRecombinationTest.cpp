@@ -83,4 +83,5 @@ TEST(GenotypeFreeRecombinationTest, WithinChromosomeFreeRecombineBottomTop) {
 
   auto genotype_C = genotype_A->free_recombine_with(&c, &random, genotype_B);
   EXPECT_EQ(genotype_C->aa_sequence, genotype_C_str);
+
 }
