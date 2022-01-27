@@ -423,15 +423,7 @@ override_ec50_patterns:
     drug_id: 2
     ec50 : 0.82
 
-
-  #
-  #  "||||NY2||KTHFI,X,CCC||||||FNMYRIPRPC|1"
-  #  "||||NY1||TTHFI,x,ccc||||||FNMYRIPRPC|1"
-
-  # within chromosome recombination rate: 0
-  # within chromosome recombination rate: 0.1
-  # bottom-top vs top-bottom
-
+within_chromosome_recombination_rate: 0.1
 
 initial_parasite_info:
   #if location id is -1 all location will have the same initial parasites

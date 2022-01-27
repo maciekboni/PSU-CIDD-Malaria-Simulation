@@ -35,17 +35,11 @@ Genotype::Genotype(const std::string &in_aa_sequence) : aa_sequence { in_aa_sequ
 Genotype::~Genotype() = default;
 
 bool Genotype::resist_to(DrugType *dt) {
-  // TODO: rework on this
-  return false;
-}
-
-bool Genotype::resist_to(Therapy *therapy) {
-  // TODO: rework on this
-  return false;
+  return EC50_power_n[dt->id()] > pow(dt->base_EC50, dt->n());
 }
 
 Genotype *Genotype::combine_mutation_to(const int &locus, const int &value) {
-  // TODO: rework on this
+  // TODO: remove this
   return this;
 }
 
@@ -61,16 +55,6 @@ std::ostream &operator<<(std::ostream &os, const Genotype &e) {
 
 std::string Genotype::get_aa_sequence() const {
   return aa_sequence;
-  //  std::stringstream ss;
-  //
-  //  for (auto &chromosome : aa_structure) {
-  //    ss << chromosome;
-  //    if (&chromosome != &aa_structure.back()){
-  //      ss << "|";
-  //    }
-  //  }
-  //
-  //  return ss.str();
 }
 bool Genotype::is_valid(const PfGeneInfo &gene_info) {
   for (int chromosome_i = 0; chromosome_i < 14; ++chromosome_i) {
@@ -217,12 +201,21 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
   auto aa_pos = pDrugType->resistant_aa_locations[aa_pos_id];
 
   if (aa_pos.is_copy_number) {
-    // draw a random copy number
-    auto new_copy_number =
-        pRandom->random_uniform(
-            pConfig->pf_gene_info().chromosome_infos[aa_pos.chromosome_id].gene_infos[aa_pos.gene_id].max_copies)
-        + 1;
-    new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
+    // increase or decrease by 1 step
+    auto old_copy_number = NumberHelpers::char_to_single_digit_number(aa_sequence[aa_pos.aa_index_in_aa_string]);
+    if (old_copy_number == 1) {
+      new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number + 1);
+    } else if (old_copy_number
+               == pConfig->pf_gene_info()
+                      .chromosome_infos[aa_pos.chromosome_id]
+                      .gene_infos[aa_pos.gene_id]
+                      .max_copies) {
+      new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number - 1);
+    } else {
+      auto new_copy_number = pRandom->random_uniform() < 0.5 ? old_copy_number - 1 : old_copy_number + 1;
+      new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
+    }
+
   } else {
     auto &aa_list = pConfig->pf_gene_info()
                         .chromosome_infos[aa_pos.chromosome_id]
@@ -264,4 +257,73 @@ bool Genotype::match_pattern(const std::string &pattern) {
     id++;
   }
   return id >= aa_sequence.length();
+}
+
+Genotype *Genotype::free_recombine_with(Config *pConfig, Random *pRandom, Genotype *other) {
+  // TODO: this function is not optimized 100%, use with care
+  PfGenotypeStr new_pf_genotype_str;
+  // for each chromosome
+  for (int chromosome_id = 0; chromosome_id < pf_genotype_str.size(); ++chromosome_id) {
+    if (pf_genotype_str[chromosome_id].empty()) continue;
+    if (pf_genotype_str[chromosome_id].size() == 1) {
+      // if single gene
+      // draw random
+      auto topOrBottom = pRandom->random_uniform();
+      // if < 0.5 take from current, otherwise take from other
+      auto gene_str = topOrBottom < 0.5 ? pf_genotype_str[chromosome_id][0] : other->pf_genotype_str[chromosome_id][0];
+      new_pf_genotype_str[chromosome_id].push_back(gene_str);
+    } else {
+      // if multiple genes
+      // draw random to determine whether
+      // within chromosome recombination happens
+      auto with_chromosome_recombination = pRandom->random_uniform();
+      if (with_chromosome_recombination < pConfig->within_chromosome_recombination_rate()) {
+        // if happen draw a random crossover point based on ','
+        auto cutting_gene_id = pRandom->random_uniform(pf_genotype_str[chromosome_id].size() - 1) + 1;
+        // draw another random to do top-bottom or bottom-top cross over
+        auto topOrBottom = pRandom->random_uniform();
+        for (auto gene_id = 0; gene_id < cutting_gene_id; ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? pf_genotype_str[chromosome_id][gene_id]
+                                            : other->pf_genotype_str[chromosome_id][gene_id];
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+        for (auto gene_id = cutting_gene_id; gene_id < pf_genotype_str[chromosome_id].size(); ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? other->pf_genotype_str[chromosome_id][gene_id]
+                                            : pf_genotype_str[chromosome_id][gene_id];
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+      } else {
+        // if not do the same with single gene
+        auto topOrBottom = pRandom->random_uniform();
+        for (int gene_id = 0; gene_id < pf_genotype_str[chromosome_id].size(); ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? pf_genotype_str[chromosome_id][gene_id]
+                                            : other->pf_genotype_str[chromosome_id][gene_id];
+
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+      }
+    }
+  }
+
+  auto new_aa_sequence = Convert_PfGenotypeStr_To_String(new_pf_genotype_str);
+  return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
+}
+
+std::string Genotype::Convert_PfGenotypeStr_To_String(const PfGenotypeStr &pfGenotypeStr) {
+  std::stringstream ss;
+
+  for (auto &chromosome : pfGenotypeStr) {
+    for (auto &gene : chromosome) {
+      ss << gene;
+      if (gene != chromosome.back()) {
+        ss << ",";
+      }
+    }
+
+    if (&chromosome != &pfGenotypeStr.back()) {
+      ss << "|";
+    }
+  }
+
+  return ss.str();
 }

@@ -40,7 +40,7 @@ TEST(ConfigTest, ReadArtemisininResistantAALocation) {
 TEST(ConfigTest, ReadLumefantrineResistantAALocation) {
   Config c;
   c.read_from_file("input.yml");
-  ASSERT_EQ(c.drug_db()->at(1)->resistant_aa_locations.size(), 8);
+  ASSERT_EQ(c.drug_db()->at(1)->resistant_aa_locations.size(), 4);
 
   auto chromosome_id1 = c.drug_db()->at(1)->resistant_aa_locations[0].chromosome_id;
   auto gene_id1 = c.drug_db()->at(1)->resistant_aa_locations[0].gene_id;
@@ -102,8 +102,8 @@ TEST(ConfigTest, ReadAAPostInAASequence) {
   auto aa_pos3 = c.drug_db()->at(1)->resistant_aa_locations[2].aa_index_in_aa_string;
   ASSERT_EQ(aa_sequence[aa_pos3], '1');
 
-  auto aa_pos4 = c.drug_db()->at(1)->resistant_aa_locations[7].aa_index_in_aa_string;
-  ASSERT_EQ(aa_sequence[aa_pos4], 'I');
+  auto aa_pos4 = c.drug_db()->at(1)->resistant_aa_locations[3].aa_index_in_aa_string;
+  ASSERT_EQ(aa_sequence[aa_pos4], 'K');
 
   // kaf
   //  auto aa_pos5 = c.drug_db()->at(7)->resistant_aa_location[0].aa_index_in_aa_string;

@@ -35,6 +35,7 @@ set(TEST_SRC_FILES
   Parasites/GenotypeMatchPatternTest.cpp
   Parasites/GenotypeOverrideEC50Test.cpp
   Parasites/GenotypePerformMutationTest.cpp
+  Parasites/GenotypeFreeRecombinationTest.cpp
   Spatial/CoordinateTest.cpp
   Spatial/LocationTest.cpp
   Core/StringHelpersTest.cpp

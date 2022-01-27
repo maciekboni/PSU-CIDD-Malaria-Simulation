@@ -46,8 +46,6 @@ public:
 
   bool resist_to(DrugType* dt);
 
-  bool resist_to(Therapy* therapy);
-
   Genotype* combine_mutation_to(const int& locus, const int& value);
 
   std::string get_aa_sequence() const;
@@ -65,6 +63,10 @@ public:
   void override_EC50_power_n(const std::vector<OverrideEC50Pattern>& override_patterns, DrugDatabase* drug_db);
 
   bool match_pattern(const std::string& pattern);
+
+  Genotype* free_recombine_with(Config* config, Random* pRandom, Genotype* other);
+
+  static std::string Convert_PfGenotypeStr_To_String(const PfGenotypeStr& pfGenotypeStr);
 };
 
 #endif /* Genotype_H */

@@ -46,6 +46,7 @@ void Config::read_from_file(const std::string &config_file_name) {
   }
 }
 
+// TODO: call this function in turn on/off mutation event
 void Config::update_mutation_mask(const std::string &new_mask) {
   mutation_mask() = new_mask;
   for (auto [drug_id, dt] : *drug_db()) {
