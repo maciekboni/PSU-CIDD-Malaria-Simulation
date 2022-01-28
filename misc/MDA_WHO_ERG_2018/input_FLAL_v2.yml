@@ -348,7 +348,7 @@ initial_parasite_info:
 #
 drug_db:
   0:
-    name: "artmisinin"
+    name: "artemisinin"
     half_life: 0.0
     maximum_parasite_killing_rate: 0.999
     n: 25

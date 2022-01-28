@@ -12,6 +12,7 @@ TEST(ConfigUpdateMutationMaskTest, ConfigUpdateMutationMaskTest) {
 //    std::cout << aa_loc.chromosome_id << " - " << aa_loc.gene_id << " - " << aa_loc.aa_id << std::endl;
 //  }
 
+  ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations.size(), 10);
   ASSERT_EQ(c.drug_db()->at(1)->resistant_aa_locations.size(), 4);
   ASSERT_EQ(c.mutation_mask(), "||||111||11111,0||||||0000001001|1");
 
@@ -19,6 +20,6 @@ TEST(ConfigUpdateMutationMaskTest, ConfigUpdateMutationMaskTest) {
 
   ASSERT_EQ(c.mutation_mask(), "||||001||10000,0||||||0000000001|1");
 
-  ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations.size(), 1);
-  ASSERT_EQ(c.drug_db()->at(1)->resistant_aa_locations.size(), 2);
+  ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations.size(), 10);
+  ASSERT_EQ(c.drug_db()->at(1)->resistant_aa_locations.size(), 4);
 }

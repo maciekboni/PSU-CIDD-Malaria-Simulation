@@ -27,7 +27,7 @@ TEST(ConfigTest, ReadBaseEC50) {
 TEST(ConfigTest, ReadArtemisininResistantAALocation) {
   Config c;
   c.read_from_file("input.yml");
-  ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations.size(), 2);
+  ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations.size(), 10);
   ASSERT_EQ(c.drug_db()->at(0)->resistant_aa_locations[0].is_copy_number, false);
 
   auto chromosome_id = c.drug_db()->at(0)->resistant_aa_locations[0].chromosome_id;
@@ -58,15 +58,13 @@ TEST(ConfigTest, ReadLumefantrineResistantAALocation) {
 TEST(ConfigTest, ReadKAFResistantAALocation) {
   Config c;
   c.read_from_file("input.yml");
-  ASSERT_EQ(c.drug_db()->at(7)->resistant_aa_locations.size(), 0);
+  ASSERT_EQ(c.drug_db()->at(7)->resistant_aa_locations.size(), 1);
 
-  // due to mutation masks the following test is not valid
-
-  //  auto chromosome_id = c.drug_db()->at(7)->resistant_aa_location[0].chromosome_id;
-  //  auto gene_id = c.drug_db()->at(7)->resistant_aa_location[0].gene_id;
-  //  ASSERT_EQ(chromosome_id, 6);
-  //  ASSERT_EQ(gene_id, 1);
-  //  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkaf");
+  auto chromosome_id = c.drug_db()->at(7)->resistant_aa_locations[0].chromosome_id;
+  auto gene_id = c.drug_db()->at(7)->resistant_aa_locations[0].gene_id;
+  ASSERT_EQ(chromosome_id, 6);
+  ASSERT_EQ(gene_id, 1);
+  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkaf");
 }
 
 TEST(ConfigTest, ReadPiperaquineResistantAALocation) {
@@ -92,7 +90,7 @@ TEST(ConfigTest, ReadAAPostInAASequence) {
   // as
   auto aa_sequence = "||||NY1||KTHFI,x||||||FNMYRIPRPC|1";
   auto aa_pos1 = c.drug_db()->at(0)->resistant_aa_locations[0].aa_index_in_aa_string;
-  ASSERT_EQ(aa_sequence[aa_pos1], 'P');
+  ASSERT_EQ(aa_sequence[aa_pos1], 'F');
 
   // pip
   auto aa_pos2 = c.drug_db()->at(3)->resistant_aa_locations[0].aa_index_in_aa_string;
