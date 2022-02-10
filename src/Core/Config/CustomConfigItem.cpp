@@ -147,10 +147,6 @@ void immune_system_information::set_value(const YAML::Node &node) {
                              / value_.duration_for_naive);
 }
 
-void number_of_parasite_types::set_value(const YAML::Node &node) {
-  // TODO: remove this
-}
-
 drug_db::~drug_db() {
   ObjectHelpers::delete_pointer<DrugDatabase>(value_);
 }

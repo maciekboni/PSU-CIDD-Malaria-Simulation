@@ -42,7 +42,7 @@ class Population : public Dispatcher {
  POINTER_PROPERTY(PersonIndexAll, all_persons);
 
  PROPERTY_REF(std::vector<std::vector<double> >, current_force_of_infection_by_location_parasite_type);
- PROPERTY_REF(std::vector<std::vector<std::vector<double> > >, force_of_infection_for7days_by_location_parasite_type);
+ PROPERTY_REF(std::vector<std::vector<std::vector<double> > >, force_of_infection_for_N_days_by_location_parasite_type);
 
  public:
   Population(Model *model = nullptr);

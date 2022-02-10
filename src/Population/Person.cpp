@@ -94,7 +94,6 @@ int Person::location() const {
 
 void Person::set_location(const int &value) {
   if (location_ != value) {
-    all_clonal_parasite_populations_->remove_all_infection_force();
     if (Model::DATA_COLLECTOR != nullptr) {
       const auto day_diff = (Constants::DAYS_IN_YEAR() - Model::SCHEDULER->current_day_in_year());
       if (location_ != -1) {
@@ -108,7 +107,6 @@ void Person::set_location(const int &value) {
     NotifyChange(LOCATION, &location_, &value);
 
     location_ = value;
-    all_clonal_parasite_populations_->add_all_infection_force();
   }
 }
 
@@ -185,11 +183,8 @@ void Person::set_bitting_level(const int &value) {
     new_value = Model::CONFIG->relative_bitting_info().number_of_biting_levels - 1;
   }
   if (bitting_level_ != new_value) {
-    all_clonal_parasite_populations_->remove_all_infection_force();
-
     NotifyChange(BITTING_LEVEL, &bitting_level_, &new_value);
     bitting_level_ = new_value;
-    all_clonal_parasite_populations_->add_all_infection_force();
   }
 }
 

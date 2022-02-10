@@ -26,14 +26,10 @@ OBJECTPOOL_IMPL(SingleHostClonalParasitePopulations)
 SingleHostClonalParasitePopulations::SingleHostClonalParasitePopulations(Person* person)
     : person_(person),
       parasites_(nullptr),
-      relative_effective_parasite_density_(nullptr),
       log10_total_relative_density_(ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY) {}
 
 void SingleHostClonalParasitePopulations::init() {
   parasites_ = new std::vector<ClonalParasitePopulation*>();
-  if (Model::CONFIG != nullptr) {
-    relative_effective_parasite_density_ = new DoubleVector(Model::CONFIG->number_of_parasite_types(), 0.0);
-  }
 }
 
 SingleHostClonalParasitePopulations::~SingleHostClonalParasitePopulations() {
@@ -42,8 +38,6 @@ SingleHostClonalParasitePopulations::~SingleHostClonalParasitePopulations() {
     ObjectHelpers::delete_pointer<std::vector<ClonalParasitePopulation*>>(parasites_);
   }
 
-  ObjectHelpers::delete_pointer<std::vector<double>>(relative_effective_parasite_density_);
-
   person_ = nullptr;
 }
 
@@ -51,7 +45,6 @@ void SingleHostClonalParasitePopulations::clear() {
   if (parasites_->empty()) {
     return;
   }
-  remove_all_infection_force();
 
   for (auto& parasite : *parasites_) {
     delete parasite;
@@ -75,112 +68,23 @@ void SingleHostClonalParasitePopulations::remove(const int& index) {
   ClonalParasitePopulation* bp = parasites_->at(index);
   //    std::cout << parasites_.size() << std::endl;
   if (bp->index() != index) {
-    std::cout << bp->index() << "-" << index << "-" << parasites_->at(index)->index() << std::endl;
+    LOG(FATAL) << "Incorrect index when remove parasite from SingleHostClonalParasitePopulations: " << bp->index()
+               << "-" << index << "-" << parasites_->at(index)->index() << std::endl;
     assert(bp->index() == index);
   }
-
-  //    assert(contain(bp));
-  //    std::cout << parasites_.size() << std::endl;
-  // Remove all infection force
-  remove_all_infection_force();
-
-  //    BloodParasite* last_parasite = parasites_.back();
 
   parasites_->back()->set_index(index);
   parasites_->at(index) = parasites_->back();
   parasites_->pop_back();
   bp->set_index(-1);
 
-  //    for(BloodParasite* bp :  parasites_) {
-  //        std::cout << bp->index()<< "\t";
-  //    }
-  //    std::cout<< std::endl;
-
-  // add all infection force
-  add_all_infection_force();
-
   bp->set_parasite_population(nullptr);
-
-  //    if (contain(bp)) {
-  //        //        std::cout <<  parasites_.size()<< std::endl;
-  //        assert(false);
-  //    }
-  //    std::cout << parasites_.size() << std::endl;
 
   delete bp;
   bp = nullptr;
 }
 
-void SingleHostClonalParasitePopulations::remove_all_infection_force() {
-  change_all_infection_force(-1);
-}
-
-void SingleHostClonalParasitePopulations::add_all_infection_force() {
-  // update relative_effective_parasite_density_
-  if (Model::CONFIG->using_free_recombination()) {
-    update_relative_effective_parasite_density_using_free_recombination();
-  } else {
-    update_relative_effective_parasite_density_without_free_recombination();
-  }
-
-  change_all_infection_force(1);
-}
-
-void SingleHostClonalParasitePopulations::change_all_infection_force(const double& sign) {
-  if (person_ == nullptr) {
-    return;
-  }
-
-  if (NumberHelpers::is_equal(log10_total_relative_density_, ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY)) {
-    // do nothing
-    return;
-  }
-
-  for (auto p = 0; p < Model::CONFIG->number_of_parasite_types(); p++) {
-    person_->notify_change_in_force_of_infection(sign, p, relative_effective_parasite_density_->at(p),
-                                                 log10_total_relative_density_);
-  }
-}
-
-void SingleHostClonalParasitePopulations::update_relative_effective_parasite_density_without_free_recombination() {
-  std::vector<double> relative_parasite_density(size(), 0.0);
-  get_parasites_profiles(relative_parasite_density, log10_total_relative_density_);
-  if (NumberHelpers::is_equal(log10_total_relative_density_, ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY)) {
-    // do nothing
-    return;
-  }
-
-  for (auto p = 0; p < Model::CONFIG->number_of_parasite_types(); p++) {
-    relative_effective_parasite_density_->at(p) = 0.0;
-  }
-
-  for (auto i = 0; i < relative_parasite_density.size(); i++) {
-    if (NumberHelpers::is_equal(relative_parasite_density[i], 0.0)) {
-      continue;
-    }
-    relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id) +=
-        relative_parasite_density[i];
-  }
-}
-
-void SingleHostClonalParasitePopulations::update_relative_effective_parasite_density_using_free_recombination() {
-  std::vector<double> relative_parasite_density(size(), 0.0);
-  get_parasites_profiles(relative_parasite_density, log10_total_relative_density_);
-  if (NumberHelpers::is_equal(log10_total_relative_density_, ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY)) {
-    // do nothing
-    return;
-  }
-  assert(relative_parasite_density.size() == size());
-  for (auto p = 0; p < Model::CONFIG->number_of_parasite_types(); p++) {
-    relative_effective_parasite_density_->at(p) = 0.0;
-  }
-
-  for (auto i = 0; i < relative_parasite_density.size(); i++) {
-    relative_effective_parasite_density_->at(parasites_->at(i)->genotype()->genotype_id) +=
-        relative_parasite_density[i];
-  }
-}
-
+// return normalized parasite density and log 10 total infectious density
 void SingleHostClonalParasitePopulations::get_parasites_profiles(std::vector<double>& relative_parasite_density,
                                                                  double& log10_total_relative_density) const {
   auto i = 0;
@@ -211,6 +115,7 @@ void SingleHostClonalParasitePopulations::get_parasites_profiles(std::vector<dou
     }
   }
 
+  // normalize
   for (auto j = 0; j < parasites_->size(); j++) {
     if (NumberHelpers::is_enot_qual(relative_parasite_density[j], 0.0)) {
       relative_parasite_density[j] = pow(10, relative_parasite_density[j] - log10_total_relative_density);

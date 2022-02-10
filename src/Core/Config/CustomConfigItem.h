@@ -151,14 +151,6 @@ class genotype_db : public IConfigItem {
   void set_value(const YAML::Node &node) override;
 };
 
-class number_of_parasite_types : public ConfigItem<unsigned long> {
- public:
-  number_of_parasite_types(const std::string &name, const unsigned long &default_value,
-                           Config *config) : ConfigItem<unsigned long>(name, default_value, config) {}
-
-  void set_value(const YAML::Node &node) override;
-};
-
 class drug_db : public IConfigItem {
  DISALLOW_COPY_AND_ASSIGN(drug_db)
 

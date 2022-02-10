@@ -123,8 +123,6 @@ public:
 
   CUSTOM_CONFIG_ITEM(immune_system_information, ImmuneSystemInformation())
 
-  CUSTOM_CONFIG_ITEM(number_of_parasite_types, 0)
-
   CUSTOM_CONFIG_ITEM(drug_db, nullptr)
 
   CUSTOM_CONFIG_ITEM(circulation_info, RelativeMovingInformation())

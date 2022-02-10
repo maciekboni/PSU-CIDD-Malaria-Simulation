@@ -63,7 +63,7 @@ void MonthlyReporter::monthly_report()
   ss << group_sep;
 
 // including total number of positive individuals
-  ReporterUtils::output_genotype_frequency3(ss, Model::CONFIG->number_of_parasite_types(),
+  ReporterUtils::output_genotype_frequency3(ss, Model::CONFIG->genotype_db.size(),
                                             Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
 

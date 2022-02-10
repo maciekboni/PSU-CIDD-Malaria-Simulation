@@ -71,9 +71,10 @@ void MMCReporter::monthly_report() {
   }
   ss << group_sep;
 
+  // TODO: check if this function works properly
   ReporterUtils::output_genotype_frequency3(
       ss,
-      Model::CONFIG->number_of_parasite_types(),
+      Model::CONFIG->genotype_db.size(),
       Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
   ss << group_sep;

@@ -32,8 +32,6 @@ class SingleHostClonalParasitePopulations {
 
  POINTER_PROPERTY(std::vector<ClonalParasitePopulation *>, parasites)
 
- POINTER_PROPERTY(DoubleVector, relative_effective_parasite_density)
-
  PROPERTY_REF(double, log10_total_relative_density);
 
  public:
@@ -51,12 +49,6 @@ class SingleHostClonalParasitePopulations {
   virtual void remove(ClonalParasitePopulation *blood_parasite);
 
   virtual void remove(const int &index);
-
-  virtual void add_all_infection_force();
-
-  virtual void remove_all_infection_force();
-
-  virtual void change_all_infection_force(const double &sign);
 
   virtual double get_log10_total_relative_density();
 
@@ -78,10 +70,6 @@ class SingleHostClonalParasitePopulations {
   bool has_detectable_parasite() const;
 
   void get_parasites_profiles(std::vector<double> &parasite_density, double &log10_total_relative_density) const;
-
-  void update_relative_effective_parasite_density_using_free_recombination();
-
-  void update_relative_effective_parasite_density_without_free_recombination();
 
   bool is_gametocytaemic() const;
 

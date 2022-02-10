@@ -3,30 +3,26 @@
 //
 
 #include "NovelDrugReporter.h"
-#include <Model.h>
-#include <MDC/ModelDataCollector.h>
+
 #include <Core/Config/Config.h>
+#include <MDC/ModelDataCollector.h>
+#include <Model.h>
 #include <Population/Population.h>
 #include <Population/Properties/PersonIndexByLocationStateAgeClass.h>
 #include <Population/SingleHostClonalParasitePopulations.h>
-#include "easylogging++.h"
-#include "ReporterUtils.h"
 #include <Strategies/IStrategy.h>
 #include <Strategies/NestedMFTStrategy.h>
 #include <Strategies/NovelDrugIntroductionStrategy.h>
 
-void NovelDrugReporter::initialize() {
+#include "ReporterUtils.h"
+#include "easylogging++.h"
 
-}
+void NovelDrugReporter::initialize() {}
 
 void NovelDrugReporter::before_run() {
   // output header for csv file
-  ss << "TIME" << sep
-     << "PFPR" << sep
-     << "MUTATIONS" << sep
-     << "NUMBER_OF_TREATMENTS" << sep
-     << "NUMBER_OF_TREATMENT_FAILURES" << sep
-     << "NUMBER_OF_SYMPTOMATIC_CASES" << sep;
+  ss << "TIME" << sep << "PFPR" << sep << "MUTATIONS" << sep << "NUMBER_OF_TREATMENTS" << sep
+     << "NUMBER_OF_TREATMENT_FAILURES" << sep << "NUMBER_OF_SYMPTOMATIC_CASES" << sep;
   for (auto i = 0; i < Model::CONFIG->genotype_db.size(); i++) {
     ss << "GENOTYPE_ID_" << i << sep;
   }
@@ -39,7 +35,6 @@ void NovelDrugReporter::before_run() {
   ss << "PRIVATE_FRACTION";
   CLOG(INFO, "monthly_reporter") << ss.str();
   ss.str("");
-
 }
 
 void NovelDrugReporter::monthly_report() {
@@ -56,9 +51,8 @@ void NovelDrugReporter::monthly_report() {
     ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
   }
 
-  output_genotype_frequency_3(
-      Model::CONFIG->number_of_parasite_types(),
-      Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
+  output_genotype_frequency_3(Model::CONFIG->genotype_db.size(),
+                              Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
   ss << (dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->is_switched ? 1 : 0) << sep;
   for (const auto& tf_by_therapy : Model::DATA_COLLECTOR->current_tf_by_therapy()) {
@@ -87,10 +81,14 @@ void NovelDrugReporter::after_run() {
     ss << Model::DATA_COLLECTOR->cumulative_number_treatments_by_location()[loc] << sep;
     ss << Model::DATA_COLLECTOR->cumulative_TF_by_location()[loc] << sep;
     ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[loc] << sep;
-    ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->newly_introduced_strategy_id) << sep;
+    ss << std::to_string(
+        dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->newly_introduced_strategy_id)
+       << sep;
     ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->tf_threshold) << sep;
-    ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->replacement_fraction) << sep;
-    ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->replacement_duration) << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->replacement_fraction)
+       << sep;
+    ss << std::to_string(dynamic_cast<NovelDrugIntroductionStrategy*>(Model::TREATMENT_STRATEGY)->replacement_duration)
+       << sep;
     ss << "FLT" << sep;
     ss << "importation" << sep;
   }
@@ -99,14 +97,10 @@ void NovelDrugReporter::after_run() {
   ss.str("");
 }
 
-void NovelDrugReporter::begin_time_step() {
+void NovelDrugReporter::begin_time_step() {}
 
-}
-
-void NovelDrugReporter::output_genotype_frequency_3(
-    const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
+void NovelDrugReporter::output_genotype_frequency_3(const int& number_of_genotypes,
+                                                    PersonIndexByLocationStateAgeClass* pi) {
   auto sum1_all = 0.0;
   std::vector<double> result3_all(number_of_genotypes, 0.0);
   const auto number_of_locations = pi->vPerson().size();
@@ -139,13 +133,10 @@ void NovelDrugReporter::output_genotype_frequency_3(
           }
 
           for (const auto genotype : individual_genotype_map) {
-            result3[genotype.first] += genotype.second /
-                                       static_cast<double>(person->all_clonal_parasite_populations()
-                                                                 ->parasites()
-                                                                 ->size()
-                                       );
-            result3_all[genotype.first] += genotype.second / static_cast<double>(person
-                ->all_clonal_parasite_populations()->parasites()->size());
+            result3[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
+            result3_all[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
           }
         }
       }
