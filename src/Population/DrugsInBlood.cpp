@@ -38,21 +38,15 @@ Drug *DrugsInBlood::add_drug(Drug *drug) {
     drug->set_person_drugs(this);
     drugs_->insert(std::pair<int, Drug *>(typeID, drug));
 
-
-    // TODO::review
-    // if (drug->drug_type()->is_artemisinin()) {
-    //   person_->all_clonal_parasite_populations()->active_astermisinin_on_gametocyte(drug->drug_type());
-    // }
   } else {
     //already have it
+    drugs_->at(typeID)->set_starting_value(drug->starting_value());
     drugs_->at(typeID)->set_dosing_days(drug->dosing_days());
     drugs_->at(typeID)->set_last_update_value(drug->last_update_value());
     drugs_->at(typeID)->set_last_update_time(drug->last_update_time());
     drugs_->at(typeID)->set_start_time(drug->start_time());
     drugs_->at(typeID)->set_end_time(drug->end_time());
 
-    //        person->cancelEvent(Events::ClearDrugFromBlood, typeID);
-    //release current drug to pool
     delete drug;
   }
 

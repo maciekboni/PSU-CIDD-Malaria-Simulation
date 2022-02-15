@@ -28,14 +28,17 @@ class ReceiveTherapyEvent : public Event {
 
  POINTER_PROPERTY(ClonalParasitePopulation, clinical_caused_parasite)
 
- public:
+public:
+  bool is_part_of_MAC_therapy { false };
+
+public:
   ReceiveTherapyEvent();
 
   //    ReceiveTherapyEvent(const ReceiveTherapyEvent& orig);
   virtual ~ReceiveTherapyEvent();
 
   static void schedule_event(Scheduler *scheduler, Person *p, Therapy *therapy, const int &time,
-                             ClonalParasitePopulation *clinical_caused_parasite);
+                             ClonalParasitePopulation *clinical_caused_parasite, bool is_part_of_MAC_therapy = false);
 
   std::string name() override {
     return "ReceiveTherapyEvent";

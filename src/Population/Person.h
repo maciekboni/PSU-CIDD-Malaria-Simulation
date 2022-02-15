@@ -123,7 +123,10 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
 
  PROPERTY_REF(std::vector<double>, prob_present_at_mda_by_age)
 
- public:
+public:
+  std::map<int, double> starting_drug_values_for_MAC;
+
+public:
   Person();
 
   //    Person(const Person& orig);
@@ -168,9 +171,10 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
 
   int complied_dosing_days(const int &dosing_day) const;
 
-  void receive_therapy(Therapy *therapy, ClonalParasitePopulation *clinical_caused_parasite);
+  void receive_therapy(Therapy *therapy, ClonalParasitePopulation *clinical_caused_parasite,
+                       bool is_part_of_MAC_therapy = false);
 
-  void add_drug_to_blood(DrugType *dt, const int &dosing_days);
+  void add_drug_to_blood(DrugType *dt, const int &dosing_days, bool is_part_of_MAC_therapy = false);
 
   void schedule_progress_to_clinical_event_by(ClonalParasitePopulation *blood_parasite);
 
