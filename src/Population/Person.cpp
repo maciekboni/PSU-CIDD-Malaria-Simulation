@@ -325,34 +325,35 @@ int Person::complied_dosing_days(const int& dosing_day) const {
   return dosing_day;
 }
 
-void Person::receive_therapy(Therapy* therapy, ClonalParasitePopulation* clinical_caused_parasite) {
+void Person::receive_therapy(Therapy* therapy, ClonalParasitePopulation* clinical_caused_parasite,
+                             bool is_part_of_MAC_therapy) {
   // if therapy is SCTherapy
   auto* sc_therapy = dynamic_cast<SCTherapy*>(therapy);
   if (sc_therapy != nullptr) {
     for (int j = 0; j < sc_therapy->drug_ids.size(); ++j) {
-      int drug_id = sc_therapy->drug_ids[j];
       auto dosing_days = sc_therapy->drug_ids.size() == sc_therapy->dosing_day.size() ? sc_therapy->dosing_day[j]
                                                                                       : sc_therapy->dosing_day[0];
 
       dosing_days = complied_dosing_days(dosing_days);
-      //      std::cout << drug_id << "-" << dosing_days << std::endl;
-
-      add_drug_to_blood(Model::CONFIG->drug_db()->at(drug_id), dosing_days);
+      int drug_id = sc_therapy->drug_ids[j];
+      add_drug_to_blood(Model::CONFIG->drug_db()->at(drug_id), dosing_days, is_part_of_MAC_therapy);
     }
   } else {
     // else if therapy is MACTherapy
     auto* mac_therapy = dynamic_cast<MACTherapy*>(therapy);
+    starting_drug_values_for_MAC.clear();
     assert(mac_therapy != nullptr);
     for (auto i = 0; i < mac_therapy->therapy_ids().size(); i++) {
       const auto therapy_id = mac_therapy->therapy_ids()[i];
       const auto start_day = mac_therapy->start_at_days()[i];
 
       if (start_day == 1) {
-        receive_therapy(Model::CONFIG->therapy_db()[therapy_id], clinical_caused_parasite);
+        receive_therapy(Model::CONFIG->therapy_db()[therapy_id], clinical_caused_parasite, true);
       } else {
         assert(start_day > 1);
         ReceiveTherapyEvent::schedule_event(Model::SCHEDULER, this, Model::CONFIG->therapy_db()[therapy_id],
-                                            Model::SCHEDULER->current_time() + start_day - 1, clinical_caused_parasite);
+                                            Model::SCHEDULER->current_time() + start_day - 1, clinical_caused_parasite,
+                                            true);
       }
     }
   }
@@ -360,22 +361,33 @@ void Person::receive_therapy(Therapy* therapy, ClonalParasitePopulation* clinica
   last_therapy_id_ = therapy->id();
 }
 
-void Person::add_drug_to_blood(DrugType* dt, const int& dosing_days) {
+void Person::add_drug_to_blood(DrugType* dt, const int& dosing_days, bool is_part_of_MAC_therapy) {
   auto* drug = new Drug(dt);
   drug->set_dosing_days(dosing_days);
   drug->set_last_update_time(Model::SCHEDULER->current_time());
 
   const auto sd = dt->age_group_specific_drug_concentration_sd()[age_class_];
-  //    std::cout << ageClass << "====" << sd << std::endl;
   const auto mean_drug_absorption = dt->age_specific_drug_absorption()[age_class_];
-  const auto drug_level = Model::RANDOM->random_normal_truncated(mean_drug_absorption, sd);
+  double drug_level = Model::RANDOM->random_normal_truncated(mean_drug_absorption, sd);
+
+  if (is_part_of_MAC_therapy) {
+    if (drugs_in_blood()->drugs()->find(dt->id()) != drugs_in_blood()->drugs()->end()) {
+      // long-half life drugs
+      drug_level = drugs_in_blood()->get_drug(dt->id())->starting_value();
+    } else if (starting_drug_values_for_MAC.find(dt->id()) != starting_drug_values_for_MAC.end()) {
+      // short half-life drugs
+      drug_level = starting_drug_values_for_MAC[dt->id()];
+    }
+    // store the override value or the default one
+    starting_drug_values_for_MAC[dt->id()] = drug_level;
+  }
+  drug->set_starting_value(drug_level);
 
   if (drugs_in_blood_->is_drug_in_blood(dt)) {
     drug->set_last_update_value(drugs_in_blood_->get_drug(dt->id())->last_update_value());
   } else {
     drug->set_last_update_value(0.0);
   }
-  drug->set_starting_value(drug_level);
 
   drug->set_start_time(Model::SCHEDULER->current_time());
   drug->set_end_time(Model::SCHEDULER->current_time() + dt->get_total_duration_of_drug_activity(dosing_days));
