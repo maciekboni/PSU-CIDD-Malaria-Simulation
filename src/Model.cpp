@@ -1,42 +1,43 @@
-/* 
+/*
  * File:   Model.cpp
  * Author: nguyentran
- * 
+ *
  * Created on March 22, 2013, 2:26 PM
  */
-#include <fmt/format.h>
 #include "Model.h"
-#include "Population/Population.h"
+
+#include <fmt/format.h>
+
+#include "Constants.h"
 #include "Core/Config/Config.h"
-#include "Population/Person.h"
 #include "Core/Random.h"
-#include "MDC/ModelDataCollector.h"
 #include "Events/BirthdayEvent.h"
-#include "Events/ProgressToClinicalEvent.h"
-#include "Events/EndClinicalDueToDrugResistanceEvent.h"
-#include "Events/TestTreatmentFailureEvent.h"
-#include "Events/UpdateWhenDrugIsPresentEvent.h"
+#include "Events/CirculateToTargetLocationNextDayEvent.h"
 #include "Events/EndClinicalByNoTreatmentEvent.h"
+#include "Events/EndClinicalDueToDrugResistanceEvent.h"
 #include "Events/EndClinicalEvent.h"
-#include "Therapies/Drug.h"
-#include "Population/ImmuneSystem.h"
-#include "Population/SingleHostClonalParasitePopulations.h"
 #include "Events/MatureGametocyteEvent.h"
 #include "Events/MoveParasiteToBloodEvent.h"
-#include "Events/UpdateEveryKDaysEvent.h"
-#include "Reporters/Reporter.h"
-#include "Events/CirculateToTargetLocationNextDayEvent.h"
-#include "Events/ReturnToResidenceEvent.h"
-#include "Population/ClonalParasitePopulation.h"
-#include "Events/SwitchImmuneComponentEvent.h"
-#include "Events/Population/ImportationPeriodicallyEvent.h"
 #include "Events/Population/ImportationEvent.h"
-#include "easylogging++.h"
+#include "Events/Population/ImportationPeriodicallyEvent.h"
+#include "Events/ProgressToClinicalEvent.h"
+#include "Events/ReturnToResidenceEvent.h"
+#include "Events/SwitchImmuneComponentEvent.h"
+#include "Events/TestTreatmentFailureEvent.h"
+#include "Events/UpdateWhenDrugIsPresentEvent.h"
 #include "Helpers/ObjectHelpers.h"
-#include "Strategies/IStrategy.h"
-#include "Malaria/SteadyTCM.h"
-#include "Constants.h"
 #include "Helpers/TimeHelpers.h"
+#include "MDC/ModelDataCollector.h"
+#include "Malaria/SteadyTCM.h"
+#include "Population/ClonalParasitePopulation.h"
+#include "Population/ImmuneSystem.h"
+#include "Population/Person.h"
+#include "Population/Population.h"
+#include "Population/SingleHostClonalParasitePopulations.h"
+#include "Reporters/Reporter.h"
+#include "Strategies/IStrategy.h"
+#include "Therapies/Drug.h"
+#include "easylogging++.h"
 
 Model* Model::MODEL = nullptr;
 Config* Model::CONFIG = nullptr;
@@ -107,7 +108,7 @@ void Model::set_treatment_strategy(const int& strategy_id) {
 void Model::set_treatment_coverage(ITreatmentCoverageModel* tcm) {
   if (treatment_coverage_ != tcm) {
     if (tcm->p_treatment_less_than_5.empty() || tcm->p_treatment_more_than_5.empty()) {
-      //copy current value
+      // copy current value
       tcm->p_treatment_less_than_5 = treatment_coverage_->p_treatment_less_than_5;
       tcm->p_treatment_more_than_5 = treatment_coverage_->p_treatment_more_than_5;
     }
@@ -131,14 +132,14 @@ void Model::initialize() {
   LOG(INFO) << "Model initilizing...";
 
   LOG(INFO) << "Initialize Random";
-  //Initialize Random Seed
+  // Initialize Random Seed
   random_->initialize(initial_seed_number_);
 
   LOG(INFO) << fmt::format("Read input file: {}", config_filename_);
-  //Read input file
+  // Read input file
   config_->read_from_file(config_filename_);
 
-  //add reporter here
+  // add reporter here
   if (reporter_type_.empty()) {
     add_reporter(Reporter::MakeReport(Reporter::MONTHLY_REPORTER));
   } else {
@@ -148,42 +149,42 @@ void Model::initialize() {
   }
 
   LOG(INFO) << "Initialing reports";
-  //initialize reporters
+  // initialize reporters
   for (auto* reporter : reporters_) {
     reporter->initialize();
   }
 
   LOG(INFO) << "Initialzing scheduler";
   LOG(INFO) << "Starting day is " << CONFIG->starting_date();
-  //initialize scheduler
+  // initialize scheduler
   scheduler_->initialize(CONFIG->starting_date(), config_->total_time());
 
   LOG(INFO) << "Initialing initial strategy";
-  //set treatment strategy
+  // set treatment strategy
   set_treatment_strategy(config_->initial_strategy_id());
 
   LOG(INFO) << "Initialing initial treatment coverage model";
   build_initial_treatment_coverage();
 
   LOG(INFO) << "Initializing data collector";
-  //initialize data_collector
+  // initialize data_collector
   data_collector_->initialize();
 
   LOG(INFO) << "Initializing population";
-  //initialize Population
+  // initialize Population
   population_->initialize();
 
   LOG(INFO) << "Introducing initial cases";
-  //initialize infected_cases
+  // initialize infected_cases
   population_->introduce_initial_cases();
 
-  //initialize external population
-  //    external_population_->initialize();
+  // initialize external population
+  //     external_population_->initialize();
 
   LOG(INFO) << "Schedule for population event";
   for (auto* event : config_->preconfig_population_events()) {
     scheduler_->schedule_population_event(event);
-//    LOG(INFO) << scheduler_->population_events_list_[event->time].size();
+    //    LOG(INFO) << scheduler_->population_events_list_[event->time].size();
   }
   //
   // for(auto it = CONFIG->genotype_db()->begin(); it != CONFIG->genotype_db()->end(); ++it) {
@@ -200,7 +201,6 @@ void Model::initialize_object_pool(const int& size) {
   EndClinicalByNoTreatmentEvent::InitializeObjectPool(size);
   MatureGametocyteEvent::InitializeObjectPool(size);
   MoveParasiteToBloodEvent::InitializeObjectPool(size);
-  UpdateEveryKDaysEvent::InitializeObjectPool(size);
   CirculateToTargetLocationNextDayEvent::InitializeObjectPool(size);
   ReturnToResidenceEvent::InitializeObjectPool(size);
   SwitchImmuneComponentEvent::InitializeObjectPool(size);
@@ -242,7 +242,6 @@ void Model::release_object_pool() {
   SwitchImmuneComponentEvent::ReleaseObjectPool();
   ReturnToResidenceEvent::ReleaseObjectPool();
   CirculateToTargetLocationNextDayEvent::ReleaseObjectPool();
-  UpdateEveryKDaysEvent::ReleaseObjectPool();
   MoveParasiteToBloodEvent::ReleaseObjectPool();
   MatureGametocyteEvent::ReleaseObjectPool();
   EndClinicalByNoTreatmentEvent::ReleaseObjectPool();
@@ -279,46 +278,44 @@ void Model::after_run() {
 }
 
 void Model::begin_time_step() {
-  //reset daily variables
+  // reset daily variables
   data_collector_->begin_time_step();
   report_begin_of_time_step();
 }
 
-void Model::perform_population_events_daily() const {
-  // TODO: turn on and off time for art mutation in the input file
-  population_->perform_infection_event();
+void Model::daily_update() {
+  population_->daily_update();
+  // for safety remove all dead by calling perform_death_event
+  population_->perform_death_event();
   population_->perform_birth_event();
   population_->perform_circulation_event();
-}
-
-void Model::daily_update(const int& current_time) {
-  //for safety remove all dead by calling perform_death_event
-  population_->perform_death_event();
-
-  //update / calculate daily UTL
-  data_collector_->end_of_time_step();
-
-  //check to switch strategy
-  treatment_strategy_->update_end_of_time_step();
+  population_->perform_infection_event();
 }
 
 void Model::monthly_update() {
   monthly_report();
 
-  //reset monthly variables
+  // reset monthly variables
   data_collector()->monthly_update();
 
-  //
   treatment_strategy_->monthly_update();
 
-  //update treatment coverage
   treatment_coverage_->monthly_update();
-
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
 void Model::yearly_update() {
   data_collector_->perform_yearly_update();
+}
+
+void Model::end_time_step() {
+  // update / calculate daily UTL
+  data_collector_->end_of_time_step();
+
+  // check to switch strategy
+  treatment_strategy_->update_end_of_time_step();
+
+  population_->persist_current_force_of_infection_to_use_N_days_later();
 }
 
 void Model::release() {
@@ -360,7 +357,6 @@ void Model::monthly_report() {
   for (auto* reporter : reporters_) {
     reporter->monthly_report();
   }
-
 }
 
 void Model::report_begin_of_time_step() {
@@ -379,20 +375,17 @@ double Model::get_seasonal_factor(const date::sys_days& today, const int& locati
     return 1;
   }
   const auto day_of_year = TimeHelpers::day_of_year(today);
-  const auto is_rainy_period = Model::CONFIG->seasonal_info().phi[location] < Constants::DAYS_IN_YEAR() / 2.0
-                               ? day_of_year >= Model::CONFIG->seasonal_info().phi[location]
-                                 && day_of_year <=
-                                    Model::CONFIG->seasonal_info().phi[location] + Constants::DAYS_IN_YEAR() / 2.0
-                               : day_of_year >= Model::CONFIG->seasonal_info().phi[location]
-                                 || day_of_year <=
-                                    Model::CONFIG->seasonal_info().phi[location] - Constants::DAYS_IN_YEAR() / 2.0;
+  const auto is_rainy_period =
+      Model::CONFIG->seasonal_info().phi[location] < Constants::DAYS_IN_YEAR() / 2.0
+          ? day_of_year >= Model::CONFIG->seasonal_info().phi[location]
+                && day_of_year <= Model::CONFIG->seasonal_info().phi[location] + Constants::DAYS_IN_YEAR() / 2.0
+          : day_of_year >= Model::CONFIG->seasonal_info().phi[location]
+                || day_of_year <= Model::CONFIG->seasonal_info().phi[location] - Constants::DAYS_IN_YEAR() / 2.0;
 
   return (is_rainy_period)
-         ? (Model::CONFIG->seasonal_info().A[location] - Model::CONFIG->seasonal_info().min_value[location]) *
-           sin(
-               Model::CONFIG->seasonal_info().B[location] * day_of_year +
-               Model::CONFIG->seasonal_info().C[location]
-           ) +
-           Model::CONFIG->seasonal_info().min_value[location]
-         : Model::CONFIG->seasonal_info().min_value[location];
+             ? (Model::CONFIG->seasonal_info().A[location] - Model::CONFIG->seasonal_info().min_value[location])
+                       * sin(Model::CONFIG->seasonal_info().B[location] * day_of_year
+                             + Model::CONFIG->seasonal_info().C[location])
+                   + Model::CONFIG->seasonal_info().min_value[location]
+             : Model::CONFIG->seasonal_info().min_value[location];
 }

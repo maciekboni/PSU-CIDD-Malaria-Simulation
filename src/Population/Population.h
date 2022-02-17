@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Population.h
  * Author: nguyentran
  *
@@ -6,19 +6,19 @@
  */
 
 #ifndef POPULATION_H
-#define    POPULATION_H
+#define POPULATION_H
 
+#include <vector>
+
+#include "Core/Dispatcher.h"
 #include "Core/PropertyMacro.h"
 #include "Core/TypeDef.h"
 #include "Person.h"
 #include "Properties/PersonIndex.h"
-#include "Core/Dispatcher.h"
-#include <vector>
 
 //#include "PersonIndexByLocationStateAgeClass.h"
 
-
-//class Person;
+// class Person;
 class Model;
 
 class PersonIndexAll;
@@ -31,20 +31,21 @@ class PersonIndexByLocationBittingLevel;
  * Population will manage the life cycle of Person object
  * it will release/delete all person object when it is deleted
  * all person index will do nothing
- * 
+ *
  */
 class Population : public Dispatcher {
- DISALLOW_COPY_AND_ASSIGN(Population)
+  DISALLOW_COPY_AND_ASSIGN(Population)
 
- POINTER_PROPERTY(Model, model);
+  POINTER_PROPERTY(Model, model);
 
- POINTER_PROPERTY(PersonIndexPtrList, person_index_list);
- POINTER_PROPERTY(PersonIndexAll, all_persons);
+  POINTER_PROPERTY(PersonIndexPtrList, person_index_list);
+  POINTER_PROPERTY(PersonIndexAll, all_persons);
 
- PROPERTY_REF(std::vector<std::vector<double> >, current_force_of_infection_by_location_parasite_type);
- PROPERTY_REF(std::vector<std::vector<std::vector<double> > >, force_of_infection_for_N_days_by_location_parasite_type);
+  PROPERTY_REF(std::vector<std::vector<double> >, current_force_of_infection_by_location_parasite_type);
+  PROPERTY_REF(std::vector<std::vector<std::vector<double> > >,
+               force_of_infection_for_N_days_by_location_parasite_type);
 
- public:
+public:
   Population(Model *model = nullptr);
 
   virtual ~Population();
@@ -55,7 +56,7 @@ class Population : public Dispatcher {
    */
   virtual void add_person(Person *person);
 
-  //just remove from index, no delete pointer
+  // just remove from index, no delete pointer
   virtual void remove_person(Person *person);
 
   /**
@@ -72,8 +73,7 @@ class Population : public Dispatcher {
    * @param oldValue
    * @param newValue
    */
-  virtual void
-  notify_change(Person *p, const Person::Property &property, const void *oldValue, const void *newValue);
+  virtual void notify_change(Person *p, const Person::Property &property, const void *oldValue, const void *newValue);
 
   /**
    * Return the number of individuals in the population
@@ -90,19 +90,16 @@ class Population : public Dispatcher {
 
   void introduce_initial_cases();
 
-  template<typename T>
+  template <typename T>
   T *get_person_index();
 
   void introduce_parasite(const int &location, Genotype *parasite_type, const int &num_of_infections);
 
   void initial_infection(Person *person, Genotype *parasite_type) const;
 
-  virtual void notify_change_in_force_of_infection(const int &location, const int &parasite_type_id,
-                                                   const double &relative_force_of_infection);
-
   // void update() override;
 
-  void update_force_of_infection(const int &current_time);
+  void persist_current_force_of_infection_to_use_N_days_later();
 
   void perform_birth_event();
 
@@ -115,21 +112,23 @@ class Population : public Dispatcher {
   void perform_circulation_event();
 
   void perform_circulation_for_1_location(const int &from_location, const int &target_location,
-                                          const int &number_of_circulation,
-                                          std::vector<Person *> &today_circulations);
+                                          const int &number_of_circulation, std::vector<Person *> &today_circulations);
 
   bool has_0_case();
 
   void initialize_person_indices();
 
   std::size_t size_residents_only(const int &location);
+
+  void daily_update();
+  void extend_force_of_infection_size(int i);
+  void update_current_foi(bool trigger_person_update);
 };
 
-template<typename T>
+template <typename T>
 T *Population::get_person_index() {
-
   for (PersonIndex *person_index : *person_index_list_) {
-    if (dynamic_cast<T *>(person_index)!=nullptr) {
+    if (dynamic_cast<T *>(person_index) != nullptr) {
       T *pi = dynamic_cast<T *>(person_index);
       return pi;
     }
@@ -137,4 +136,4 @@ T *Population::get_person_index() {
   return nullptr;
 }
 
-#endif    /* POPULATION_H */
+#endif /* POPULATION_H */

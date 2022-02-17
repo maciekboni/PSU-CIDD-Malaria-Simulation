@@ -64,7 +64,6 @@ void Population::add_person(Person* person) {
     person_index->add(person);
   }
   person->set_population(this);
-
 }
 
 void Population::remove_person(Person* person) {
@@ -148,7 +147,8 @@ void Population::perform_infection_event() {
   PersonPtrVector today_infections;
   for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
     // TODO: rework on this to loop through all current parasites only
-    for (auto parasite_type_id = 0; parasite_type_id < 1; parasite_type_id++) {
+    for (auto parasite_type_id = 0;
+         parasite_type_id < current_force_of_infection_by_location_parasite_type_[loc].size(); parasite_type_id++) {
       const auto force_of_infection =
           force_of_infection_for_N_days_by_location_parasite_type_[Model::SCHEDULER->current_time()
                                                                    % Model::CONFIG->number_of_tracking_days()][loc]
@@ -326,7 +326,6 @@ void Population::initialize() {
           p->set_latest_update_time(0);
 
           int time = Model::RANDOM->random_uniform(Model::CONFIG->update_frequency()) + 1;
-          p->schedule_update_every_K_days_event(time);
           p->generate_prob_present_at_mda_by_age();
 
           add_person(p);
@@ -349,11 +348,15 @@ void Population::introduce_initial_cases() {
       // std::cout << p_info.location << "-" << p_info.parasite_type_id << "-" << num_of_infections << std::endl;
       introduce_parasite(p_info.location, genotype, num_of_infections);
     }
+    // update current foi
+    update_current_foi(false);
+
     // update force of infection for 7 days
     for (auto d = 0; d < Model::CONFIG->number_of_tracking_days(); d++) {
       for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         // TODO: rework on this to update force of infections
-        for (auto genotype = 0; genotype < Model::CONFIG->genotype_db.size(); genotype++) {
+        for (auto genotype = 0; genotype < current_force_of_infection_by_location_parasite_type_[loc].size();
+             genotype++) {
           force_of_infection_for_N_days_by_location_parasite_type_[d][loc][genotype] =
               current_force_of_infection_by_location_parasite_type_[loc][genotype];
         }
@@ -419,11 +422,6 @@ void Population::initial_infection(Person* person, Genotype* parasite_type) cons
   }
 }
 
-void Population::notify_change_in_force_of_infection(const int& location, const int& parasite_type_id,
-                                                     const double& relative_force_of_infection) {
-  current_force_of_infection_by_location_parasite_type_[location][parasite_type_id] += relative_force_of_infection;
-}
-
 //
 // void Population::update() {
 //
@@ -483,7 +481,6 @@ void Population::give_1_birth(const int& location) {
 
   //    p->startLivingTime = (Global::startTreatmentDay > Global::scheduler->currentTime) ? Global::startTreatmentDay :
   //    Global::scheduler->currentTime;
-  p->schedule_update_every_K_days_event(Model::CONFIG->update_frequency());
   p->generate_prob_present_at_mda_by_age();
 
   add_person(p);
@@ -519,9 +516,7 @@ void Population::perform_death_event() {
       }
     }
   }
-  //    std::cout << "Actual delete " << std::endl;
   clear_all_dead_state_individual();
-  //    std::cout << "End Actual delete " << std::endl;
 }
 
 void Population::clear_all_dead_state_individual() {
@@ -539,7 +534,6 @@ void Population::clear_all_dead_state_individual() {
 
   for (Person* p : removePersons) {
     remove_dead_person(p);
-    //    assert(p== nullptr);
   }
 }
 
@@ -656,4 +650,65 @@ void Population::initialize_person_indices() {
   auto p_index_location_moving_level = new PersonIndexByLocationMovingLevel(
       number_of_location, Model::CONFIG->circulation_info().number_of_moving_levels);
   person_index_list_->push_back(p_index_location_moving_level);
+}
+
+void Population::daily_update() {
+  // update all individuals and foi
+  update_current_foi(true);
+}
+
+void Population::persist_current_force_of_infection_to_use_N_days_later() {
+  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    for (auto p_type = 0; p_type < current_force_of_infection_by_location_parasite_type()[loc].size(); p_type++) {
+      force_of_infection_for_N_days_by_location_parasite_type()
+          [Model::SCHEDULER->current_time() % Model::CONFIG->number_of_tracking_days()][loc][p_type] =
+              current_force_of_infection_by_location_parasite_type()[loc][p_type];
+    }
+  }
+}
+void Population::extend_force_of_infection_size(int new_size) {
+  for (auto& foi_by_loc : current_force_of_infection_by_location_parasite_type_) {
+    foi_by_loc.resize(new_size, 0.0);
+  }
+  for (auto& daily_foi_by_loc : force_of_infection_for_N_days_by_location_parasite_type_) {
+    for (auto& foi_by_loc : daily_foi_by_loc) {
+      foi_by_loc.resize(new_size, 0.0);
+    }
+  }
+}
+void Population::update_current_foi(bool trigger_person_update) {
+  auto pi = get_person_index<PersonIndexByLocationStateAgeClass>();
+  for (int loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    // reset force of infection for each location
+    for (auto& foi : current_force_of_infection_by_location_parasite_type_[loc]) {
+      foi = 0.0;
+    }
+    for (int hs = 0; hs < Person::NUMBER_OF_STATE - 1; hs++) {
+      if (hs == Person::DEAD) continue;
+      for (int ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++) {
+        for (auto* person : pi->vPerson()[loc][hs][ac]) {
+          if (trigger_person_update) {
+            person->update();
+          }
+
+          std::vector<double> relative_density(person->all_clonal_parasite_populations()->size(),0.0);
+          double log_10_total_density;
+          person->all_clonal_parasite_populations()->get_parasites_profiles(relative_density, log_10_total_density);
+          auto infectivity_weight =
+              person->get_biting_level_value() * person->relative_infectivity(log_10_total_density);
+
+          for (int parasite_id = 0; parasite_id < person->all_clonal_parasite_populations()->size(); ++parasite_id) {
+            auto genotype_id =
+                person->all_clonal_parasite_populations()->parasites()->at(parasite_id)->genotype()->genotype_id;
+
+            if (genotype_id > current_force_of_infection_by_location_parasite_type_[loc].size() - 1) {
+              extend_force_of_infection_size(genotype_id + 1);
+            }
+            current_force_of_infection_by_location_parasite_type_[loc][genotype_id] +=
+                infectivity_weight * relative_density[parasite_id];
+          }
+        }
+      }
+    }
+  }
 }

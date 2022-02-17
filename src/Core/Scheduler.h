@@ -74,6 +74,7 @@ class Scheduler {
 
   bool is_today_last_day_of_year() const;
 
+  void daily_update();
 };
 
 #endif  /* SCHEDULER_H */

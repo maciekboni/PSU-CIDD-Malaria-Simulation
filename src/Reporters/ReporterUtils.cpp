@@ -2,22 +2,22 @@
 // Created by Nguyen Tran on 2019-04-18.
 //
 
-#include <vector>
-#include <Core/Config/Config.h>
 #include "ReporterUtils.h"
+
+#include <Core/Config/Config.h>
+
+#include <vector>
+
+#include "Model.h"
+#include "Population/ClonalParasitePopulation.h"
 #include "Population/Properties/PersonIndexByLocationStateAgeClass.h"
 #include "Population/SingleHostClonalParasitePopulations.h"
-#include "Population/ClonalParasitePopulation.h"
-#include "Model.h"
 
 const std::string group_sep = "-1111\t";
 const std::string sep = "\t";
 
-
-void ReporterUtils::output_genotype_frequency1(
-    std::stringstream& ss, const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
+void ReporterUtils::output_genotype_frequency1(std::stringstream& ss, const int& number_of_genotypes,
+                                               PersonIndexByLocationStateAgeClass* pi) {
   auto sum1_all = 0.0;
   std::vector<double> result1_all(number_of_genotypes, 0.0);
 
@@ -71,10 +71,8 @@ void ReporterUtils::output_genotype_frequency1(
   }
 }
 
-void ReporterUtils::output_genotype_frequency2(
-    std::stringstream& ss, const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
+void ReporterUtils::output_genotype_frequency2(std::stringstream& ss, const int& number_of_genotypes,
+                                               PersonIndexByLocationStateAgeClass* pi) {
   auto sum2_all = 0.0;
   std::vector<double> result2_all(number_of_genotypes, 0.0);
   const auto number_of_locations = pi->vPerson().size();
@@ -104,24 +102,21 @@ void ReporterUtils::output_genotype_frequency2(
     }
 
     // output for each location
-
     for (auto& i : result2) {
       i /= sum2;
       ss << (sum2 == 0 ? 0 : i) << sep;
     }
   }
-  // output for all locations
   ss << group_sep;
+  // output for all locations
   for (auto& i : result2_all) {
     i /= sum2_all;
     ss << (sum2_all == 0 ? 0 : i) << sep;
   }
 }
 
-void ReporterUtils::output_genotype_frequency3(
-    std::stringstream& ss, const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
+void ReporterUtils::output_genotype_frequency3(std::stringstream& ss, const int& number_of_genotypes,
+                                               PersonIndexByLocationStateAgeClass* pi) {
   auto sum1_all = 0.0;
   std::vector<double> result3_all(number_of_genotypes, 0.0);
   const auto number_of_locations = pi->vPerson().size();
@@ -154,39 +149,36 @@ void ReporterUtils::output_genotype_frequency3(
           }
 
           for (const auto genotype : individual_genotype_map) {
-            result3[genotype.first] += genotype.second /
-                                       static_cast<double>(person->all_clonal_parasite_populations()
-                                                                 ->parasites()
-                                                                 ->size()
-                                       );
-            result3_all[genotype.first] += genotype.second / static_cast<double>(person
-                ->all_clonal_parasite_populations()->parasites()->size());
+            result3[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
+            result3_all[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
           }
         }
       }
     }
     // output per location
-    for (auto& i : result3) {
-      i /= sum1;
-      ss << (sum1 == 0 ? 0 : i) << sep;
-    }
+    // TODO: implement dynamic way to output for each location
+//
+//    for (auto& i : result3) {
+//      i /= sum1;
+//      ss << (sum1 == 0 ? 0 : i) << sep;
+//    }
   }
+//  ss << group_sep;
 
-  //this is for all locations
-  ss << group_sep;
+  // this is for all locations
   for (auto& i : result3_all) {
     i /= sum1_all;
     ss << (sum1_all == 0 ? 0 : i) << sep;
   }
-
-  ss << group_sep;
-  ss << sum1_all << sep;
+//
+//  ss << group_sep;
+//  ss << sum1_all << sep;
 }
 
-void ReporterUtils::output_3_genotype_frequency(
-    std::stringstream& ss, const int& number_of_genotypes,
-    PersonIndexByLocationStateAgeClass* pi
-) {
+void ReporterUtils::output_3_genotype_frequency(std::stringstream& ss, const int& number_of_genotypes,
+                                                PersonIndexByLocationStateAgeClass* pi) {
   auto sum1_all = 0.0;
   auto sum2_all = 0.0;
   std::vector<double> result1_all(number_of_genotypes, 0.0);
@@ -219,6 +211,7 @@ void ReporterUtils::output_3_genotype_frequency(
           std::map<int, int> individual_genotype_map;
 
           for (auto* parasite_population : *(person->all_clonal_parasite_populations()->parasites())) {
+            std::cout << "hello" << std::endl;
             const auto g_id = parasite_population->genotype()->genotype_id;
             result2[g_id] += 1;
             result2_all[g_id] += 1;
@@ -232,13 +225,10 @@ void ReporterUtils::output_3_genotype_frequency(
           for (const auto genotype : individual_genotype_map) {
             result1[genotype.first] += 1;
             result1_all[genotype.first] += 1;
-            result3[genotype.first] += genotype.second /
-                                       static_cast<double>(person->all_clonal_parasite_populations()
-                                                                 ->parasites()
-                                                                 ->size()
-                                       );
-            result3_all[genotype.first] += genotype.second / static_cast<double>(person
-                ->all_clonal_parasite_populations()->parasites()->size());
+            result3[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
+            result3_all[genotype.first] +=
+                genotype.second / static_cast<double>(person->all_clonal_parasite_populations()->parasites()->size());
           }
         }
       }
@@ -269,7 +259,7 @@ void ReporterUtils::output_3_genotype_frequency(
     ss << group_sep;
   }
 
-  //this is for all locations
+  // this is for all locations
   ss << group_sep;
   for (auto j = 0; j < number_of_genotypes; ++j) {
     if (sum1_all == 0) {
@@ -321,20 +311,18 @@ void ReporterUtils::initialize_moi_file_logger() {
   moi_reporter_logger.set(el::Level::Verbose, el::ConfigurationType::Format, "[%level-%vlevel] [%logger] %msg");
 
   moi_reporter_logger.setGlobally(el::ConfigurationType::ToFile, "true");
-  moi_reporter_logger.setGlobally(
-      el::ConfigurationType::Filename,
-      fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
+  moi_reporter_logger.setGlobally(el::ConfigurationType::Filename,
+                                  fmt::format("{}moi_{}.txt", "", Model::MODEL->cluster_job_number()));
   moi_reporter_logger.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
   moi_reporter_logger.setGlobally(el::ConfigurationType::LogFlushThreshold, "100");
   // default logger uses default configurations
   el::Loggers::reconfigureLogger("moi_reporter", moi_reporter_logger);
-
 }
 
 //
 //
 //
-//void MonthlyReporter::print_monthly_incidence_by_location() {
+// void MonthlyReporter::print_monthly_incidence_by_location() {
 //  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); ++loc) {
 //    ss << Model::DATA_COLLECTOR->monthly_number_of_treatment_by_location()[loc] << sep;
 //  }
@@ -345,4 +333,3 @@ void ReporterUtils::initialize_moi_file_logger() {
 //    ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
 //  }
 //}
-

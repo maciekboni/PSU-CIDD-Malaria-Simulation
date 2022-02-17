@@ -29,6 +29,7 @@ class Reporter;
 
 class Model {
  DISALLOW_COPY_AND_ASSIGN(Model)
+ void end_time_step();
 
  DISALLOW_MOVE(Model)
 
@@ -105,9 +106,7 @@ class Model {
 
   void begin_time_step();
 
-  void perform_population_events_daily() const;
-
-  void daily_update(const int &current_time);
+  void daily_update();
 
   void monthly_update();
 
@@ -126,7 +125,6 @@ class Model {
  private:
   IStrategy *treatment_strategy_{nullptr};
   ITreatmentCoverageModel *treatment_coverage_{nullptr};
-
 };
 
 #endif    /* MODEL_H */

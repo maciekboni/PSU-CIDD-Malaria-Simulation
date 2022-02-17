@@ -217,10 +217,10 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
         if (new_genotype != blood_parasite->genotype()) {
           // mutation occurs
           Model::DATA_COLLECTOR->record_1_mutation(person_->location(), blood_parasite->genotype(), new_genotype);
-          LOG(DEBUG) << Model::SCHEDULER->current_time() << "\t" << blood_parasite->genotype()->genotype_id << "\t"
-                     << new_genotype->genotype_id << "\t"
-                     << blood_parasite->genotype()->get_EC50_power_n(drug->drug_type()) << "\t"
-                     << new_genotype->get_EC50_power_n(drug->drug_type());
+//          LOG(TRACE) << Model::SCHEDULER->current_time() << "\t" << blood_parasite->genotype()->genotype_id << "\t"
+//                     << new_genotype->genotype_id << "\t"
+//                     << blood_parasite->genotype()->get_EC50_power_n(drug->drug_type()) << "\t"
+//                     << new_genotype->get_EC50_power_n(drug->drug_type());
           blood_parasite->set_genotype(new_genotype);
         }
       }

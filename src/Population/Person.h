@@ -144,10 +144,6 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
   //    BloodParasite* add_new_parasite_to_blood(Genotype* parasite_type);
   ClonalParasitePopulation *add_new_parasite_to_blood(Genotype *parasite_type) const;
 
-  virtual void notify_change_in_force_of_infection(const double &sign, const int &parasite_type_id,
-                                                   const double &blood_parasite_log_relative_density,
-                                                   const double &log_total_relative_parasite_density);
-
   virtual double get_biting_level_value();
 
   virtual double relative_infectivity(const double &log10_parasite_density);
@@ -174,9 +170,6 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
 
   void schedule_progress_to_clinical_event_by(ClonalParasitePopulation *blood_parasite);
 
-  [[deprecated]]
-  void schedule_end_clinical_due_to_drug_resistance_event(ClonalParasitePopulation *blood_parasite);
-
   void schedule_test_treatment_failure_event(ClonalParasitePopulation *blood_parasite, const int &testing_day,
                                              const int &t_id = 0);
 
@@ -191,8 +184,6 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
   void schedule_move_parasite_to_blood(Genotype *genotype, const int &time);
 
   void schedule_mature_gametocyte_event(ClonalParasitePopulation *clinical_caused_parasite);
-
-  void schedule_update_every_K_days_event(const int &time);
 
   void change_state_when_no_parasite_in_blood();
 
