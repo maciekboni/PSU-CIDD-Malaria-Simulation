@@ -55,6 +55,7 @@ Model::Model(const int& object_pool_size) {
   config_ = new Config(this);
   scheduler_ = new Scheduler(this);
   population_ = new Population(this);
+//  mosquito = new Mosquito(this);
   data_collector_ = new ModelDataCollector(this);
 
   MODEL = this;
@@ -177,6 +178,8 @@ void Model::initialize() {
   LOG(INFO) << "Introducing initial cases";
   // initialize infected_cases
   population_->introduce_initial_cases();
+
+  // mosquito_->initialize();
 
   // initialize external population
   //     external_population_->initialize();

@@ -69,7 +69,8 @@ class Model {
  PROPERTY_REF(bool, is_farm_output)
 
  PROPERTY_REF(std::string, reporter_type)
-
+ public:
+   // Mosquito* mosquito;
  public:
   static Model *MODEL;
   static Config *CONFIG;

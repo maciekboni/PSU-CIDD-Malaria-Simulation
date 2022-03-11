@@ -45,6 +45,7 @@ set(TEST_SRC_FILES
   Core/Config/ReadInitialParasiteInfoTest.cpp
   Core/Config/ReadDrugDBTest.cpp
   Core/Config/ReadOverrideEC50.cpp
+  Core/Config/ReadMosquitoConfigTest.cpp
   Core/Config/UpdateMutationMaskTest.cpp
   )
 

@@ -25,7 +25,8 @@ file(GLOB SRC_FILES *.cpp
         Reporters/*.cpp 
         Spatial/*.cpp 
         Strategies/*.cpp
-        Therapies/*.cpp       
+        Therapies/*.cpp
+        Mosquito/*.cpp
 )
 
 set(SRC_FILES ${SRC_FILES}

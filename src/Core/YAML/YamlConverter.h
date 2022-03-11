@@ -242,5 +242,22 @@ struct convert<OverrideEC50Patterns> {
   }
 };
 
+template<>
+struct convert<MosquitoConfig> {
+  static Node encode(const MosquitoConfig &mdb) {
+    Node node;
+    node.push_back("mosquito_config");
+    return node;
+  }
+  static bool decode(const Node &node, MosquitoConfig &mcf) {
+    mcf.daily_report = node["daily_report"].as<bool>();
+    mcf.cell_size = node["cell_size"].as<int>();
+    mcf.interrupted_feeding_rate = node["interrupted_feeding_rate"].as<double>();
+    mcf.prmc_size = node["prmc_size"].as<int>();
+
+    return true;
+  }
+};
+
 }  // namespace YAML
 #endif  // YAMLCONVERTER_H

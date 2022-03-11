@@ -261,5 +261,21 @@ struct OverrideEC50Pattern {
 
 typedef std::vector<OverrideEC50Pattern> OverrideEC50Patterns;
 
+struct MosquitoConfig{
+  bool daily_report {false};
+  int cell_size {5};
+  double interrupted_feeding_rate {0};
+  int prmc_size{20};
+
+
+  friend std::ostream &operator<<(std::ostream &os, const MosquitoConfig &mcf) {
+    os << "[";
+    os << mcf.daily_report << ", ";
+    os << mcf.cell_size << ", ";
+    os << mcf.interrupted_feeding_rate << ", ";
+    os << mcf.prmc_size << ", ";
+    return os << "]";
+  }
+};
 
 #endif /* TYPEDEF_H */
