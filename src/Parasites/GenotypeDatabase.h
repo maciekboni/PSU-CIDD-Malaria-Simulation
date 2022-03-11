@@ -16,9 +16,8 @@
 
 class Genotype;
 class Config;
-// unsigned long ul
+
 typedef std::map<ul, Genotype*> GenotypePtrMap;
-//typedef std::vector<std::vector<std::vector<double>>> MatingMatrix;
 
 class GenotypeDatabase : public GenotypePtrMap {
   DISALLOW_COPY_AND_ASSIGN(GenotypeDatabase)
@@ -28,6 +27,7 @@ class GenotypeDatabase : public GenotypePtrMap {
 //  VIRTUAL_PROPERTY_REF(MatingMatrix, mating_matrix)
 
   VIRTUAL_PROPERTY_REF(IntVector, weight)
+
 public:
   std::map<std::string, Genotype*> aa_sequence_id_map;
 

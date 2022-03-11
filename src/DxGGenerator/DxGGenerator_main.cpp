@@ -10,6 +10,9 @@
  *
  * Created on January 12, 2017, 4:31 PM
  */
+// TODO: make it works, input for genotype will be string or a file with a list of string
+
+
 #include <math.h>  // log10
 
 #include <CLI/CLI.hpp>
@@ -38,20 +41,13 @@ INITIALIZE_EASYLOGGINGPP
 
 using namespace std;
 
-typedef std::vector<double> EF50Key;
-
-typedef std::map<EF50Key, double> efficacy_map;
-
 double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model);
 
 void create_cli_option(CLI::App& app);
 
-EF50Key get_EC50_key(SCTherapy* p_therapy, Genotype* p_genotype);
-
 // efficacy_map efficacies;
 
 std::vector<int> therapies;
-std::vector<int> genotypes;
 
 double as_iov = -1.0;
 double as_iiv = -1.0;
@@ -94,7 +90,8 @@ int main(int argc, char** argv) {
   }
 
   if (as_ec50 != -1) {
-    p_model->CONFIG->EC50_power_n_table()[0][0] = pow(as_ec50, p_model->CONFIG->drug_db()->at(0)->n());
+    // TODO: fix it
+    //    p_model->CONFIG->EC50_power_n_table()[0][0] = pow(as_ec50, p_model->CONFIG->drug_db()->at(0)->n());
   }
 
   // initialEC50Table
@@ -114,17 +111,8 @@ int main(int argc, char** argv) {
     max_therapy_id = therapies[1];
   }
 
-  int max_genotype_id { 0 }, min_genotype_id { 0 };
-  if (genotypes.empty()) {
-    min_genotype_id = 0;
-    max_genotype_id = Model::CONFIG->number_of_parasite_types() - 1;
-  } else if (genotypes.size() == 1) {
-    min_genotype_id = genotypes[0];
-    max_genotype_id = genotypes[0];
-  } else if (genotypes.size() == 2) {
-    min_genotype_id = genotypes[0];
-    max_genotype_id = genotypes[1];
-  }
+  // TODO: Genotype should be imported  from input files
+  std::vector<Genotype*> genotypes;
 
   std::cout << "ID,Genotype";
   for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
@@ -132,57 +120,24 @@ int main(int argc, char** argv) {
   }
   std::cout << std::endl;
 
-  for (auto genotype_id = min_genotype_id; genotype_id <= max_genotype_id; genotype_id++) {
+  for (auto* p_genotype : genotypes) {
     std::stringstream ss;
-    auto p_genotype = (*Model::CONFIG->genotype_db)[genotype_id];
     ss << p_genotype->genotype_id << "," << p_genotype->get_aa_sequence() << ",";
 
     for (auto therapy_id = min_therapy_id; therapy_id <= max_therapy_id; therapy_id++) {
-      auto* therapy = dynamic_cast<SCTherapy*>(Model::CONFIG->therapy_db()[therapy_id]);
       double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
       ss << efficacy << (therapy_id == max_therapy_id ? "" : ",");
-
-//      EF50Key key = get_EC50_key(therapy, p_genotype);
-//      auto search = efficacies.find(key);
-//      if (search == efficacies.end()) {
-//        double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
-//        ss << efficacy << (therapy_id == max_therapy_id ? "" : ",");
-//        efficacies.insert(std::make_pair(key, efficacy));
-//      } else {
-//        ss << search->second << (therapy_id == max_therapy_id ? "" : ",");
-//      }
-
-      //      double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
-      //      ss << efficacy << "\t";
     }
     std::cout << ss.str() << std::endl;
   }
 
-  //    std::cout << p_model->CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()[0] << std::endl;
   delete p_model;
 
   return 0;
 }
 
-EF50Key get_EC50_key(SCTherapy* p_therapy, Genotype* p_genotype) {
-  EF50Key result;
-
-  for (int j = 0; j < p_therapy->drug_ids.size(); ++j) {
-//    drug_type->ec50_map()
-    auto ec50 = Model::CONFIG->EC50_power_n_table()[p_genotype->genotype_id][p_therapy->drug_ids[j]];
-//    std::cout << p_therapy->drug_ids[j] << "-" << ec50 << std::endl;
-    result.push_back(p_therapy->drug_ids[j]);
-    result.push_back(ec50);
-  }
-
-  return result;
-}
-
 void create_cli_option(CLI::App& app) {
   app.add_option("-t", therapies, "Get efficacies for range therapies [from to]");
-
-  app.add_option("-g", genotypes, "Get efficacies for range genotypes [from to]");
-
   app.add_option("--iov", as_iov, "AS inter-occasion-variability");
   app.add_option("--iiv", as_iiv, "AS inter-individual-variability");
   app.add_option("--ec50", as_ec50, "EC50 for AS on C580 only");

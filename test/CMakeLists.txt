@@ -54,4 +54,4 @@ package_add_test(${MAIN_TEST} ${TEST_SRC_FILES})
 
 add_custom_command(TARGET ${MAIN_TEST} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  ${POMS_SOURCE_DIR}/misc/input.yml $<TARGET_FILE_DIR:${MAIN_TEST}>)
+  ${POMS_SOURCE_DIR}/input/input.yml $<TARGET_FILE_DIR:${MAIN_TEST}>)

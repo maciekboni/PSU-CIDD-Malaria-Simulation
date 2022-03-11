@@ -60,7 +60,7 @@ target_link_libraries(MaSim PRIVATE MaSimCore)
 target_compile_features(MaSim PRIVATE cxx_range_for)
 
 install(TARGETS MaSim DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-install(FILES ${PROJECT_SOURCE_DIR}/misc/input_dev.yml DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+install(FILES ${PROJECT_SOURCE_DIR}/input/input.yml DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 
 add_subdirectory(DxGGenerator)
 add_subdirectory(EfficacyEstimator)
