@@ -47,15 +47,15 @@ Genotype *GenotypeDatabase::get_genotype(const std::string &aa_sequence, Config 
     new_genotype->genotype_id = new_id;
 
     // check if aa_sequence is valid
-    if (!new_genotype->is_valid(config->pf_gene_info())) {
+    if (!new_genotype->is_valid(config->pf_genotype_info())) {
       LOG(FATAL) << "Invalid genotype: " << aa_sequence;
     }
 
     // calculate cost of resistance
-    new_genotype->calculate_daily_fitness(config->pf_gene_info());
+    new_genotype->calculate_daily_fitness(config->pf_genotype_info());
 
     // calculate ec50
-    new_genotype->calculate_EC50_power_n(config->pf_gene_info(), config->drug_db());
+    new_genotype->calculate_EC50_power_n(config->pf_genotype_info(), config->drug_db());
 
     new_genotype->override_EC50_power_n(config->override_ec50_patterns(), config->drug_db());
 

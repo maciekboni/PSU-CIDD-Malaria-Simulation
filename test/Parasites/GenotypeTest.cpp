@@ -32,13 +32,13 @@ TEST_F(GenotypeTest, CheckValid) {
   c.read_from_file("input.yml");
 
   Genotype g("||||NY1||KTHFI,x||||||FNMYRIPRPC|1");
-  EXPECT_TRUE(g.is_valid(c.pf_gene_info()));
+  EXPECT_TRUE(g.is_valid(c.pf_genotype_info()));
 
   Genotype g2("||||NY2||KTHFI,x||||||FNMYRIPRPC|1");
-  EXPECT_TRUE(g2.is_valid(c.pf_gene_info()));
+  EXPECT_TRUE(g2.is_valid(c.pf_genotype_info()));
 
   Genotype g3("||||NY2||KTHFI,x||||||FNMYRIPRPC|2");
-  EXPECT_TRUE(g3.is_valid(c.pf_gene_info()));
+  EXPECT_TRUE(g3.is_valid(c.pf_genotype_info()));
 }
 
 TEST_F(GenotypeTest, CheckInvalid) {
@@ -46,22 +46,22 @@ TEST_F(GenotypeTest, CheckInvalid) {
   c.read_from_file("input.yml");
 
   Genotype g1("||||NY1||KTHFI||||||FNMYRIPRPC|1");
-  EXPECT_FALSE(g1.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g1.is_valid(c.pf_genotype_info()));
 
   Genotype g2("|");
-  EXPECT_FALSE(g2.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g2.is_valid(c.pf_genotype_info()));
 
   Genotype g3("||||MY1||KTHFI,x||||||FNMYRIPRPC|1");
-  EXPECT_FALSE(g3.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g3.is_valid(c.pf_genotype_info()));
 
   Genotype g4("||||NY3||KTHFI,x||||||FNMYRIPRPC|1");
-  EXPECT_FALSE(g4.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g4.is_valid(c.pf_genotype_info()));
 
   Genotype g5("||||NYC2||KTHFI,x||||||FNMYRIPRPC|1");
-  EXPECT_FALSE(g5.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g5.is_valid(c.pf_genotype_info()));
 
   Genotype g6("||||NY2||KTHFI,x||||||FNMYRIPRPC|Y1");
-  EXPECT_FALSE(g6.is_valid(c.pf_gene_info()));
+  EXPECT_FALSE(g6.is_valid(c.pf_genotype_info()));
 }
 
 TEST_F(GenotypeTest, CalculateCostOfResistance) {
@@ -69,15 +69,15 @@ TEST_F(GenotypeTest, CalculateCostOfResistance) {
   c.read_from_file("input.yml");
 
   Genotype g("||||NY1||KTHFI,x||||||FNMYRIPRPC|1");
-  g.calculate_daily_fitness(c.pf_gene_info());
+  g.calculate_daily_fitness(c.pf_genotype_info());
   EXPECT_DOUBLE_EQ(g.daily_fitness_multiple_infection, 1);
 
   Genotype g1("||||NY1||KTHFI,X||||||FNMYRIPRPC|1");
-  g1.calculate_daily_fitness(c.pf_gene_info());
+  g1.calculate_daily_fitness(c.pf_genotype_info());
   EXPECT_DOUBLE_EQ(g1.daily_fitness_multiple_infection, pow(1 - 0.0005, 1));
 
   Genotype g2("||||YF2||KTHFI,X||||||FNMYRIPRPC|1");
-  g2.calculate_daily_fitness(c.pf_gene_info());
+  g2.calculate_daily_fitness(c.pf_genotype_info());
   EXPECT_DOUBLE_EQ(g2.daily_fitness_multiple_infection, pow(1 - 0.0005, 3) * (1 - 0.0055));
 }
 
@@ -99,7 +99,7 @@ TEST_F(GenotypeTest, Calculate_Base_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_samples) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.0000000001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -142,7 +142,7 @@ TEST_F(GenotypeTest, Calculate_AS_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.000001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -168,7 +168,7 @@ TEST_F(GenotypeTest, Calculate_Piperaquine_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -194,7 +194,7 @@ TEST_F(GenotypeTest, Calculate_Mefloquine_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -215,7 +215,7 @@ TEST_F(GenotypeTest, Calculate_SP_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -255,7 +255,7 @@ TEST_F(GenotypeTest, Calculate_CQ_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -311,7 +311,7 @@ TEST_F(GenotypeTest, Calculate_Lumefantrine_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }
@@ -346,7 +346,7 @@ TEST_F(GenotypeTest, Calculate_Amodiaquine_EC50) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);
   }

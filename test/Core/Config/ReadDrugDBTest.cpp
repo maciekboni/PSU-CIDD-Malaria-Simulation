@@ -34,7 +34,7 @@ TEST(ConfigTest, ReadArtemisininResistantAALocation) {
   auto gene_id = c.drug_db()->at(0)->resistant_aa_locations[0].gene_id;
   ASSERT_EQ(chromosome_id, 12);
   ASSERT_EQ(gene_id, 0);
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkelch13");
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkelch13");
 }
 
 TEST(ConfigTest, ReadLumefantrineResistantAALocation) {
@@ -51,8 +51,8 @@ TEST(ConfigTest, ReadLumefantrineResistantAALocation) {
   ASSERT_EQ(chromosome_id2, 6);
   ASSERT_EQ(gene_id1, 0);
   ASSERT_EQ(gene_id2, 0);
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id1].gene_infos[gene_id1].name, "Pfmdr1");
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id2].gene_infos[gene_id2].name, "Pfcrt");
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id1].gene_infos[gene_id1].name, "Pfmdr1");
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id2].gene_infos[gene_id2].name, "Pfcrt");
 }
 
 TEST(ConfigTest, ReadKAFResistantAALocation) {
@@ -64,7 +64,7 @@ TEST(ConfigTest, ReadKAFResistantAALocation) {
   auto gene_id = c.drug_db()->at(7)->resistant_aa_locations[0].gene_id;
   ASSERT_EQ(chromosome_id, 6);
   ASSERT_EQ(gene_id, 1);
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkaf");
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfkaf");
 }
 
 TEST(ConfigTest, ReadPiperaquineResistantAALocation) {
@@ -79,8 +79,8 @@ TEST(ConfigTest, ReadPiperaquineResistantAALocation) {
   ASSERT_EQ(c.drug_db()->at(3)->resistant_aa_locations[0].aa_id, 0);
   ASSERT_EQ(c.drug_db()->at(3)->resistant_aa_locations[0].is_copy_number, true);
 
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfplasmepsin");
-  ASSERT_EQ(c.pf_gene_info().chromosome_infos[chromosome_id].gene_infos[gene_id].max_copies, 2);
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id].gene_infos[gene_id].name, "Pfplasmepsin");
+  ASSERT_EQ(c.pf_genotype_info().chromosome_infos[chromosome_id].gene_infos[gene_id].max_copies, 2);
 }
 
 TEST(ConfigTest, ReadAAPostInAASequence) {

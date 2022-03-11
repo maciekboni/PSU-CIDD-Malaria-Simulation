@@ -89,7 +89,7 @@ public:
 
   CONFIG_ITEM(relative_infectivity, RelativeInfectivity, RelativeInfectivity())
 
-  CONFIG_ITEM(pf_gene_info, PfGeneInfo, PfGeneInfo())
+  CONFIG_ITEM(pf_genotype_info, PfGeneInfo, PfGeneInfo())
 
   CONFIG_ITEM(initial_strategy_id, int, -1)
 

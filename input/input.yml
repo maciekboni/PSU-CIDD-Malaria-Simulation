@@ -191,7 +191,7 @@ circulation_info:
 mutation_mask: "||||111||11111,0||||||0000001001|1"
 
 # the appearance of gene should be in order
-pf_gene_info:
+pf_genotype_info:
   - chromosome: 7
     genes:
       - name: "Pfcrt"

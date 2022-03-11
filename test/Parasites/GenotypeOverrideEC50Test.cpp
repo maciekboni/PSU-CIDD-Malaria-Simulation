@@ -74,7 +74,7 @@ TEST(GenotypeOverridEC50Test, OverrideEC50AfterCalculate) {
 
   for (const auto& [gene_str, drug_id, ec50_p_n] : test_cases) {
     Genotype g(gene_str);
-    g.calculate_EC50_power_n(c.pf_gene_info(), c.drug_db());
+    g.calculate_EC50_power_n(c.pf_genotype_info(), c.drug_db());
     g.override_EC50_power_n(c.override_ec50_patterns(), c.drug_db());
     EXPECT_NEAR(g.get_EC50_power_n(c.drug_db()->at(drug_id)), ec50_p_n, 0.00001)
         << fmt::format("{}-{}-{}", gene_str, drug_id, ec50_p_n);

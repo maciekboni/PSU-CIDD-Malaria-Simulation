@@ -207,7 +207,7 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
       if (old_copy_number == 1) {
         new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number + 1);
       } else if (old_copy_number
-                 == pConfig->pf_gene_info()
+                 == pConfig->pf_genotype_info()
                         .chromosome_infos[aa_pos.chromosome_id]
                         .gene_infos[aa_pos.gene_id]
                         .max_copies) {
@@ -218,7 +218,7 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
       }
 
     } else {
-      auto &aa_list = pConfig->pf_gene_info()
+      auto &aa_list = pConfig->pf_genotype_info()
                           .chromosome_infos[aa_pos.chromosome_id]
                           .gene_infos[aa_pos.gene_id]
                           .aa_position_infos[aa_pos.aa_id]
