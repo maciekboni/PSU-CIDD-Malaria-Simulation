@@ -8,6 +8,7 @@
 
 #include "Core/TypeDef.h"
 #include "Spatial/Location.h"
+#include "easylogging++.h"
 
 namespace YAML {
 template <>
@@ -242,19 +243,24 @@ struct convert<OverrideEC50Patterns> {
   }
 };
 
-template<>
+template <>
 struct convert<MosquitoConfig> {
-  static Node encode(const MosquitoConfig &mdb) {
+  static Node encode(const MosquitoConfig& mdb) {
     Node node;
     node.push_back("mosquito_config");
     return node;
   }
-  static bool decode(const Node &node, MosquitoConfig &mcf) {
-    mcf.daily_report = node["daily_report"].as<bool>();
-    mcf.cell_size = node["cell_size"].as<int>();
-    mcf.interrupted_feeding_rate = node["interrupted_feeding_rate"].as<double>();
+  static bool decode(const Node& node, MosquitoConfig& mcf) {
     mcf.prmc_size = node["prmc_size"].as<int>();
-
+    if (node["interrupted_feeding_rate"]) {
+      mcf.interrupted_feeding_rate = node["interrupted_feeding_rate"].as<std::vector<double>>();
+    }
+    if (node["interrupted_feeding_rate_raster"]) {
+      mcf.interrupted_feeding_rate_raster = node["interrupted_feeding_rate"].as<std::string>();
+    }
+    if (!node["interrupted_feeding_rate"] && !node["interrupted_feeding_rate_raster"]) {
+      LOG(FATAL) << "Either interrupted feeding rate or raster file needs to be supplied";
+    }
     return true;
   }
 };

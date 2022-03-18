@@ -933,12 +933,5 @@ sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
 
 #Mosquito
 mosquito_config:
-  #generate daily reports (for debug)
-  daily_report: false
-  # Set the cell size used by raster, in sq.km
-  cell_size: 5
-  #Interruped feeding rate, set 0.0 will disable the interrupted feature
-  interrupted_feeding_rate_raster: "interrupted_feeding_rate.asc"
-  interrupted_feeding_rate: 0.19
-  #PRMC size
-  prmc_size: 800
+  interrupted_feeding_rate: [0.19]
+  prmc_size: 40

@@ -4,9 +4,16 @@
 
 #ifndef POMS_SRC_MOSQUITO_MOSQUITO_H
 #define POMS_SRC_MOSQUITO_MOSQUITO_H
+#include <vector>
+
 #include "Core/PropertyMacro.h"
+#include "Core/Config/Config.h"
+
+class Genotype;
 
 class Model;
+
+class Config;
 
 class Mosquito {
 public:
@@ -17,10 +24,17 @@ public:
   Model *model { nullptr };
 
 public:
-  Mosquito(Model *model = nullptr);
+  explicit Mosquito(Model *model = nullptr);
   virtual ~Mosquito() = default;
 
-  void init();
+  void initialize(Config* config);
+
+  void infect_new_cohort_in_PRMC(Config* config, Random* random, const int &tracking_index);
+
+public:
+  std::vector<std::vector<std::vector<Genotype *>>> genotypes_table; /* Mosquito table */
+  static std::vector<unsigned int> build_interrupted_feeding_indices(Random *random, const double &interrupted_feeding_rate,
+                                                              const int& prmc_size);
 };
 
 #endif  // POMS_SRC_MOSQUITO_MOSQUITO_H

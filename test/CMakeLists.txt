@@ -47,6 +47,7 @@ set(TEST_SRC_FILES
   Core/Config/ReadOverrideEC50.cpp
   Core/Config/ReadMosquitoConfigTest.cpp
   Core/Config/UpdateMutationMaskTest.cpp
+  Mosquito/MosquitoTest.cpp
   )
 
 set(MAIN_TEST masim_test)

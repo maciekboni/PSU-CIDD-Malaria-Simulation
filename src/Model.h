@@ -27,6 +27,8 @@ class ModelDataCollector;
 
 class Reporter;
 
+class Mosquito;
+
 class Model {
  DISALLOW_COPY_AND_ASSIGN(Model)
  void end_time_step();
@@ -70,7 +72,7 @@ class Model {
 
  PROPERTY_REF(std::string, reporter_type)
  public:
-   // Mosquito* mosquito;
+    Mosquito* mosquito;
  public:
   static Model *MODEL;
   static Config *CONFIG;

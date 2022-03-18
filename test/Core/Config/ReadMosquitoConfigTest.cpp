@@ -11,9 +11,6 @@ TEST(ConfigTest, ReadMosquitoConfigTest) {
   Config c;
   c.read_from_file("input.yml");
 
-  EXPECT_EQ(c.mosquito_config().daily_report, false);
-  EXPECT_EQ(c.mosquito_config().interrupted_feeding_rate, 0.19);
-  EXPECT_EQ(c.mosquito_config().cell_size, 5);
-  EXPECT_EQ(c.mosquito_config().prmc_size, 800);
-
+  EXPECT_EQ(c.mosquito_config().interrupted_feeding_rate[0], 0.19);
+  EXPECT_EQ(c.mosquito_config().prmc_size, 40);
 }

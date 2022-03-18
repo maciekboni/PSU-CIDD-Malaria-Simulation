@@ -37,6 +37,7 @@
 #include "Reporters/Reporter.h"
 #include "Strategies/IStrategy.h"
 #include "Therapies/Drug.h"
+#include "Mosquito/Mosquito.h"
 #include "easylogging++.h"
 
 Model* Model::MODEL = nullptr;
@@ -57,6 +58,7 @@ Model::Model(const int& object_pool_size) {
   population_ = new Population(this);
 //  mosquito = new Mosquito(this);
   data_collector_ = new ModelDataCollector(this);
+  mosquito = new Mosquito(this);
 
   MODEL = this;
   CONFIG = config_;
@@ -174,6 +176,10 @@ void Model::initialize() {
   LOG(INFO) << "Initializing population";
   // initialize Population
   population_->initialize();
+
+  LOG(INFO) << "Initializing mosquito";
+  // initialize Population
+  mosquito->initialize(config_);
 
   LOG(INFO) << "Introducing initial cases";
   // initialize infected_cases
