@@ -123,8 +123,9 @@ public:
 
   std::size_t size_residents_only(const int &location);
 
-  void daily_update();
-  void update_current_foi(bool trigger_person_update);
+  void update_all_individuals();
+
+  void update_current_foi();
 };
 
 template <typename T>

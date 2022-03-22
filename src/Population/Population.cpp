@@ -335,14 +335,14 @@ void Population::introduce_initial_cases() {
       introduce_parasite(p_info.location, genotype, num_of_infections);
     }
     // update current foi
-    update_current_foi(false);
+    update_current_foi();
 
     // update force of infection for N days
     for (auto d = 0; d < Model::CONFIG->number_of_tracking_days(); d++) {
       for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         force_of_infection_for_N_days_by_location[d][loc] = current_force_of_infection_by_location[loc];
       }
-      Model::MOSQUITO->infect_new_cohort_in_PRMC(Model::CONFIG, Model::RANDOM,this, d);
+      Model::MOSQUITO->infect_new_cohort_in_PRMC(Model::CONFIG, Model::RANDOM, this, d);
     }
   }
 }
@@ -634,9 +634,18 @@ void Population::initialize_person_indices() {
   person_index_list_->push_back(p_index_location_moving_level);
 }
 
-void Population::daily_update() {
-  // update all individuals and foi
-  update_current_foi(true);
+void Population::update_all_individuals() {
+  // update all individuals
+  auto pi = get_person_index<PersonIndexByLocationStateAgeClass>();
+  for (int loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    for (int hs = 0; hs < Person::DEAD; hs++) {
+      for (int ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++) {
+        for (auto* person : pi->vPerson()[loc][hs][ac]) {
+          person->update();
+        }
+      }
+    }
+  }
 }
 
 void Population::persist_current_force_of_infection_to_use_N_days_later() {
@@ -647,7 +656,7 @@ void Population::persist_current_force_of_infection_to_use_N_days_later() {
   }
 }
 
-void Population::update_current_foi(bool trigger_person_update) {
+void Population::update_current_foi() {
   individual_foi_by_location =
       std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
   all_alive_persons_by_location =
@@ -657,14 +666,9 @@ void Population::update_current_foi(bool trigger_person_update) {
   for (int loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
     // reset force of infection for each location
     current_force_of_infection_by_location[loc] = 0.0;
-    for (int hs = 0; hs < Person::NUMBER_OF_STATE - 1; hs++) {
-      if (hs == Person::DEAD) continue;
+    for (int hs = 0; hs < Person::DEAD; hs++) {
       for (int ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++) {
         for (auto* person : pi->vPerson()[loc][hs][ac]) {
-          if (trigger_person_update) {
-            person->update();
-          }
-
           std::vector<double> relative_density(person->all_clonal_parasite_populations()->size(), 0.0);
           double log_10_total_density;
           person->all_clonal_parasite_populations()->get_parasites_profiles(relative_density, log_10_total_density);

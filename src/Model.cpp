@@ -295,15 +295,24 @@ void Model::begin_time_step() {
 }
 
 void Model::daily_update() {
-  population_->daily_update();
+  population_->update_all_individuals();
   // for safety remove all dead by calling perform_death_event
   population_->perform_death_event();
   population_->perform_birth_event();
   population_->perform_circulation_event();
   population_->perform_infection_event();
 
+  // update current foi should be call after perform death, birth event, circulation event
+  // in order to obtain the right all alive individuals
+  population_->update_current_foi();
+  // infect new mosquito cohort in prmc must be run after population perform infection event and update current foi
+  // because the prmc at the tracking index will be overridden with new cohort to use N days later and
+  // infection event used the prmc at the tracking index for the today infection
   auto tracking_index = scheduler_->current_time() % config_->number_of_tracking_days();
   mosquito->infect_new_cohort_in_PRMC(config_, random_, population_, tracking_index);
+
+  // this function must be called after mosquito infect new cohort in prmc
+  population_->persist_current_force_of_infection_to_use_N_days_later();
 }
 
 void Model::monthly_update() {
@@ -328,8 +337,6 @@ void Model::end_time_step() {
 
   // check to switch strategy
   treatment_strategy_->update_end_of_time_step();
-
-  population_->persist_current_force_of_infection_to_use_N_days_later();
 }
 
 void Model::release() {
