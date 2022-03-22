@@ -29,6 +29,7 @@
 #include "Helpers/TimeHelpers.h"
 #include "MDC/ModelDataCollector.h"
 #include "Malaria/SteadyTCM.h"
+#include "Mosquito/Mosquito.h"
 #include "Population/ClonalParasitePopulation.h"
 #include "Population/ImmuneSystem.h"
 #include "Population/Person.h"
@@ -37,7 +38,6 @@
 #include "Reporters/Reporter.h"
 #include "Strategies/IStrategy.h"
 #include "Therapies/Drug.h"
-#include "Mosquito/Mosquito.h"
 #include "easylogging++.h"
 
 Model* Model::MODEL = nullptr;
@@ -46,6 +46,7 @@ Random* Model::RANDOM = nullptr;
 Scheduler* Model::SCHEDULER = nullptr;
 ModelDataCollector* Model::DATA_COLLECTOR = nullptr;
 Population* Model::POPULATION = nullptr;
+Mosquito* Model::MOSQUITO = nullptr;
 IStrategy* Model::TREATMENT_STRATEGY = nullptr;
 ITreatmentCoverageModel* Model::TREATMENT_COVERAGE = nullptr;
 // std::shared_ptr<spdlog::logger> LOGGER;
@@ -56,7 +57,7 @@ Model::Model(const int& object_pool_size) {
   config_ = new Config(this);
   scheduler_ = new Scheduler(this);
   population_ = new Population(this);
-//  mosquito = new Mosquito(this);
+  //  mosquito = new Mosquito(this);
   data_collector_ = new ModelDataCollector(this);
   mosquito = new Mosquito(this);
 
@@ -66,6 +67,7 @@ Model::Model(const int& object_pool_size) {
   RANDOM = random_;
   DATA_COLLECTOR = data_collector_;
   POPULATION = population_;
+  MOSQUITO = mosquito;
 
   // LOGGER = spdlog::stdout_logger_mt("console");
 
@@ -299,6 +301,9 @@ void Model::daily_update() {
   population_->perform_birth_event();
   population_->perform_circulation_event();
   population_->perform_infection_event();
+
+  auto tracking_index = scheduler_->current_time() % config_->number_of_tracking_days();
+  mosquito->infect_new_cohort_in_PRMC(config_, random_, population_, tracking_index);
 }
 
 void Model::monthly_update() {

@@ -28,7 +28,20 @@ Config::Config(Model *model)
       modified_daily_cost_of_resistance_(-1),
       modified_mutation_probability_(-1) {}
 
-Config::~Config() = default;
+Config::~Config() {
+  for (auto *therapy : therapy_db()) {
+    delete therapy;
+  }
+
+  for (auto *strategy : strategy_db()) {
+    delete strategy;
+  }
+
+  for (auto *event : preconfig_population_events()) {
+    delete event;
+  }
+
+};
 
 void Config::read_from_file(const std::string &config_file_name) {
   YAML::Node config;

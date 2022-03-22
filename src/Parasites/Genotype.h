@@ -66,6 +66,8 @@ public:
 
   Genotype* free_recombine_with(Config* config, Random* pRandom, Genotype* other);
 
+  static Genotype* free_recombine(Config* config, Random* pRandom, Genotype* f, Genotype* m);
+
   static std::string Convert_PfGenotypeStr_To_String(const PfGenotypeStr& pfGenotypeStr);
 };
 

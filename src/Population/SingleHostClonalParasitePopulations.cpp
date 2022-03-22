@@ -203,7 +203,6 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
 
       if (p < drug->get_mutation_probability()) {
         // select all locus
-        // TODO: rework here
         // remember to use mask to turn on and off mutation location
         // for a specific time
         Genotype* candidate_genotype =

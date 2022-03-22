@@ -223,7 +223,6 @@ void circulation_info::set_value(const YAML::Node &node) {
   auto j = 0;
   double old_p = 0;
   double sum = 0;
-  // TODO: fix it
   for (double i = 0; i <= max + 0.0001; i += step) {
     const auto p = gsl_cdf_gamma_P(i + step, a, b);
     double value = 0;

@@ -18,7 +18,8 @@
 
 //#include "PersonIndexByLocationStateAgeClass.h"
 
-// class Person;
+class Person;
+
 class Model;
 
 class PersonIndexAll;
@@ -41,9 +42,11 @@ class Population : public Dispatcher {
   POINTER_PROPERTY(PersonIndexPtrList, person_index_list);
   POINTER_PROPERTY(PersonIndexAll, all_persons);
 
-  PROPERTY_REF(std::vector<std::vector<double> >, current_force_of_infection_by_location_parasite_type);
-  PROPERTY_REF(std::vector<std::vector<std::vector<double> > >,
-               force_of_infection_for_N_days_by_location_parasite_type);
+public:
+  std::vector<std::vector<double>> individual_foi_by_location;
+  std::vector<double> current_force_of_infection_by_location;
+  std::vector<std::vector<double>> force_of_infection_for_N_days_by_location;
+  std::vector<std::vector<Person *>> all_alive_persons_by_location;
 
 public:
   Population(Model *model = nullptr);
@@ -121,7 +124,6 @@ public:
   std::size_t size_residents_only(const int &location);
 
   void daily_update();
-  void extend_force_of_infection_size(int i);
   void update_current_foi(bool trigger_person_update);
 };
 

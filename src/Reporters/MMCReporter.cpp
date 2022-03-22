@@ -71,7 +71,6 @@ void MMCReporter::monthly_report() {
   }
   ss << group_sep;
 
-  // TODO: check if this function works properly
   ReporterUtils::output_genotype_frequency3(
       ss,
       Model::CONFIG->genotype_db.size(),

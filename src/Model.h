@@ -80,6 +80,7 @@ class Model {
   static Scheduler *SCHEDULER;
   static ModelDataCollector *DATA_COLLECTOR;
   static Population *POPULATION;
+  static Mosquito *MOSQUITO;
 
   static IStrategy *TREATMENT_STRATEGY;
   static ITreatmentCoverageModel *TREATMENT_COVERAGE;

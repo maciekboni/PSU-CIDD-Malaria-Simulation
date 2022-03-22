@@ -149,7 +149,7 @@ public:
 
   virtual double get_biting_level_value();
 
-  virtual double relative_infectivity(const double &log10_parasite_density);
+  static double relative_infectivity(const double &log10_parasite_density);
 
   virtual double get_probability_progress_to_clinical();
 

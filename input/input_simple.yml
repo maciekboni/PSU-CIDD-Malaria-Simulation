@@ -848,3 +848,8 @@ age_bracket_prob_individual_present_at_mda: [ 10, 40 ]
 mean_prob_individual_present_at_mda: [ 0.85, 0.75, 0.85 ]
 
 sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
+
+#Mosquito
+mosquito_config:
+  interrupted_feeding_rate: [0.19]
+  prmc_size: 40

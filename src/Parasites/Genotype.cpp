@@ -329,3 +329,52 @@ std::string Genotype::Convert_PfGenotypeStr_To_String(const PfGenotypeStr &pfGen
 
   return ss.str();
 }
+Genotype *Genotype::free_recombine(Config *config, Random *pRandom, Genotype *f, Genotype *m) {
+  PfGenotypeStr new_pf_genotype_str;
+  // for each chromosome
+  for (int chromosome_id = 0; chromosome_id < f->pf_genotype_str.size(); ++chromosome_id) {
+    if (f->pf_genotype_str[chromosome_id].empty()) continue;
+    if (f->pf_genotype_str[chromosome_id].size() == 1) {
+      // if single gene
+      // draw random
+      auto topOrBottom = pRandom->random_uniform();
+      // if < 0.5 take from current, otherwise take from other
+      auto gene_str = topOrBottom < 0.5 ? f->pf_genotype_str[chromosome_id][0] : m->pf_genotype_str[chromosome_id][0];
+      new_pf_genotype_str[chromosome_id].push_back(gene_str);
+    } else {
+      // if multiple genes
+      // draw random to determine whether
+      // within chromosome recombination happens
+      auto with_chromosome_recombination = pRandom->random_uniform();
+      if (with_chromosome_recombination < config->within_chromosome_recombination_rate()) {
+        // if happen draw a random crossover point based on ','
+        auto cutting_gene_id = pRandom->random_uniform(f->pf_genotype_str[chromosome_id].size() - 1) + 1;
+        // draw another random to do top-bottom or bottom-top cross over
+        auto topOrBottom = pRandom->random_uniform();
+        for (auto gene_id = 0; gene_id < cutting_gene_id; ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? f->pf_genotype_str[chromosome_id][gene_id]
+                                            : m->pf_genotype_str[chromosome_id][gene_id];
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+        for (auto gene_id = cutting_gene_id; gene_id < f->pf_genotype_str[chromosome_id].size(); ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? m->pf_genotype_str[chromosome_id][gene_id]
+                                            : f->pf_genotype_str[chromosome_id][gene_id];
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+      } else {
+        // if there is no within chromosome recombination
+        // do the same with single gene
+        auto topOrBottom = pRandom->random_uniform();
+        for (int gene_id = 0; gene_id < f->pf_genotype_str[chromosome_id].size(); ++gene_id) {
+          auto gene_str = topOrBottom < 0.5 ? f->pf_genotype_str[chromosome_id][gene_id]
+                                            : m->pf_genotype_str[chromosome_id][gene_id];
+
+          new_pf_genotype_str[chromosome_id].push_back(gene_str);
+        }
+      }
+    }
+  }
+
+  auto new_aa_sequence = Convert_PfGenotypeStr_To_String(new_pf_genotype_str);
+  return config->genotype_db.get_genotype(new_aa_sequence, config);
+}

@@ -6,14 +6,13 @@
 #define POMS_SRC_MOSQUITO_MOSQUITO_H
 #include <vector>
 
-#include "Core/PropertyMacro.h"
 #include "Core/Config/Config.h"
+#include "Core/PropertyMacro.h"
 
 class Genotype;
-
 class Model;
-
 class Config;
+class Population;
 
 class Mosquito {
 public:
@@ -27,14 +26,21 @@ public:
   explicit Mosquito(Model *model = nullptr);
   virtual ~Mosquito() = default;
 
-  void initialize(Config* config);
+  void initialize(Config *config);
 
-  void infect_new_cohort_in_PRMC(Config* config, Random* random, const int &tracking_index);
+  void infect_new_cohort_in_PRMC(Config *config, Random *random, Population *population, const int &tracking_index);
 
 public:
   std::vector<std::vector<std::vector<Genotype *>>> genotypes_table; /* Mosquito table */
-  static std::vector<unsigned int> build_interrupted_feeding_indices(Random *random, const double &interrupted_feeding_rate,
-                                                              const int& prmc_size);
+
+  [[nodiscard]] static std::vector<unsigned int> build_interrupted_feeding_indices(
+      Random *random, const double &interrupted_feeding_rate, const int &prmc_size);
+
+  //  [[nodiscard]] static std::vector<Person *> prmc_sampling(Random *random, int prmc_size,
+  //                                                           std::vector<double> &foi_distribution,
+  //                                                           std::vector<Person *> &all_person);
+  //
+  int random_genotype(int location, int tracking_index);
 };
 
 #endif  // POMS_SRC_MOSQUITO_MOSQUITO_H

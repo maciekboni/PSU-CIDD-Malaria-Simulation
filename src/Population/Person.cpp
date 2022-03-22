@@ -238,6 +238,8 @@ double Person::get_biting_level_value() {
 }
 
 double Person::relative_infectivity(const double& log10_parasite_density) {
+  if (log10_parasite_density == ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY) return 0.0;
+
   // this sigma has already taken 'ln' and 'log10' into account
   const auto d_n = log10_parasite_density * Model::CONFIG->relative_infectivity().sigma
                    + Model::CONFIG->relative_infectivity().ro_star;

@@ -1,21 +1,24 @@
-/* 
+/*
  * File:   Random.cpp
  * Author: nguyentran
- * 
+ *
  * Created on May 27, 2013, 10:46 AM
  */
+#include "Random.h"
+
+#include <fmt/format.h>
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_randist.h>
+
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <gsl/gsl_cdf.h>
-#include <gsl/gsl_randist.h>
 #include <thread>
-#include <fmt/format.h>
-#include "Random.h"
+
 #include "Helpers/NumberHelpers.h"
 #include "easylogging++.h"
 
-Random::Random(gsl_rng* g_rng) : seed_(0ul), G_RNG(g_rng) {}
+Random::Random(gsl_rng *g_rng) : seed_(0ul), G_RNG(g_rng) {}
 
 Random::~Random() {
   release();
@@ -31,7 +34,6 @@ void Random::initialize(const unsigned long &seed) {
 
   LOG(INFO) << fmt::format("Random initializing with seed: {}", seed_);
   gsl_rng_set(G_RNG, seed_);
-
 }
 
 void Random::release() const {
@@ -46,7 +48,7 @@ unsigned long Random::random_uniform(unsigned long range) {
   return gsl_rng_uniform_int(G_RNG, range);
 }
 
-//return an integer in  [from, to) , not include to
+// return an integer in  [from, to) , not include to
 unsigned long Random::random_uniform_int(const unsigned long &from, const unsigned long &to) {
   return from + gsl_rng_uniform_int(G_RNG, to - from);
 }
@@ -87,9 +89,8 @@ int Random::random_normal_truncated(const int &mean, const int &sd) {
 }
 
 double Random::random_beta(const double &alpha, const double &beta) {
-  //if beta =0, alpha = means
-  if (NumberHelpers::is_equal(beta, 0.0))
-    return alpha;
+  // if beta =0, alpha = means
+  if (NumberHelpers::is_equal(beta, 0.0)) return alpha;
   return gsl_ran_beta(G_RNG, alpha, beta);
 }
 
@@ -99,16 +100,14 @@ double Random::random_beta(const double &alpha, const double &beta) {
 //
 
 double Random::random_gamma(const double &shape, const double &scale) {
-  //if beta =0, alpha = means
-  if (NumberHelpers::is_equal(scale, 0.0))
-    return shape;
+  // if beta =0, alpha = means
+  if (NumberHelpers::is_equal(scale, 0.0)) return shape;
   return gsl_ran_gamma(G_RNG, shape, scale);
 }
 
 double Random::cdf_gamma_distribution(const double &x, const double &alpha, const double &beta) {
-  //if beta =0, alpha = means
-  if (NumberHelpers::is_equal(beta, 0.0))
-    return 1.0;
+  // if beta =0, alpha = means
+  if (NumberHelpers::is_equal(beta, 0.0)) return 1.0;
   return gsl_cdf_gamma_P(x, alpha, beta);
 }
 
@@ -124,7 +123,7 @@ void Random::random_multinomial(const size_t &K, const unsigned &N, double p[], 
   gsl_ran_multinomial(G_RNG, K, N, p, n);
 }
 
-void Random::random_shuffle(void* base, size_t base_length, size_t size_of_type) {
+void Random::random_shuffle(void *base, size_t base_length, size_t size_of_type) {
   gsl_ran_shuffle(G_RNG, base, base_length, size_of_type);
 }
 
@@ -136,6 +135,6 @@ int Random::random_binomial(const double &p, const unsigned int &n) {
   return gsl_ran_binomial(G_RNG, p, n);
 }
 
-void Random::shuffle(void* base, const size_t &n, const size_t &size) {
+void Random::shuffle(void *base, const size_t &n, const size_t &size) {
   gsl_ran_shuffle(G_RNG, base, n, size);
 }

@@ -10,6 +10,8 @@
 
 #include <gsl/gsl_rng.h>
 
+#include <algorithm>
+
 #include "PropertyMacro.h"
 #include "Strategies/AdaptiveCyclingStrategy.h"
 
@@ -73,6 +75,42 @@ public:
   virtual int random_binomial(const double &p, const unsigned int &n);
 
   void shuffle(void *base, const size_t &n, const size_t &size);
+
+  template <class T>
+  [[nodiscard]] std::vector<T *> multinomial_sampling(int size, std::vector<double> &distribution,
+                                                      std::vector<T *> &all_objects, bool is_shuffled,
+                                                      double sum_distribution = -1);
 };
+
+template <class T>
+std::vector<T *> Random::multinomial_sampling(int size, std::vector<double> &distribution,
+                                              std::vector<T *> &all_objects, bool is_shuffled,
+                                              double sum_distribution) {
+  if (sum_distribution == 0) {
+    return std::vector<T *>(size, nullptr);
+  } else if (sum_distribution < 0) {
+    auto found = std::find_if(distribution.begin(), distribution.end(), [](double d) { return d > 0; });
+
+    if (found == distribution.end()) {
+      return std::vector<T *>(size, nullptr);
+    }
+  }
+
+  std::vector<T *> samples;
+  std::vector<unsigned int> hit_per_object(distribution.size());
+  random_multinomial(distribution.size(), size, &distribution[0], &hit_per_object[0]);
+
+  samples.reserve(size);
+
+  for (auto i = 0; i < hit_per_object.size(); i++) {
+    for (int j = 0; j < hit_per_object[i]; ++j) {
+      samples.push_back(all_objects[i]);
+    }
+  }
+  if (is_shuffled) {
+    random_shuffle(&samples[0], samples.size(), sizeof(T *));
+  }
+  return samples;
+}
 
 #endif /* RANDOM_H */

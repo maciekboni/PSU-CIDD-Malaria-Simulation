@@ -537,8 +537,6 @@ void ModelDataCollector::update_average_number_bitten(
     const int& location, const int& birthday,
     const int& number_of_times_bitten
 ) {
-
-  //TODO: check here
   const auto time_living_from_start_collect_data_day = (birthday < Model::CONFIG->start_collect_data_day())
                                                        ? 1
                                                        : Model::SCHEDULER->current_time() + 1 -
@@ -569,7 +567,7 @@ void ModelDataCollector::calculate_percentage_bites_on_top_20() {
     const auto size20 = static_cast<int>(std::round(
         average_number_biten_by_location_person_[location].size() / 100.0 * 20
     ));
-    // TODO: research about size_t and int comparison
+
     for (auto i = 0; static_cast<size_t>(i) < average_number_biten_by_location_person_[location].size(); i++) {
       total += average_number_biten_by_location_person_[location][i];
 
