@@ -65,7 +65,6 @@ public:
   CONFIG_ITEM(report_frequency, int, 30)
 
   CONFIG_ITEM(tf_rate, double, 0.1)
-  CONFIG_ITEM(using_free_recombination, bool, true)
   CONFIG_ITEM(tf_window_size, int, 60)
 
   CONFIG_ITEM(using_age_dependent_bitting_level, bool, false)

@@ -27,8 +27,8 @@ TEST_F(MosquitoTest, Initialize) {
 
   m.initialize(&c);
 
-  EXPECT_EQ(m.genotypes_table.size(), c.number_of_locations());
-  EXPECT_EQ(m.genotypes_table[0].size(), c.number_of_tracking_days());
+  EXPECT_EQ(m.genotypes_table.size(), c.number_of_tracking_days());
+  EXPECT_EQ(m.genotypes_table[0].size(), c.number_of_locations());
   EXPECT_EQ(m.genotypes_table[0][0].size(), c.mosquito_config().prmc_size);
   for (Genotype* g : m.genotypes_table[0][0]) {
     EXPECT_EQ(g, nullptr);
@@ -48,8 +48,8 @@ TEST_F(MosquitoTest, InitializeWithConfigHasCorrectNumberIFR) {
   c.mosquito_config().interrupted_feeding_rate = std::vector<double>(c.number_of_locations(), 0.20);
   m.initialize(&c);
 
-  EXPECT_EQ(m.genotypes_table.size(), c.number_of_locations());
-  EXPECT_EQ(m.genotypes_table[0].size(), c.number_of_tracking_days());
+  EXPECT_EQ(m.genotypes_table.size(), c.number_of_tracking_days());
+  EXPECT_EQ(m.genotypes_table[0].size(), c.number_of_locations());
   EXPECT_EQ(m.genotypes_table[0][0].size(), c.mosquito_config().prmc_size);
   for (Genotype* g : m.genotypes_table[0][0]) {
     EXPECT_EQ(g, nullptr);

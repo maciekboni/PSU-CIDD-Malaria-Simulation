@@ -52,7 +52,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile) {
   ASSERT_EQ(c.report_frequency(), 30);
 
   ASSERT_EQ(c.tf_rate(), 0.1);
-  ASSERT_EQ(c.using_free_recombination(), true);
   ASSERT_EQ(c.tf_window_size(), 60);
 
   ASSERT_EQ(c.using_age_dependent_bitting_level(), false);
