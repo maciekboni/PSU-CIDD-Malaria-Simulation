@@ -313,7 +313,7 @@ std::vector<Event*> PopulationEventBuilder::build_change_interrupted_feeding_rat
       const auto starting_date = event_node["day"].as<date::year_month_day>();
       auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
       auto ifr = event_node["rate"].as<double>();
-      auto* event = new ChangeInterruptedFeedingRateEvent(location, time, ifr);
+      auto* event = new ChangeInterruptedFeedingRateEvent(location, ifr, time);
       events.push_back(event);
     }
   }

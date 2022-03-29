@@ -41,7 +41,7 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
                                          const int &tracking_index) {
   // for each location fill prmc at tracking_index row with sampling genotypes
   for (int loc = 0; loc < config->number_of_locations(); loc++) {
-    LOG(DEBUG) << "Day " << Model::SCHEDULER->current_time() << " ifr = " << Model::CONFIG->mosquito_config().interrupted_feeding_rate[loc];
+    LOG(TRACE) << "Day " << Model::SCHEDULER->current_time() << " ifr = " << Model::CONFIG->mosquito_config().interrupted_feeding_rate[loc];
     // if there is no parasites in location
     if (population->current_force_of_infection_by_location[loc] <= 0) {
       for (int i = 0; i < config->mosquito_config().prmc_size; ++i) {

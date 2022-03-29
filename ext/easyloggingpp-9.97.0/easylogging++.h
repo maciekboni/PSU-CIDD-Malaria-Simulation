@@ -14,6 +14,8 @@
 //  http://muflihun.com
 //
 
+#define ELPP_DISABLE_TRACE_LOGS
+
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
 // Compilers and C++0x/C++11 Evaluation
