@@ -209,7 +209,7 @@ TEST_F(GenotypeTest, Calculate_SP_EC50) {
     { "||||NY1||KTHFI,x||||||FNMYRIPRPC|1", 5, pow(1.08, 15) },
     // mutations has no effect
     { "||||NY1||KTHFI,x||||||FNMYRIPRPC|2", 5, pow(1.08, 15) },
-    { "||||YF2||TTHFI,C||||||FNMYRIPHPY|1", 5, pow(1.08, 15) },
+    { "||||YF2||TTHFI,X||||||FNMYRIPHPY|1", 5, pow(1.08, 15) },
 
   };
 
