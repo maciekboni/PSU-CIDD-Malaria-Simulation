@@ -22,6 +22,7 @@
 #include "SingleRoundMDAEvent.h"
 #include "TurnOffMutationEvent.h"
 #include "TurnOnMutationEvent.h"
+#include "ChangeInterruptedFeedingRateEvent.h"
 #include "yaml-cpp/yaml.h"
 
 std::vector<Event*> PopulationEventBuilder::build_introduce_parasite_events(const YAML::Node& node, Config* config) {
@@ -303,6 +304,22 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_triple_mutant_to_dpm
   return events;
 }
 
+
+std::vector<Event*> PopulationEventBuilder::build_change_interrupted_feeding_rate_event(const YAML::Node& node, Config* config) {
+  std::vector<Event*> events;
+  for (const auto & event_node : node) {
+    auto location = event_node["location"].as<int>();
+    if (location < config->number_of_locations()) {
+      const auto starting_date = event_node["day"].as<date::year_month_day>();
+      auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
+      auto ifr = event_node["rate"].as<double>();
+      auto* event = new ChangeInterruptedFeedingRateEvent(location, time, ifr);
+      events.push_back(event);
+    }
+  }
+  return events;
+}
+
 std::vector<Event*> PopulationEventBuilder::build(const YAML::Node& node, Config* config) {
   std::vector<Event*> events;
   const auto name = node["name"].as<std::string>();
@@ -356,6 +373,9 @@ std::vector<Event*> PopulationEventBuilder::build(const YAML::Node& node, Config
   }
   if (name == "turn_off_mutation") {
     events = build_turn_off_mutation_event(node["info"], config);
+  }
+  if (name == "change_interrupted_feeding_rate") {
+    events = build_change_interrupted_feeding_rate_event(node["info"], config);
   }
   return events;
 }
