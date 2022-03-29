@@ -30,7 +30,8 @@ endmacro()
 set(TEST_SRC_FILES
   MockRandom.h
   main.cpp test1.cpp
-  RandomTest.cpp
+  Core/Random/RandomTest.cpp
+  Core/Random/RouletteTest.cpp
   Parasites/GenotypeTest.cpp
   Parasites/GenotypeMatchPatternTest.cpp
   Parasites/GenotypeOverrideEC50Test.cpp

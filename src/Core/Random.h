@@ -80,6 +80,11 @@ public:
   [[nodiscard]] std::vector<T *> multinomial_sampling(int size, std::vector<double> &distribution,
                                                       std::vector<T *> &all_objects, bool is_shuffled,
                                                       double sum_distribution = -1);
+
+  template <class T>
+  [[nodiscard]] std::vector<T *> roulette_sampling(int number_of_samples, std::vector<double> &distribution,
+                                                   std::vector<T *> &all_objects, bool is_shuffled,
+                                                   double sum_distribution = -1);
 };
 
 template <class T>
@@ -113,4 +118,42 @@ std::vector<T *> Random::multinomial_sampling(int size, std::vector<double> &dis
   return samples;
 }
 
+template <class T>
+std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<double> &distribution,
+                                           std::vector<T *> &all_objects, bool is_shuffled, double sum_distribution) {
+  double sum { sum_distribution };
+  if (sum_distribution == 0) {
+    return std::vector<T *>(number_of_samples, nullptr);
+  } else if (sum_distribution < 0) {
+    sum = 0;
+    for (auto d : distribution) {
+      sum += d;
+    }
+  }
+
+  std::vector<double> uniform_sampling(number_of_samples, 0.0);
+  for (auto &index : uniform_sampling) {
+    index = this->random_uniform() * sum;
+  }
+
+  std::sort(uniform_sampling.begin(), uniform_sampling.end());
+
+  std::vector<T *> samples;
+  samples.reserve(number_of_samples);
+  double sum_weight = 0;
+  int uniform_sampling_index = 0;
+
+  for (auto pi = 0; pi < distribution.size(); pi++) {
+    auto weight = distribution[pi];
+    sum_weight += weight;
+    while (uniform_sampling[uniform_sampling_index] < sum_weight) {
+      uniform_sampling_index++;
+      samples.push_back(all_objects[pi]);
+    }
+  }
+  if (is_shuffled) {
+    random_shuffle(&samples[0], samples.size(), sizeof(T *));
+  }
+  return samples;
+}
 #endif /* RANDOM_H */

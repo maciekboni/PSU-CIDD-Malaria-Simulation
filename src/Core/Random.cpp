@@ -138,3 +138,4 @@ int Random::random_binomial(const double &p, const unsigned int &n) {
 void Random::shuffle(void *base, const size_t &n, const size_t &size) {
   gsl_ran_shuffle(G_RNG, base, n, size);
 }
+
