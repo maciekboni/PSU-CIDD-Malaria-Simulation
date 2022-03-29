@@ -147,6 +147,9 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
         auto aa_pos_info = res_gene_info.aa_position_infos[aa_i];
         auto element = pf_genotype_str[chromosome_i][gene_i][aa_i];
         auto it = std::find(aa_pos_info.amino_acids.begin(), aa_pos_info.amino_acids.end(), element);
+        if (it == aa_pos_info.amino_acids.end()) {
+          LOG(FATAL) << "Incorrect AA in aa sequence";
+        }
         auto element_id = it - aa_pos_info.amino_acids.begin();
 
         for (const auto &[drug_id, dt] : *drug_db) {
