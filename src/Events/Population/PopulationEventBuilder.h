@@ -30,6 +30,7 @@ public:
 
   static std::vector<Event*> build_turn_off_mutation_event(const YAML::Node& node, Config* config);
 
+  static std::vector<Event*> build_change_interrupted_feeding_rate_event(const YAML::Node& node, Config* config);
 
   static std::vector<Event*> build(const YAML::Node& node, Config* config);
 
