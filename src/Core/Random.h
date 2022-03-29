@@ -146,9 +146,12 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   for (auto pi = 0; pi < distribution.size(); pi++) {
     auto weight = distribution[pi];
     sum_weight += weight;
-    while (uniform_sampling[uniform_sampling_index] < sum_weight) {
+    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight ) {
       uniform_sampling_index++;
       samples.push_back(all_objects[pi]);
+    }
+    if(uniform_sampling_index == number_of_samples){
+      break;
     }
   }
   if (is_shuffled) {
