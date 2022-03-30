@@ -49,8 +49,7 @@ Person::Person()
       age_class_(-1),
       birthday_(-1),
       latest_update_time_(-1),
-      bitting_level_(-1),
-      base_bitting_level_value_(0),
+      innate_relative_biting_rate{0},
       moving_level_(-1),
       liver_parasite_type_(nullptr),
       number_of_times_bitten_(0),
@@ -177,25 +176,6 @@ void Person::set_age_class(const int& value) {
   }
 }
 
-int Person::bitting_level() const {
-  return bitting_level_;
-}
-
-void Person::set_bitting_level(const int& value) {
-  auto new_value = value;
-  if (new_value < 0) {
-    new_value = 0;
-  }
-
-  if (new_value > (Model::CONFIG->relative_bitting_info().number_of_biting_levels - 1)) {
-    new_value = Model::CONFIG->relative_bitting_info().number_of_biting_levels - 1;
-  }
-  if (bitting_level_ != new_value) {
-    NotifyChange(BITTING_LEVEL, &bitting_level_, &new_value);
-    bitting_level_ = new_value;
-  }
-}
-
 int Person::moving_level() const {
   return moving_level_;
 }
@@ -231,10 +211,6 @@ ClonalParasitePopulation* Person::add_new_parasite_to_blood(Genotype* parasite_t
       Model::CONFIG->parasite_density_level().log_parasite_density_from_liver);
 
   return blood_parasite;
-}
-
-double Person::get_biting_level_value() {
-  return Model::CONFIG->relative_bitting_info().v_biting_level_value[bitting_level_];
 }
 
 double Person::relative_infectivity(const double& log10_parasite_density) {
@@ -512,24 +488,17 @@ void Person::update() {
 
   // update bitting level only less than 1 to save performance
   //  the other will be update in birthday event
-  update_bitting_level();
+  update_relative_bitting_rate();
 
   latest_update_time_ = Model::SCHEDULER->current_time();
   //    std::cout << "End Person Update"<< std::endl;
 }
 
-void Person::update_bitting_level() {
+void Person::update_relative_bitting_rate() {
   if (Model::CONFIG->using_age_dependent_bitting_level()) {
-    const auto new_bitting_level_value = base_bitting_level_value_ * get_age_dependent_biting_factor();
-    const auto diff_in_level =
-        static_cast<int>(std::floor(new_bitting_level_value - get_biting_level_value())
-                         / ((Model::CONFIG->relative_bitting_info().max_relative_biting_value - 1)
-                            / static_cast<double>(Model::CONFIG->relative_bitting_info().number_of_biting_levels - 1)));
-    if (diff_in_level != 0) {
-      //            std::cout << bitting_level_ << "\t" << diff_in_level << std::endl;
-      set_bitting_level(bitting_level_ + diff_in_level);
-      //              std::cout << "ok" << std::endl;
-    }
+    current_relative_biting_rate = innate_relative_biting_rate * get_age_dependent_biting_factor();
+  }else{
+    current_relative_biting_rate = innate_relative_biting_rate;
   }
 }
 

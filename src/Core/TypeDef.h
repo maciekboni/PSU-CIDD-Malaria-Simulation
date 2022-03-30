@@ -138,16 +138,13 @@ struct RelativeBittingInformation {
   double max_relative_biting_value;
   int number_of_biting_levels;
 
-  //  biting_level_distribution:
-  //  #  distribution: Exponential
-  //    distribution: Gamma
-  //    Exponential:
   double scale;
 
   double mean;
   double sd;
-  DoubleVector v_biting_level_value;
-  DoubleVector v_biting_level_density;
+
+  double gamma_a;
+  double gamma_b;
 };
 
 struct RelativeMovingInformation {

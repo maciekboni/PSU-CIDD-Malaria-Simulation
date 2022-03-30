@@ -180,7 +180,6 @@ TEST(ConfigTest, ReadFromDefaultInputFile) {
   ASSERT_EQ(c.preconfig_population_events()[13]->time, 10995);
   ASSERT_EQ(c.preconfig_population_events()[14]->time, 11030);
 
-  ASSERT_EQ(c.bitting_level_generator().level_density.size(), 100);
   ASSERT_EQ(c.moving_level_generator().level_density.size(), 100);
 
   ASSERT_EQ(c.mutation_mask(), "||||111||11111,0||||||0000001001|1");

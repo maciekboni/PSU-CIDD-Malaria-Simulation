@@ -807,6 +807,7 @@ external_population_circulation_information:
     period: 360
     min_value: 0.1
 
+# TODO: remove unused parameter
 # free recombination among the drug resistance loci
 using_free_recombination: true
 #using_free_recombination: false

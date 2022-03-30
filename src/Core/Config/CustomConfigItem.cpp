@@ -272,42 +272,42 @@ void relative_bitting_info::set_value(const YAML::Node &node) {
   value_.sd = info_node["biting_level_distribution"]["Gamma"]["sd"].as<double>();
 
   const auto var = value_.sd * value_.sd;
-  const auto b = var / (value_.mean - 1);  // theta
-  const auto a = (value_.mean - 1) / b;    // k
+  value_.gamma_b = var / (value_.mean - 1);  // theta
+  value_.gamma_a = (value_.mean - 1) / value_.gamma_b ;    // k
 
-  value_.v_biting_level_density.clear();
-  value_.v_biting_level_value.clear();
+//  value_.v_biting_level_density.clear();
+//  value_.v_biting_level_value.clear();
 
-  const auto max = value_.max_relative_biting_value - 1;  // maxRelativeBiting -1
-  const auto number_of_level = value_.number_of_biting_levels;
-
-  const auto step = max / static_cast<double>(number_of_level - 1);
-
-  auto j = 0;
-  auto old_p = 0.0;
-  auto sum = 0.0;
-
-  for (double i = 0; i <= max + 0.0001; i += step) {
-    const auto p = gsl_cdf_gamma_P(i + step, a, b);
-    double value = 0;
-    value = (j == 0) ? p : p - old_p;
-    value_.v_biting_level_density.push_back(value);
-    old_p = p;
-    value_.v_biting_level_value.push_back(i + 1);
-    sum += value;
-    j++;
-  }
-
-  // normalized
-  double t = 0;
-  for (auto &i : value_.v_biting_level_density) {
-    i = i + (1 - sum) / value_.v_biting_level_density.size();
-    t += i;
-  }
-
-  assert(value_.number_of_biting_levels == value_.v_biting_level_density.size());
-  assert(value_.number_of_biting_levels == value_.v_biting_level_value.size());
-  assert(fabs(t - 1) < 0.0001);
+//  const auto max = value_.max_relative_biting_value - 1;  // maxRelativeBiting -1
+//  const auto number_of_level = value_.number_of_biting_levels;
+//
+//  const auto step = max / static_cast<double>(number_of_level - 1);
+//
+//  auto j = 0;
+//  auto old_p = 0.0;
+//  auto sum = 0.0;
+//
+//  for (double i = 0; i <= max + 0.0001; i += step) {
+//    const auto p = gsl_cdf_gamma_P(i + step, a, b);
+//    double value = 0;
+//    value = (j == 0) ? p : p - old_p;
+//    value_.v_biting_level_density.push_back(value);
+//    old_p = p;
+//    value_.v_biting_level_value.push_back(i + 1);
+//    sum += value;
+//    j++;
+//  }
+//
+//  // normalized
+//  double t = 0;
+//  for (auto &i : value_.v_biting_level_density) {
+//    i = i + (1 - sum) / value_.v_biting_level_density.size();
+//    t += i;
+//  }
+//
+//  assert(value_.number_of_biting_levels == value_.v_biting_level_density.size());
+//  assert(value_.number_of_biting_levels == value_.v_biting_level_value.size());
+//  assert(fabs(t - 1) < 0.0001);
 }
 
 therapy_db::~therapy_db() {
@@ -371,10 +371,6 @@ void initial_parasite_info::set_value(const YAML::Node &node) {
       }
     }
   }
-}
-
-void bitting_level_generator::set_value(const YAML::Node &node) {
-  value_.level_density = config_->relative_bitting_info().v_biting_level_density;
 }
 
 void moving_level_generator::set_value(const YAML::Node &node) {
