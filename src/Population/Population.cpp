@@ -162,48 +162,79 @@ void Population::perform_infection_event() {
     // data_collector store number of bites
     Model::DATA_COLLECTOR->collect_number_of_bites(loc, number_of_bites);
 
-    DoubleVector vLevelDensity;
-    auto pi = get_person_index<PersonIndexByLocationBittingLevel>();
+    auto persons_bitten_today = Model::RANDOM->roulette_sampling<Person>(
+        number_of_bites, Model::POPULATION->individual_relative_biting_by_location[loc],
+        Model::POPULATION->all_alive_persons_by_location[loc], false);
 
-    for (auto i = 0; i < Model::CONFIG->relative_bitting_info().number_of_biting_levels; i++) {
-      auto temp = Model::CONFIG->relative_bitting_info().v_biting_level_value[i] * pi->vPerson()[loc][i].size();
-      vLevelDensity.push_back(temp);
-    }
+    for (auto* person : persons_bitten_today) {
+      assert(person->host_state() != Person::DEAD);
+      person->increase_number_of_times_bitten();
 
-    std::vector<unsigned int> v_int_number_of_bites(vLevelDensity.size());
-    model_->random()->random_multinomial(vLevelDensity.size(), number_of_bites, &vLevelDensity[0],
-                                         &v_int_number_of_bites[0]);
+      auto genotype_id = Model::MOSQUITO->random_genotype(loc, tracking_index);
 
-    for (auto bitting_level = 0; bitting_level < v_int_number_of_bites.size(); bitting_level++) {
-      const auto size = pi->vPerson()[loc][bitting_level].size();
-      if (size == 0) continue;
-      for (auto j = 0u; j < v_int_number_of_bites[bitting_level]; j++) {
-        // select 1 random person from level i
-        const auto index = model_->random()->random_uniform(size);
-        auto* person = pi->vPerson()[loc][bitting_level][index];
-
-        assert(person->host_state() != Person::DEAD);
-        person->increase_number_of_times_bitten();
-
-        auto genotype_id = Model::MOSQUITO->random_genotype(loc, tracking_index);
-
-        const auto p_infectious = Model::RANDOM->random_flat(0.0, 1.0);
-        // only infect with real infectious bite
-        if (Model::CONFIG->using_variable_probability_infectious_bites_cause_infection()) {
-          if (p_infectious <= person->p_infection_from_an_infectious_bite()) {
-            if (person->host_state() != Person::EXPOSED && person->liver_parasite_type() == nullptr) {
-              person->today_infections()->push_back(genotype_id);
-              today_infections.push_back(person);
-            }
-          }
-        } else if (p_infectious <= Model::CONFIG->p_infection_from_an_infectious_bite()) {
+      const auto p_infectious = Model::RANDOM->random_flat(0.0, 1.0);
+      // only infect with real infectious bite
+      if (Model::CONFIG->using_variable_probability_infectious_bites_cause_infection()) {
+        if (p_infectious <= person->p_infection_from_an_infectious_bite()) {
           if (person->host_state() != Person::EXPOSED && person->liver_parasite_type() == nullptr) {
             person->today_infections()->push_back(genotype_id);
             today_infections.push_back(person);
           }
         }
+      } else if (p_infectious <= Model::CONFIG->p_infection_from_an_infectious_bite()) {
+        if (person->host_state() != Person::EXPOSED && person->liver_parasite_type() == nullptr) {
+          person->today_infections()->push_back(genotype_id);
+          today_infections.push_back(person);
+        }
       }
     }
+
+    /*
+     // TODO: If the new method above works remove the following comments
+
+        DoubleVector vLevelDensity;
+        auto pi = get_person_index<PersonIndexByLocationBittingLevel>();
+
+        for (auto i = 0; i < Model::CONFIG->relative_bitting_info().number_of_biting_levels; i++) {
+          auto temp = Model::CONFIG->relative_bitting_info().v_biting_level_value[i] * pi->vPerson()[loc][i].size();
+          vLevelDensity.push_back(temp);
+        }
+
+        std::vector<unsigned int> v_int_number_of_bites(vLevelDensity.size());
+        model_->random()->random_multinomial(vLevelDensity.size(), number_of_bites, &vLevelDensity[0],
+                                             &v_int_number_of_bites[0]);
+
+        for (auto bitting_level = 0; bitting_level < v_int_number_of_bites.size(); bitting_level++) {
+          const auto size = pi->vPerson()[loc][bitting_level].size();
+          if (size == 0) continue;
+          for (auto j = 0u; j < v_int_number_of_bites[bitting_level]; j++) {
+            // select 1 random person from level i
+            const auto index = model_->random()->random_uniform(size);
+            auto* person = pi->vPerson()[loc][bitting_level][index];
+
+            assert(person->host_state() != Person::DEAD);
+            person->increase_number_of_times_bitten();
+
+            auto genotype_id = Model::MOSQUITO->random_genotype(loc, tracking_index);
+
+            const auto p_infectious = Model::RANDOM->random_flat(0.0, 1.0);
+            // only infect with real infectious bite
+            if (Model::CONFIG->using_variable_probability_infectious_bites_cause_infection()) {
+              if (p_infectious <= person->p_infection_from_an_infectious_bite()) {
+                if (person->host_state() != Person::EXPOSED && person->liver_parasite_type() == nullptr) {
+                  person->today_infections()->push_back(genotype_id);
+                  today_infections.push_back(person);
+                }
+              }
+            } else if (p_infectious <= Model::CONFIG->p_infection_from_an_infectious_bite()) {
+              if (person->host_state() != Person::EXPOSED && person->liver_parasite_type() == nullptr) {
+                person->today_infections()->push_back(genotype_id);
+                today_infections.push_back(person);
+              }
+            }
+          }
+        }
+      */
   }
   //    std::cout << "Solve infections"<< std::endl;
   // solve Multiple infections
@@ -223,6 +254,8 @@ void Population::initialize() {
   if (model() != nullptr) {
     // those vector will be used in the initial infection
     individual_relative_biting_by_location =
+        std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
+    individual_relative_moving_by_location =
         std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
     all_alive_persons_by_location =
         std::vector<std::vector<Person*>>(Model::CONFIG->number_of_locations(), std::vector<Person*>());
@@ -309,8 +342,10 @@ void Population::initialize() {
 
           // set_relative_biting_rate
           p->set_bitting_level(Model::CONFIG->bitting_level_generator().draw_random_level(Model::RANDOM));
+
           p->set_base_bitting_level_value(
               Model::CONFIG->relative_bitting_info().v_biting_level_value[p->bitting_level()]);
+
           //                    p->update_bitting_level();
 
           p->set_moving_level(Model::CONFIG->moving_level_generator().draw_random_level(Model::RANDOM));
@@ -323,6 +358,8 @@ void Population::initialize() {
           add_person(p);
 
           individual_relative_biting_by_location[loc].push_back(p->get_biting_level_value());
+          individual_relative_moving_by_location[loc].push_back(
+              Model::CONFIG->circulation_info().v_moving_level_value[p->moving_level()]);
           all_alive_persons_by_location[loc].push_back(p);
         }
       }
@@ -358,30 +395,40 @@ void Population::introduce_initial_cases() {
 
 void Population::introduce_parasite(const int& location, Genotype* parasite_type, const int& num_of_infections) {
   if (model_ != nullptr) {
-    DoubleVector vLevelDensity;
-    auto pi = get_person_index<PersonIndexByLocationBittingLevel>();
+    auto persons_bitten_today = Model::RANDOM->roulette_sampling<Person>(
+        num_of_infections, Model::POPULATION->individual_relative_biting_by_location[location],
+        Model::POPULATION->all_alive_persons_by_location[location], false);
 
-    for (auto i = 0; i < Model::CONFIG->relative_bitting_info().number_of_biting_levels; i++) {
-      auto temp = Model::CONFIG->relative_bitting_info().v_biting_level_value[i] * pi->vPerson()[location][i].size();
-      vLevelDensity.push_back(temp);
+    for (auto* person : persons_bitten_today) {
+      initial_infection(person, parasite_type);
     }
 
-    std::vector<unsigned int> vIntNumberOfBites(vLevelDensity.size());
-    model_->random()->random_multinomial(vLevelDensity.size(), num_of_infections, &vLevelDensity[0],
-                                         &vIntNumberOfBites[0]);
+    // TODO: if the above method is stable, remove old method
 
-    for (auto biting_level = 0; biting_level < vIntNumberOfBites.size(); biting_level++) {
-      const int size = pi->vPerson()[location][biting_level].size();
-      if (size == 0) continue;
-      for (auto j = 0u; j < vIntNumberOfBites[biting_level]; j++) {
-        //                std::cout << vIntNumberOfBites[bitting_level] << "-" << j << std::endl;
-        // select 1 random person from level i
-        const int index = model_->random()->random_uniform(size);
-        auto* p = pi->vPerson()[location][biting_level][index];
-
-        initial_infection(p, parasite_type);
-      }
-    }
+    //    DoubleVector vLevelDensity;
+    //    auto pi = get_person_index<PersonIndexByLocationBittingLevel>();
+    //
+    //    for (auto i = 0; i < Model::CONFIG->relative_bitting_info().number_of_biting_levels; i++) {
+    //      auto temp = Model::CONFIG->relative_bitting_info().v_biting_level_value[i] *
+    //      pi->vPerson()[location][i].size(); vLevelDensity.push_back(temp);
+    //    }
+    //
+    //    std::vector<unsigned int> vIntNumberOfBites(vLevelDensity.size());
+    //    model_->random()->random_multinomial(vLevelDensity.size(), num_of_infections, &vLevelDensity[0],
+    //                                         &vIntNumberOfBites[0]);
+    //
+    //    for (auto biting_level = 0; biting_level < vIntNumberOfBites.size(); biting_level++) {
+    //      const int size = pi->vPerson()[location][biting_level].size();
+    //      if (size == 0) continue;
+    //      for (auto j = 0u; j < vIntNumberOfBites[biting_level]; j++) {
+    //        //                std::cout << vIntNumberOfBites[bitting_level] << "-" << j << std::endl;
+    //        // select 1 random person from level i
+    //        const int index = model_->random()->random_uniform(size);
+    //        auto* p = pi->vPerson()[location][biting_level][index];
+    //
+    //        initial_infection(p, parasite_type);
+    //      }
+    //    }
   }
 }
 
@@ -580,35 +627,48 @@ void Population::perform_circulation_event() {
 }
 
 void Population::perform_circulation_for_1_location(const int& from_location, const int& target_location,
-                                                    const int& number_of_circulation,
+                                                    const int& number_of_circulations,
                                                     std::vector<Person*>& today_circulations) {
-  DoubleVector vLevelDensity;
-  auto pi = get_person_index<PersonIndexByLocationMovingLevel>();
+  auto persons_moving_today = Model::RANDOM->roulette_sampling<Person>(
+      number_of_circulations, individual_relative_moving_by_location[from_location],
+      all_alive_persons_by_location[from_location], false);
 
-  for (int i = 0; i < Model::CONFIG->circulation_info().number_of_moving_levels; i++) {
-    double temp = Model::CONFIG->circulation_info().v_moving_level_value[i] * pi->vPerson()[from_location][i].size();
-    vLevelDensity.push_back(temp);
+  for (auto* person : persons_moving_today) {
+    assert(person->host_state() != Person::DEAD);
+
+    person->today_target_locations()->push_back(target_location);
+    today_circulations.push_back(person);
   }
 
-  std::vector<unsigned int> vIntNumberOfCirculation(vLevelDensity.size());
+  // TODO: if the above method is stable, remove old method
 
-  model_->random()->random_multinomial(static_cast<int>(vLevelDensity.size()),
-                                       static_cast<unsigned int>(number_of_circulation), &vLevelDensity[0],
-                                       &vIntNumberOfCirculation[0]);
-
-  for (int moving_level = 0; moving_level < vIntNumberOfCirculation.size(); moving_level++) {
-    auto size = static_cast<int>(pi->vPerson()[from_location][moving_level].size());
-    if (size == 0) continue;
-    for (auto j = 0u; j < vIntNumberOfCirculation[moving_level]; j++) {
-      // select 1 random person from level i
-      int index = model_->random()->random_uniform(size);
-      Person* p = pi->vPerson()[from_location][moving_level][index];
-      assert(p->host_state() != Person::DEAD);
-
-      p->today_target_locations()->push_back(target_location);
-      today_circulations.push_back(p);
-    }
-  }
+  //  DoubleVector vLevelDensity;
+  //  auto pi = get_person_index<PersonIndexByLocationMovingLevel>();
+  //
+  //  for (int i = 0; i < Model::CONFIG->circulation_info().number_of_moving_levels; i++) {
+  //    double temp = Model::CONFIG->circulation_info().v_moving_level_value[i] *
+  //    pi->vPerson()[from_location][i].size(); vLevelDensity.push_back(temp);
+  //  }
+  //
+  //  std::vector<unsigned int> vIntNumberOfCirculation(vLevelDensity.size());
+  //
+  //  model_->random()->random_multinomial(static_cast<int>(vLevelDensity.size()),
+  //                                       static_cast<unsigned int>(number_of_circulation), &vLevelDensity[0],
+  //                                       &vIntNumberOfCirculation[0]);
+  //
+  //  for (int moving_level = 0; moving_level < vIntNumberOfCirculation.size(); moving_level++) {
+  //    auto size = static_cast<int>(pi->vPerson()[from_location][moving_level].size());
+  //    if (size == 0) continue;
+  //    for (auto j = 0u; j < vIntNumberOfCirculation[moving_level]; j++) {
+  //      // select 1 random person from level i
+  //      int index = model_->random()->random_uniform(size);
+  //      Person* p = pi->vPerson()[from_location][moving_level][index];
+  //      assert(p->host_state() != Person::DEAD);
+  //
+  //      p->today_target_locations()->push_back(target_location);
+  //      today_circulations.push_back(p);
+  //    }
+  //  }
 }
 
 bool Population::has_0_case() {
@@ -670,6 +730,8 @@ void Population::update_current_foi() {
       std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
   individual_relative_biting_by_location =
       std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
+  individual_relative_moving_by_location =
+      std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
   all_alive_persons_by_location =
       std::vector<std::vector<Person*>>(Model::CONFIG->number_of_locations(), std::vector<Person*>());
 
@@ -688,6 +750,8 @@ void Population::update_current_foi() {
 
           individual_foi_by_location[loc].push_back(individual_foi);
           individual_relative_biting_by_location[loc].push_back(person->get_biting_level_value());
+          individual_relative_moving_by_location[loc].push_back(
+              Model::CONFIG->circulation_info().v_moving_level_value[person->moving_level()]);
           all_alive_persons_by_location[loc].push_back(person);
           current_force_of_infection_by_location[loc] += individual_foi;
         }
