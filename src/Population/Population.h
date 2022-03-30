@@ -44,6 +44,7 @@ class Population : public Dispatcher {
 
 public:
   std::vector<std::vector<double>> individual_foi_by_location;
+  std::vector<std::vector<double>> individual_relative_biting_by_location;
   std::vector<double> current_force_of_infection_by_location;
   std::vector<std::vector<double>> force_of_infection_for_N_days_by_location;
   std::vector<std::vector<Person *>> all_alive_persons_by_location;
@@ -115,7 +116,7 @@ public:
   void perform_circulation_event();
 
   void perform_circulation_for_1_location(const int &from_location, const int &target_location,
-                                          const int &number_of_circulation, std::vector<Person *> &today_circulations);
+                                          const int &number_of_circulations, std::vector<Person *> &today_circulations);
 
   bool has_0_case();
 

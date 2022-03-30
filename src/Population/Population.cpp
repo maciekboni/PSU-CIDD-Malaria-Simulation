@@ -221,6 +221,12 @@ void Population::perform_infection_event() {
 
 void Population::initialize() {
   if (model() != nullptr) {
+    // those vector will be used in the initial infection
+    individual_relative_biting_by_location =
+        std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
+    all_alive_persons_by_location =
+        std::vector<std::vector<Person*>>(Model::CONFIG->number_of_locations(), std::vector<Person*>());
+
     // get population size, number of location, age_distribution from Model::CONFIG
     //        Config* Model::CONFIG = Model::CONFIG;
 
@@ -315,6 +321,9 @@ void Population::initialize() {
           p->generate_prob_present_at_mda_by_age();
 
           add_person(p);
+
+          individual_relative_biting_by_location[loc].push_back(p->get_biting_level_value());
+          all_alive_persons_by_location[loc].push_back(p);
         }
       }
     }
@@ -659,6 +668,8 @@ void Population::persist_current_force_of_infection_to_use_N_days_later() {
 void Population::update_current_foi() {
   individual_foi_by_location =
       std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
+  individual_relative_biting_by_location =
+      std::vector<std::vector<double>>(Model::CONFIG->number_of_locations(), std::vector<double>());
   all_alive_persons_by_location =
       std::vector<std::vector<Person*>>(Model::CONFIG->number_of_locations(), std::vector<Person*>());
 
@@ -676,6 +687,7 @@ void Population::update_current_foi() {
           auto individual_foi = person->get_biting_level_value() * person->relative_infectivity(log_10_total_density);
 
           individual_foi_by_location[loc].push_back(individual_foi);
+          individual_relative_biting_by_location[loc].push_back(person->get_biting_level_value());
           all_alive_persons_by_location[loc].push_back(person);
           current_force_of_infection_by_location[loc] += individual_foi;
         }

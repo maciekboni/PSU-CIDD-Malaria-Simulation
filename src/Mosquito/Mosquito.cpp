@@ -19,8 +19,7 @@ void Mosquito::initialize(Config *config) {
   genotypes_table = std::vector<std::vector<std::vector<Genotype *>>>(
       config->number_of_tracking_days(),
       std::vector<std::vector<Genotype *>>(config->number_of_locations(),
-                                           std::vector<Genotype *>(config->mosquito_config().prmc_size, nullptr))
-  );
+                                           std::vector<Genotype *>(config->mosquito_config().prmc_size, nullptr)));
   VLOG(0) << "[Mosquito] Size: " << config->mosquito_config().prmc_size;
   if (!config->mosquito_config().interrupted_feeding_rate_raster.empty()) {
     // read from raster
@@ -41,7 +40,8 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
                                          const int &tracking_index) {
   // for each location fill prmc at tracking_index row with sampling genotypes
   for (int loc = 0; loc < config->number_of_locations(); loc++) {
-    LOG(TRACE) << "Day " << Model::SCHEDULER->current_time() << " ifr = " << Model::CONFIG->mosquito_config().interrupted_feeding_rate[loc];
+    LOG(TRACE) << "Day " << Model::SCHEDULER->current_time()
+               << " ifr = " << Model::CONFIG->mosquito_config().interrupted_feeding_rate[loc];
     // if there is no parasites in location
     if (population->current_force_of_infection_by_location[loc] <= 0) {
       for (int i = 0; i < config->mosquito_config().prmc_size; ++i) {
@@ -50,7 +50,7 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
       return;
     }
     // multinomial sampling based on relative infectivity
-    auto first_sampling = random->multinomial_sampling<Person>(
+    auto first_sampling = random->roulette_sampling<Person>(
         config->mosquito_config().prmc_size, population->individual_foi_by_location[loc],
         population->all_alive_persons_by_location[loc], false, population->current_force_of_infection_by_location[loc]);
 
@@ -58,10 +58,9 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
         random, config->mosquito_config().interrupted_feeding_rate[loc], config->mosquito_config().prmc_size);
 
     // uniform sampling in all person
-    auto all_person_distribution = std::vector<double>(population->all_alive_persons_by_location[loc].size(), 1);
-    auto second_sampling =
-        random->multinomial_sampling<Person>(config->mosquito_config().prmc_size, all_person_distribution,
-                                             population->all_alive_persons_by_location[loc], true, 1);
+    auto second_sampling = random->roulette_sampling<Person>(config->mosquito_config().prmc_size,
+                                                             population->individual_relative_biting_by_location[loc],
+                                                             population->all_alive_persons_by_location[loc], true);
 
     // recombination
     // *p1 , *p2, bool is_interrupted  ===> *genotype
@@ -93,7 +92,7 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
       }
 
       auto parent_genotypes =
-          random->multinomial_sampling<Genotype>(2, relative_infectivity_each_pp, sampling_genotypes, false);
+          random->roulette_sampling<Genotype>(2, relative_infectivity_each_pp, sampling_genotypes, false);
 
       Genotype *sampled_genotype =
           (parent_genotypes[0]->aa_sequence == parent_genotypes[1]->aa_sequence)

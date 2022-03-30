@@ -299,12 +299,16 @@ void Model::daily_update() {
   // for safety remove all dead by calling perform_death_event
   population_->perform_death_event();
   population_->perform_birth_event();
-  population_->perform_circulation_event();
-  population_->perform_infection_event();
 
-  // update current foi should be call after perform death, birth event, circulation event
-  // in order to obtain the right all alive individuals
+  // update current foi should be call after perform death, birth event
+  // in order to obtain the right all alive individuals,
+  // infection event will use pre-calculated individual relative biting rate to infect new infections
+  // circulation event will use pre-calculated individual relative moving rate to migrate individual to new location
   population_->update_current_foi();
+
+  population_->perform_infection_event();
+  population_->perform_circulation_event();
+
   // infect new mosquito cohort in prmc must be run after population perform infection event and update current foi
   // because the prmc at the tracking index will be overridden with new cohort to use N days later and
   // infection event used the prmc at the tracking index for the today infection
