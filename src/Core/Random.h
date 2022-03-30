@@ -14,6 +14,7 @@
 
 #include "PropertyMacro.h"
 #include "Strategies/AdaptiveCyclingStrategy.h"
+#include "easylogging++.h"
 
 class Model;
 
@@ -145,7 +146,7 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   for (auto pi = 0; pi < distribution.size(); pi++) {
     auto weight = distribution[pi];
     sum_weight += weight;
-    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight) {
+    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] <= sum_weight) {
       samples[uniform_sampling_index] = all_objects[pi];
       uniform_sampling_index++;
     }
@@ -153,6 +154,11 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
       break;
     }
   }
+
+  if (uniform_sampling_index != number_of_samples) {
+    LOG(FATAL) << "Error in roulette sampling";
+  }
+
   if (is_shuffled) {
     random_shuffle(&samples[0], samples.size(), sizeof(T *));
   }

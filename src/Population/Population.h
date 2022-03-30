@@ -47,6 +47,9 @@ public:
   std::vector<std::vector<double>> individual_relative_biting_by_location;
   std::vector<std::vector<double>> individual_relative_moving_by_location;
 
+  std::vector<double> sum_relative_biting_by_location;
+  std::vector<double> sum_relative_moving_by_location;
+
   std::vector<double> current_force_of_infection_by_location;
   std::vector<std::vector<double>> force_of_infection_for_N_days_by_location;
   std::vector<std::vector<Person *>> all_alive_persons_by_location;
