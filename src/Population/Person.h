@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Person.h
  * Author: nguyentran
  *
@@ -6,16 +6,15 @@
  */
 
 #ifndef PERSON_H
-#define    PERSON_H
+#define PERSON_H
 
+#include "ClonalParasitePopulation.h"
+#include "Core/Dispatcher.h"
+#include "Core/ObjectPool.h"
 #include "Core/PropertyMacro.h"
 #include "Properties/PersonIndexAllHandler.h"
-#include "Properties/PersonIndexByLocationStateAgeClassHandler.h"
-#include "Core/ObjectPool.h"
-#include "Core/Dispatcher.h"
-#include "Properties/PersonIndexByLocationBittingLevelHandler.h"
 #include "Properties/PersonIndexByLocationMovingLevelHandler.h"
-#include "ClonalParasitePopulation.h"
+#include "Properties/PersonIndexByLocationStateAgeClassHandler.h"
 
 class Population;
 
@@ -49,11 +48,11 @@ class DrugsInBlood;
 
 class Genotype;
 
-class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAgeClassHandler,
-               public PersonIndexByLocationBittingLevelHandler, public PersonIndexByLocationMovingLevelHandler,
+class Person : public PersonIndexAllHandler,
+               public PersonIndexByLocationStateAgeClassHandler,
+               public PersonIndexByLocationMovingLevelHandler,
                public Dispatcher {
- public:
-
+public:
   enum Property {
     LOCATION = 0,
     HOST_STATE,
@@ -64,67 +63,58 @@ class Person : public PersonIndexAllHandler, public PersonIndexByLocationStateAg
     EXTERNAL_POPULATION_MOVING_LEVEL
   };
 
-  enum HostStates {
-    SUSCEPTIBLE = 0,
-    EXPOSED = 1,
-    ASYMPTOMATIC = 2,
-    CLINICAL = 3,
-    DEAD = 4,
-    NUMBER_OF_STATE = 5
-  };
+  enum HostStates { SUSCEPTIBLE = 0, EXPOSED = 1, ASYMPTOMATIC = 2, CLINICAL = 3, DEAD = 4, NUMBER_OF_STATE = 5 };
 
- OBJECTPOOL(Person)
+  OBJECTPOOL(Person)
 
- DISALLOW_COPY_AND_ASSIGN(Person)
+  DISALLOW_COPY_AND_ASSIGN(Person)
 
- DISALLOW_MOVE(Person)
+  DISALLOW_MOVE(Person)
 
- POINTER_PROPERTY(Population, population)
+  POINTER_PROPERTY(Population, population)
 
- PROPERTY_HEADER(int, location)
+  PROPERTY_HEADER(int, location)
 
- PROPERTY_REF(int, residence_location)
+  PROPERTY_REF(int, residence_location)
 
- PROPERTY_HEADER(HostStates, host_state)
+  PROPERTY_HEADER(HostStates, host_state)
 
- PROPERTY_HEADER(int, age)
+  PROPERTY_HEADER(int, age)
 
- PROPERTY_HEADER(int, age_class)
+  PROPERTY_HEADER(int, age_class)
 
   // birthday has the unit of time in the scheduler
   // if birthday is -100 which is that person was born 100 day before the simulation start
- PROPERTY_REF(int, birthday)
+  PROPERTY_REF(int, birthday)
 
- POINTER_PROPERTY_HEADER(ImmuneSystem, immune_system)
+  POINTER_PROPERTY_HEADER(ImmuneSystem, immune_system)
 
- POINTER_PROPERTY(SingleHostClonalParasitePopulations, all_clonal_parasite_populations)
+  POINTER_PROPERTY(SingleHostClonalParasitePopulations, all_clonal_parasite_populations)
 
- VIRTUAL_PROPERTY_REF(int, latest_update_time)
+  VIRTUAL_PROPERTY_REF(int, latest_update_time)
 
- PROPERTY_HEADER(int, bitting_level)
+  PROPERTY_HEADER(int, moving_level)
 
- PROPERTY_REF(double, base_bitting_level_value)
+  POINTER_PROPERTY(DrugsInBlood, drugs_in_blood)
 
- PROPERTY_HEADER(int, moving_level)
+  POINTER_PROPERTY(Genotype, liver_parasite_type)
 
- POINTER_PROPERTY(DrugsInBlood, drugs_in_blood)
+  POINTER_PROPERTY(IntVector, today_infections)
 
- POINTER_PROPERTY(Genotype, liver_parasite_type)
+  POINTER_PROPERTY(IntVector, today_target_locations)
 
- POINTER_PROPERTY(IntVector, today_infections)
+  PROPERTY_REF(int, number_of_times_bitten)
 
- POINTER_PROPERTY(IntVector, today_target_locations)
-
- PROPERTY_REF(int, number_of_times_bitten)
-
- PROPERTY_REF(int, number_of_trips_taken)
+  PROPERTY_REF(int, number_of_trips_taken)
   //    PROPERTY_REF(bool, is_tracking_treatment_number);
- PROPERTY_REF(int, last_therapy_id)
+  PROPERTY_REF(int, last_therapy_id)
 
- PROPERTY_REF(std::vector<double>, prob_present_at_mda_by_age)
+  PROPERTY_REF(std::vector<double>, prob_present_at_mda_by_age)
 
 public:
   std::map<int, double> starting_drug_values_for_MAC;
+  double innate_relative_biting_rate { 0 };
+  double current_relative_biting_rate { 0 };
 
 public:
   Person();
@@ -139,15 +129,12 @@ public:
   //    Config* config();
   //    Random* random();
 
-
   void NotifyChange(const Property &property, const void *oldValue, const void *newValue);
 
   virtual void increase_age_by_1_year();
 
   //    BloodParasite* add_new_parasite_to_blood(Genotype* parasite_type);
   ClonalParasitePopulation *add_new_parasite_to_blood(Genotype *parasite_type) const;
-
-  virtual double get_biting_level_value();
 
   static double relative_infectivity(const double &log10_parasite_density);
 
@@ -223,7 +210,7 @@ public:
 
   double get_age_dependent_biting_factor() const;
 
-  void update_bitting_level();
+  void update_relative_bitting_rate();
 
   double p_infection_from_an_infectious_bite() const;
 
@@ -236,4 +223,4 @@ public:
   bool has_effective_drug_in_blood() const;
 };
 
-#endif    /* PERSON_H */
+#endif /* PERSON_H */

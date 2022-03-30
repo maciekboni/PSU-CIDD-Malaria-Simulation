@@ -65,6 +65,8 @@ int main(const int argc, char **argv) {
   }
 #endif
 
+  auto start = std::chrono::high_resolution_clock::now();
+
   // Parse the CLI
   auto *m = new Model();
   handle_cli(m, argc, argv);
@@ -79,6 +81,11 @@ int main(const int argc, char **argv) {
 
   // Clean-up and return
   delete m;
+
+  auto stop = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+
+  LOG(INFO) << fmt::format("Running times: {}s", duration.count());
   exit(EXIT_SUCCESS);
 }
 

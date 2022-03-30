@@ -58,7 +58,7 @@ public:
 
   virtual double random_beta(const double &alpha, const double &beta);
 
-  virtual double random_gamma(const double &shape, const double &scale);
+  virtual double random_gamma(const double &a, const double &b);
 
   virtual double cdf_gamma_distribution(const double &x, const double &alpha, const double &beta);
 
@@ -91,25 +91,25 @@ template <class T>
 std::vector<T *> Random::multinomial_sampling(int size, std::vector<double> &distribution,
                                               std::vector<T *> &all_objects, bool is_shuffled,
                                               double sum_distribution) {
+  std::vector<T *> samples(size, nullptr);
   if (sum_distribution == 0) {
-    return std::vector<T *>(size, nullptr);
+    return samples;
   } else if (sum_distribution < 0) {
     auto found = std::find_if(distribution.begin(), distribution.end(), [](double d) { return d > 0; });
 
     if (found == distribution.end()) {
-      return std::vector<T *>(size, nullptr);
+      return samples;
     }
   }
 
-  std::vector<T *> samples;
   std::vector<unsigned int> hit_per_object(distribution.size());
   random_multinomial(distribution.size(), size, &distribution[0], &hit_per_object[0]);
 
-  samples.reserve(size);
-
+  auto index = 0;
   for (auto i = 0; i < hit_per_object.size(); i++) {
     for (int j = 0; j < hit_per_object[i]; ++j) {
-      samples.push_back(all_objects[i]);
+      samples[index] = all_objects[i];
+      index++;
     }
   }
   if (is_shuffled) {
@@ -121,9 +121,10 @@ std::vector<T *> Random::multinomial_sampling(int size, std::vector<double> &dis
 template <class T>
 std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<double> &distribution,
                                            std::vector<T *> &all_objects, bool is_shuffled, double sum_distribution) {
+  std::vector<T *> samples(number_of_samples, nullptr);
   double sum { sum_distribution };
   if (sum_distribution == 0) {
-    return std::vector<T *>(number_of_samples, nullptr);
+    return samples;
   } else if (sum_distribution < 0) {
     sum = 0;
     for (auto d : distribution) {
@@ -138,19 +139,17 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
 
   std::sort(uniform_sampling.begin(), uniform_sampling.end());
 
-  std::vector<T *> samples;
-  samples.reserve(number_of_samples);
   double sum_weight = 0;
   int uniform_sampling_index = 0;
 
   for (auto pi = 0; pi < distribution.size(); pi++) {
     auto weight = distribution[pi];
     sum_weight += weight;
-    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight ) {
+    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight) {
+      samples[uniform_sampling_index] = all_objects[pi];
       uniform_sampling_index++;
-      samples.push_back(all_objects[pi]);
     }
-    if(uniform_sampling_index == number_of_samples){
+    if (uniform_sampling_index == number_of_samples) {
       break;
     }
   }

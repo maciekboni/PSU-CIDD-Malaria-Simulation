@@ -67,7 +67,7 @@ location_db:
   beta_by_location: [ 0.09 ]
 
   #if the number of values less than number of locations, the first value will be applied for all locations
-  population_size_by_location: [ 500000 ]
+  population_size_by_location: [ 50000 ]
   #spatial_model could be Gravity, Barabasi, or Wesolowski
 
 # seasonality parameters for all location
@@ -852,4 +852,4 @@ sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
 #Mosquito
 mosquito_config:
   interrupted_feeding_rate: [0.19]
-  prmc_size: 40
+  prmc_size: 800

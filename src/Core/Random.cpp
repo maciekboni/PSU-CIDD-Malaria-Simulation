@@ -99,10 +99,10 @@ double Random::random_beta(const double &alpha, const double &beta) {
 // and alpha*beta^2 = variance
 //
 
-double Random::random_gamma(const double &shape, const double &scale) {
+double Random::random_gamma(const double &a, const double &b) {
   // if beta =0, alpha = means
-  if (NumberHelpers::is_equal(scale, 0.0)) return shape;
-  return gsl_ran_gamma(G_RNG, shape, scale);
+  if (NumberHelpers::is_equal(b, 0.0)) return a;
+  return gsl_ran_gamma(G_RNG, a, b);
 }
 
 double Random::cdf_gamma_distribution(const double &x, const double &alpha, const double &beta) {

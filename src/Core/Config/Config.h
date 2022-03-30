@@ -138,8 +138,6 @@ public:
 
   CUSTOM_CONFIG_ITEM(preconfig_population_events, std::vector<Event *>())
 
-  CUSTOM_CONFIG_ITEM(bitting_level_generator, MultinomialDistributionGenerator())
-
   CUSTOM_CONFIG_ITEM(moving_level_generator, MultinomialDistributionGenerator())
 
   CUSTOM_CONFIG_ITEM(prob_individual_present_at_mda_distribution, std::vector<beta_distribution_params>())
