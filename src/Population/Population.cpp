@@ -610,7 +610,7 @@ void Population::update_current_foi() {
   for (int loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
     // reset force of infection for each location
     current_force_of_infection_by_location[loc] = 0.0;
-    sum_relative_moving_by_location[loc] = 0.0;
+    sum_relative_biting_by_location[loc] = 0.0;
     sum_relative_moving_by_location[loc] = 0.0;
 
     individual_foi_by_location[loc].clear();
@@ -633,7 +633,7 @@ void Population::update_current_foi() {
           individual_relative_moving_by_location[loc].push_back(
               Model::CONFIG->circulation_info().v_moving_level_value[person->moving_level()]);
 
-          sum_relative_moving_by_location[loc] += person->current_relative_biting_rate;
+          sum_relative_biting_by_location[loc] += person->current_relative_biting_rate;
           sum_relative_moving_by_location[loc] +=
               Model::CONFIG->circulation_info().v_moving_level_value[person->moving_level()];
           current_force_of_infection_by_location[loc] += individual_foi;

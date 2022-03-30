@@ -8,6 +8,7 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#include <fmt/format.h>
 #include <gsl/gsl_rng.h>
 
 #include <algorithm>
@@ -144,8 +145,7 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   int uniform_sampling_index = 0;
 
   for (auto pi = 0; pi < distribution.size(); pi++) {
-    auto weight = distribution[pi];
-    sum_weight += weight;
+    sum_weight += distribution[pi];
     while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] <= sum_weight) {
       samples[uniform_sampling_index] = all_objects[pi];
       uniform_sampling_index++;
@@ -155,8 +155,9 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
     }
   }
 
-  if (uniform_sampling_index != number_of_samples) {
-    LOG(FATAL) << "Error in roulette sampling";
+  if (uniform_sampling_index < number_of_samples) {
+    LOG(FATAL) << fmt::format("Error in roulette sampling. Sum weight: {}. Sum distribution: {}", sum_weight,
+                              sum_distribution);
   }
 
   if (is_shuffled) {
