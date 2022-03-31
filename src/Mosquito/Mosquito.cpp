@@ -64,27 +64,19 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
 
     // recombination
     // *p1 , *p2, bool is_interrupted  ===> *genotype
+    std::vector<Genotype *> sampling_genotypes;
+    std::vector<double> relative_infectivity_each_pp;
     for (int if_index = 0; if_index < interrupted_feeding_indices.size(); ++if_index) {
-      std::vector<Person *> sampling_persons;
+      // clear() is used to avoid memory reallocation
+      sampling_genotypes.clear();
+      relative_infectivity_each_pp.clear();
+
+      // get all infectious parasites from first person
+      get_genotypes_profile_from_person(first_sampling[if_index], sampling_genotypes, relative_infectivity_each_pp);
+
       if (interrupted_feeding_indices[if_index]) {
         // interrupted feeding occurs
-        // select person 1 and person 2
-        sampling_persons.push_back(first_sampling[if_index]);
-        sampling_persons.push_back(second_sampling[if_index]);
-      } else {
-        // no interrupted feeding
-        // select only person 1
-        sampling_persons.push_back(first_sampling[if_index]);
-      }
-
-      std::vector<Genotype *> sampling_genotypes;
-      std::vector<double> relative_infectivity_each_pp;
-      for (auto *person : sampling_persons) {
-        for (auto *pp : *person->all_clonal_parasite_populations()->parasites()) {
-          relative_infectivity_each_pp.push_back(
-              pp->gametocyte_level() * Person::relative_infectivity(pp->last_update_log10_parasite_density()));
-          sampling_genotypes.push_back(pp->genotype());
-        }
+        get_genotypes_profile_from_person(second_sampling[if_index], sampling_genotypes, relative_infectivity_each_pp);
       }
 
       if (sampling_genotypes.empty()) {
@@ -119,4 +111,12 @@ int Mosquito::random_genotype(int location, int tracking_index) {
   auto genotype_index = Model::RANDOM->random_uniform_int(0, Model::CONFIG->mosquito_config().prmc_size);
 
   return genotypes_table[tracking_index][location][genotype_index]->genotype_id;
+}
+void Mosquito::get_genotypes_profile_from_person(Person *person, std::vector<Genotype *> &sampling_genotypes,
+                                                 std::vector<double> &relative_infectivity_each_pp) {
+  for (auto *pp : *person->all_clonal_parasite_populations()->parasites()) {
+    relative_infectivity_each_pp.push_back(
+        pp->gametocyte_level() * Person::relative_infectivity(pp->last_update_log10_parasite_density()));
+    sampling_genotypes.push_back(pp->genotype());
+  }
 }

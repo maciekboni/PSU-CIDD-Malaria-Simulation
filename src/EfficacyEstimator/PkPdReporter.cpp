@@ -37,7 +37,7 @@ void PkPdReporter::begin_time_step() {
   for (int i = 0; i < Model::POPULATION->all_persons()->vPerson().size(); i++) {
     auto p_person = Model::POPULATION->all_persons()->vPerson()[i];
     if (p_person->all_clonal_parasite_populations()->size() > 0) {
-      ss << sep << p_person->all_clonal_parasite_populations()->parasites()->at(0)->get_log10_relative_density();
+      ss << sep << p_person->all_clonal_parasite_populations()->parasites()->at(0)->get_log10_infectious_density();
     } else {
       ss << sep << Model::CONFIG->parasite_density_level().log_parasite_density_cured;
     }

@@ -26,7 +26,7 @@ OBJECTPOOL_IMPL(SingleHostClonalParasitePopulations)
 SingleHostClonalParasitePopulations::SingleHostClonalParasitePopulations(Person* person)
     : person_(person),
       parasites_(nullptr),
-      log10_total_relative_density_(ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY) {}
+      log10_total_infectious_denstiy(ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY) {}
 
 void SingleHostClonalParasitePopulations::init() {
   parasites_ = new std::vector<ClonalParasitePopulation*>();
@@ -84,71 +84,6 @@ void SingleHostClonalParasitePopulations::remove(const int& index) {
   bp = nullptr;
 }
 
-// return normalized parasite density and log 10 total infectious density
-void SingleHostClonalParasitePopulations::get_parasites_profiles(std::vector<double>& relative_parasite_density,
-                                                                 double& log10_total_relative_density) const {
-  auto i = 0;
-
-  while ((i < parasites_->size())
-         && (NumberHelpers::is_equal(parasites_->at(i)->get_log10_relative_density(),
-                                     ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY))) {
-    relative_parasite_density[i] = 0.0;
-    i++;
-  }
-
-  if (i == parasites_->size()) {
-    log10_total_relative_density = ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY;
-    return;
-  }
-
-  log10_total_relative_density = parasites_->at(i)->get_log10_relative_density();
-  relative_parasite_density[i] = (log10_total_relative_density);
-
-  for (auto j = i + 1; j < parasites_->size(); j++) {
-    const auto log10_relative_density = parasites_->at(j)->get_log10_relative_density();
-
-    if (NumberHelpers::is_enot_qual(log10_relative_density, ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY)) {
-      relative_parasite_density[j] = (log10_relative_density);
-      log10_total_relative_density += log10(pow(10, log10_relative_density - log10_total_relative_density) + 1);
-    } else {
-      relative_parasite_density[j] = (0.0);
-    }
-  }
-
-  // normalize
-  for (auto j = 0; j < parasites_->size(); j++) {
-    if (NumberHelpers::is_enot_qual(relative_parasite_density[j], 0.0)) {
-      relative_parasite_density[j] = pow(10, relative_parasite_density[j] - log10_total_relative_density);
-    }
-  }
-}
-
-double SingleHostClonalParasitePopulations::get_log10_total_relative_density() {
-  auto i = 0;
-
-  while ((i < parasites_->size())
-         && (NumberHelpers::is_equal(parasites_->at(i)->get_log10_relative_density(),
-                                     ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY))) {
-    i++;
-  }
-
-  if (i == parasites_->size()) {
-    return ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY;
-  }
-
-  auto log10_total_relative_density = parasites_->at(i)->get_log10_relative_density();
-
-  for (int j = i + 1; j < parasites_->size(); j++) {
-    const auto log10_relative_density = parasites_->at(j)->get_log10_relative_density();
-
-    if (NumberHelpers::is_enot_qual(log10_relative_density, ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY)) {
-      log10_total_relative_density += log10(pow(10, log10_relative_density - log10_total_relative_density) + 1);
-    }
-  }
-
-  return log10_total_relative_density;
-}
-
 int SingleHostClonalParasitePopulations::latest_update_time() const {
   return person_->latest_update_time();
 }
@@ -176,19 +111,26 @@ void SingleHostClonalParasitePopulations::change_all_parasite_update_function(Pa
   }
 }
 
-void SingleHostClonalParasitePopulations::update() const {
+void SingleHostClonalParasitePopulations::update() {
   for (auto* bp : *parasites_) {
     bp->update();
   }
-  //    std::vector<BloodParasite*>(*parasites_).swap(*parasites_);
 }
 
 void SingleHostClonalParasitePopulations::clear_cured_parasites() {
+  log10_total_infectious_denstiy = ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY;
   //    std::vector<int> cured_parasites_index;
   for (int i = parasites_->size() - 1; i >= 0; i--) {
     if (parasites_->at(i)->last_update_log10_parasite_density()
         <= Model::CONFIG->parasite_density_level().log_parasite_density_cured + 0.00001) {
       remove(i);
+    } else {
+      if (log10_total_infectious_denstiy == ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY) {
+        log10_total_infectious_denstiy = (*parasites_)[i]->get_log10_infectious_density();
+      } else {
+        log10_total_infectious_denstiy +=
+            log10(pow(10, (*parasites_)[i]->get_log10_infectious_density() - log10_total_infectious_denstiy) + 1);
+      }
     }
   }
 }
@@ -216,10 +158,11 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
         if (new_genotype != blood_parasite->genotype()) {
           // mutation occurs
           Model::DATA_COLLECTOR->record_1_mutation(person_->location(), blood_parasite->genotype(), new_genotype);
-//          LOG(TRACE) << Model::SCHEDULER->current_time() << "\t" << blood_parasite->genotype()->genotype_id << "\t"
-//                     << new_genotype->genotype_id << "\t"
-//                     << blood_parasite->genotype()->get_EC50_power_n(drug->drug_type()) << "\t"
-//                     << new_genotype->get_EC50_power_n(drug->drug_type());
+          //          LOG(TRACE) << Model::SCHEDULER->current_time() << "\t" << blood_parasite->genotype()->genotype_id
+          //          << "\t"
+          //                     << new_genotype->genotype_id << "\t"
+          //                     << blood_parasite->genotype()->get_EC50_power_n(drug->drug_type()) << "\t"
+          //                     << new_genotype->get_EC50_power_n(drug->drug_type());
           blood_parasite->set_genotype(new_genotype);
         }
       }

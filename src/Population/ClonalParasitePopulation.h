@@ -47,7 +47,7 @@ class ClonalParasitePopulation : public IndexHandler {
 
   double get_current_parasite_density(const int &current_time);
 
-  double get_log10_relative_density() const;
+  double get_log10_infectious_density() const;
 
   bool resist_to(const int &drug_id) const;
 

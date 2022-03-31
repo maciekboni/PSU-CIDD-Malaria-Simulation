@@ -37,6 +37,10 @@ public:
       Random *random, const double &interrupted_feeding_rate, const int &prmc_size);
 
   int random_genotype(int location, int tracking_index);
+
+  // this function will populate values for both parasite densities and genotypes that carried by a person
+  void get_genotypes_profile_from_person(Person *person, std::vector<Genotype *> &sampling_genotypes,
+                                         std::vector<double> &relative_infectivity_each_pp);
 };
 
 #endif  // POMS_SRC_MOSQUITO_MOSQUITO_H

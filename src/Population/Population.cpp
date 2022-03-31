@@ -383,6 +383,7 @@ void Population::initial_infection(Person* person, Genotype* parasite_type) cons
     blood_parasite->set_update_function(model_->immunity_clearance_update_function());
   }
 }
+
 void Population::perform_birth_event() {
   //    std::cout << "Birth Event" << std::endl;
 
@@ -613,6 +614,7 @@ void Population::update_current_foi() {
     sum_relative_biting_by_location[loc] = 0.0;
     sum_relative_moving_by_location[loc] = 0.0;
 
+    // using clear so as system will not reallocate memory slot for vector
     individual_foi_by_location[loc].clear();
     individual_relative_biting_by_location[loc].clear();
     individual_relative_moving_by_location[loc].clear();
@@ -621,9 +623,7 @@ void Population::update_current_foi() {
     for (int hs = 0; hs < Person::DEAD; hs++) {
       for (int ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++) {
         for (auto* person : pi->vPerson()[loc][hs][ac]) {
-          std::vector<double> relative_density(person->all_clonal_parasite_populations()->size(), 0.0);
-          double log_10_total_density;
-          person->all_clonal_parasite_populations()->get_parasites_profiles(relative_density, log_10_total_density);
+          double log_10_total_density = person->all_clonal_parasite_populations()->log10_total_infectious_denstiy;
 
           auto individual_foi =
               person->current_relative_biting_rate * Person::relative_infectivity(log_10_total_density);
