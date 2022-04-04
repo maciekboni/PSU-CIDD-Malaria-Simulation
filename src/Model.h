@@ -61,6 +61,8 @@ class Model {
 
  PROPERTY_REF(int, cluster_job_number)
 
+ PROPERTY_REF(std::string, output_path)
+
  PROPERTY_REF(std::string, tme_filename)
 
  PROPERTY_REF(std::string, override_parameter_filename)
