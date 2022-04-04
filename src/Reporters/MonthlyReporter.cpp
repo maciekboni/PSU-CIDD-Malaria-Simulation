@@ -23,10 +23,10 @@ MonthlyReporter::MonthlyReporter() = default;
 MonthlyReporter::~MonthlyReporter() = default;
 
 void MonthlyReporter::initialize() {
-  gene_freq_file.open(fmt::format("gene_freq_{}.txt", Model::MODEL->cluster_job_number()));
-  monthly_data_file.open(fmt::format("monthly_data_{}.txt", Model::MODEL->cluster_job_number()));
-  summary_data_file.open(fmt::format("summary_{}.txt", Model::MODEL->cluster_job_number()));
-  gene_db_file.open(fmt::format("gene_db_{}.txt", Model::MODEL->cluster_job_number()));
+  gene_freq_file.open(fmt::format("{}/gene_freq_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+  monthly_data_file.open(fmt::format("{}/monthly_data_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+  summary_data_file.open(fmt::format("{}/summary_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+  gene_db_file.open(fmt::format("{}/gene_db_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
 }
 
 void MonthlyReporter::before_run() {}

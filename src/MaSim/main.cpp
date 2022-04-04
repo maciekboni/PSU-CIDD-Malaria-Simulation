@@ -28,7 +28,7 @@ static const bool SET_TERMINATE = std::set_terminate(crit_err_terminate);
 
 // Settings read from the CLI
 int job_number = 0;
-std::string path("");
+std::string path(".");
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -98,7 +98,7 @@ void handle_cli(Model *model, int argc, char **argv) {
                                           { 'i', 'c', "input", "config" });
   args::ValueFlag<int> cluster_job_number(commands, "int", "Cluster job number. \nEx: MaSim -j 1", { 'j' });
   args::ValueFlag<std::string> reporter(commands, "string", "Reporter Type. \nEx: MaSim -r mmc", { 'r' });
-  args::ValueFlag<std::string> input_path(
+  args::ValueFlag<std::string> output_path(
       commands, "string", "Path for output files, default is current directory. \nEx: MaSim -p out", { 'o' });
 
   // Allow the --v=[int] flag to be processed by START_EASYLOGGINGPP
@@ -127,7 +127,8 @@ void handle_cli(Model *model, int argc, char **argv) {
   model->set_config_filename(input);
 
   // Set the remaining values if given
-  path = input_path ? args::get(input_path) : path;
+  path = output_path ? args::get(output_path) : path;
+  Model::MODEL->set_output_path(path);
   job_number = cluster_job_number ? args::get(cluster_job_number) : 0;
   model->set_cluster_job_number(job_number);
   const auto reporter_type = reporter ? args::get(reporter) : "";
