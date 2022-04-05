@@ -209,7 +209,7 @@ PROPERTY_REF(LongVector, number_of_mutation_events_by_year)
 PROPERTY_REF(long, current_number_of_mutation_events_in_this_year)
 
 
-  static const int number_of_reported_MOI = 8;
+  static const int number_of_reported_MOI = 10;
 
 public:
   explicit ModelDataCollector(Model* model = nullptr);
