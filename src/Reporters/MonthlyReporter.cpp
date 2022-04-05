@@ -59,6 +59,12 @@ void MonthlyReporter::monthly_report() {
     ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
   }
   ss << group_sep;
+  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    for(auto moi : Model::DATA_COLLECTOR->multiple_of_infection_by_location()[loc]){
+      ss << moi << sep;
+    }
+  }
+  ss << group_sep;
 
   // including total number of positive individuals
   //  ReporterUtils::output_genotype_frequency3(ss, Model::CONFIG->genotype_db.size(),

@@ -336,17 +336,17 @@ void ModelDataCollector::perform_population_statistic() {
 
           int moi = p->all_clonal_parasite_populations()->size();
 
+
+          if (moi > number_of_reported_MOI) {
+            multiple_of_infection_by_location_[loc][number_of_reported_MOI - 1]++;
+          } else {
+            multiple_of_infection_by_location_[loc][moi]++;
+          }
+
           if (moi > 0) {
             sum_moi += moi;
-
             total_parasite_population_by_location_[loc] += moi;
             total_parasite_population_by_location_age_group_[loc][p->age_class()] += moi;
-
-            if (moi > number_of_reported_MOI) {
-              //                            multiple_of_infection_by_location_[loc][number_of_reported_MOI - 1]++;
-            } else {
-              multiple_of_infection_by_location_[loc][moi - 1]++;
-            }
           }
 
           if (p->age() < 79) {
