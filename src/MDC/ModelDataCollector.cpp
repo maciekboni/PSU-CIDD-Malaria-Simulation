@@ -337,7 +337,7 @@ void ModelDataCollector::perform_population_statistic() {
           int moi = p->all_clonal_parasite_populations()->size();
 
 
-          if (moi > number_of_reported_MOI) {
+          if (moi >= number_of_reported_MOI) {
             multiple_of_infection_by_location_[loc][number_of_reported_MOI - 1]++;
           } else {
             multiple_of_infection_by_location_[loc][moi]++;
