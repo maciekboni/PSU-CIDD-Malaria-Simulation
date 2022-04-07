@@ -49,7 +49,7 @@ Person::Person()
       age_class_(-1),
       birthday_(-1),
       latest_update_time_(-1),
-      innate_relative_biting_rate{0},
+      innate_relative_biting_rate { 0 },
       moving_level_(-1),
       liver_parasite_type_(nullptr),
       number_of_times_bitten_(0),
@@ -497,7 +497,7 @@ void Person::update() {
 void Person::update_relative_bitting_rate() {
   if (Model::CONFIG->using_age_dependent_bitting_level()) {
     current_relative_biting_rate = innate_relative_biting_rate * get_age_dependent_biting_factor();
-  }else{
+  } else {
     current_relative_biting_rate = innate_relative_biting_rate;
   }
 }
@@ -698,4 +698,16 @@ bool Person::has_effective_drug_in_blood() const {
     if (kv_drug.second->last_update_value() > 0.5) return true;
   }
   return false;
+}
+double Person::draw_random_relative_biting_rate(Random* pRandom, Config* pConfig) {
+  auto result =
+      pRandom->random_gamma(pConfig->relative_bitting_info().gamma_a, pConfig->relative_bitting_info().gamma_b);
+
+  while (result > (pConfig->relative_bitting_info().max_relative_biting_value
+                   - pConfig->relative_bitting_info().min_relative_biting_value)) {
+    // re-draw
+    result = pRandom->random_gamma(pConfig->relative_bitting_info().gamma_a, pConfig->relative_bitting_info().gamma_b);
+  }
+
+  return result + pConfig->relative_bitting_info().min_relative_biting_value;
 }

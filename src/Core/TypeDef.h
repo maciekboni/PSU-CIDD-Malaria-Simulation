@@ -136,6 +136,7 @@ struct ParasiteDensityLevel {
 
 struct RelativeBittingInformation {
   double max_relative_biting_value;
+  double min_relative_biting_value;
   int number_of_biting_levels;
 
   double scale;

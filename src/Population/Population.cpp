@@ -291,8 +291,7 @@ void Population::initialize() {
           p->immune_system()->set_increase(false);
           //                    p->draw_random_immune();
 
-          p->innate_relative_biting_rate = Model::RANDOM->random_gamma(Model::CONFIG->relative_bitting_info().gamma_a,
-                                                                       Model::CONFIG->relative_bitting_info().gamma_b);
+          p->innate_relative_biting_rate = Person::draw_random_relative_biting_rate(Model::RANDOM, Model::CONFIG);
           p->update_relative_bitting_rate();
 
           p->set_moving_level(Model::CONFIG->moving_level_generator().draw_random_level(Model::RANDOM));
@@ -416,8 +415,7 @@ void Population::give_1_birth(const int& location) {
   //                    p->draw_random_immune();
 
   // set_relative_biting_rate
-  p->innate_relative_biting_rate = Model::RANDOM->random_gamma(Model::CONFIG->relative_bitting_info().gamma_a,
-                                                               Model::CONFIG->relative_bitting_info().gamma_b);
+  p->innate_relative_biting_rate = Person::draw_random_relative_biting_rate(Model::RANDOM, Model::CONFIG);
   p->update_relative_bitting_rate();
 
   p->set_moving_level(Model::CONFIG->moving_level_generator().draw_random_level(Model::RANDOM));

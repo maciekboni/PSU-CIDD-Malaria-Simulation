@@ -221,6 +221,8 @@ public:
   double prob_present_at_mda();
 
   bool has_effective_drug_in_blood() const;
+
+  static double draw_random_relative_biting_rate(Random *pRandom, Config *pConfig);
 };
 
 #endif /* PERSON_H */

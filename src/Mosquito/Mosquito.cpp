@@ -112,6 +112,7 @@ int Mosquito::random_genotype(int location, int tracking_index) {
 
   return genotypes_table[tracking_index][location][genotype_index]->genotype_id;
 }
+
 void Mosquito::get_genotypes_profile_from_person(Person *person, std::vector<Genotype *> &sampling_genotypes,
                                                  std::vector<double> &relative_infectivity_each_pp) {
   for (auto *pp : *person->all_clonal_parasite_populations()->parasites()) {

@@ -653,6 +653,7 @@ min_dosing_days: 1
 # exponentially distributed biting rate
 relative_bitting_info:
   max_relative_biting_value: 35
+  min_relative_biting_value: 0.35
   number_of_biting_levels: 100
   biting_level_distribution:
     #  distribution: Exponential
