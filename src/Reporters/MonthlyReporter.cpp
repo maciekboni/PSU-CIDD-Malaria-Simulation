@@ -105,6 +105,14 @@ void MonthlyReporter::after_run()
 
   ss << (sum_ntf * 100 / pop_size) / total_time_in_years << sep;
 
+  ss << group_sep;
+  for (auto location = 0; location < Model::CONFIG->number_of_locations(); location++)
+  {
+    for (auto age = 0; age < 60; age++){
+      ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location_age()[location][age]/total_time_in_years/Model::DATA_COLLECTOR->popsize_by_location_age()[location][age] << sep;
+    }
+  }
+
   CLOG(INFO, "summary_reporter") << ss.str();
   ss.str("");
 
