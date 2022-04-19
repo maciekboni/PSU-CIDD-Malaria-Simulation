@@ -621,10 +621,13 @@ void Population::update_current_foi() {
     for (int hs = 0; hs < Person::DEAD; hs++) {
       for (int ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++) {
         for (auto* person : pi->vPerson()[loc][hs][ac]) {
-          double log_10_total_density = person->all_clonal_parasite_populations()->log10_total_infectious_denstiy;
+          double log_10_total_infectious_density =
+              person->all_clonal_parasite_populations()->log10_total_infectious_denstiy;
 
-          auto individual_foi =
-              person->current_relative_biting_rate * Person::relative_infectivity(log_10_total_density);
+          auto individual_foi = log_10_total_infectious_density == ClonalParasitePopulation::LOG_ZERO_PARASITE_DENSITY
+                                    ? 0.0
+                                    : person->current_relative_biting_rate
+                                          * Person::relative_infectivity(log_10_total_infectious_density);
 
           individual_foi_by_location[loc].push_back(individual_foi);
           individual_relative_biting_by_location[loc].push_back(person->current_relative_biting_rate);
