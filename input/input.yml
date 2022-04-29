@@ -937,3 +937,5 @@ sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
 mosquito_config:
   interrupted_feeding_rate: [0.19]
   prmc_size: 40
+
+within_host_induced_free_recombination: true

@@ -110,6 +110,8 @@ public:
 
   CONFIG_ITEM(within_chromosome_recombination_rate, double, 0)
 
+  CONFIG_ITEM(within_host_induced_free_recombination, bool, true)
+
   CUSTOM_CONFIG_ITEM(start_of_comparison_period, 0)
 
   CUSTOM_CONFIG_ITEM(number_of_age_classes, 0)

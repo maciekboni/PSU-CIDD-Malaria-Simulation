@@ -12,6 +12,7 @@
 #include <gsl/gsl_rng.h>
 
 #include <algorithm>
+#include <tuple>
 
 #include "PropertyMacro.h"
 #include "Strategies/AdaptiveCyclingStrategy.h"
@@ -87,6 +88,13 @@ public:
   [[nodiscard]] std::vector<T *> roulette_sampling(int number_of_samples, std::vector<double> &distribution,
                                                    std::vector<T *> &all_objects, bool is_shuffled,
                                                    double sum_distribution = -1);
+
+  template <class T>
+  [[nodiscard]] std::vector<std::tuple<T *, double>> roulette_sampling_tuple(int number_of_samples,
+                                                                             std::vector<double> &distribution,
+                                                                             std::vector<T *> &all_objects,
+                                                                             bool is_shuffled,
+                                                                             double sum_distribution = -1);
 };
 
 template <class T>
@@ -145,7 +153,7 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   int uniform_sampling_index = 0;
 
   for (auto pi = 0; pi < distribution.size(); pi++) {
-    if(distribution[pi] == 0) continue;
+    if (distribution[pi] == 0) continue;
     sum_weight += distribution[pi];
     while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight) {
       samples[uniform_sampling_index] = all_objects[pi];
@@ -166,4 +174,54 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   }
   return samples;
 }
+
+template <class T>
+std::vector<std::tuple<T *, double>> Random::roulette_sampling_tuple(int number_of_samples,
+                                                                     std::vector<double> &distribution,
+                                                                     std::vector<T *> &all_objects, bool is_shuffled,
+                                                                     double sum_distribution) {
+  std::vector<std::tuple<T *, double>> samples(number_of_samples, std::make_tuple(nullptr, 0.0));
+  double sum { sum_distribution };
+  if (sum_distribution == 0) {
+    return samples;
+  } else if (sum_distribution < 0) {
+    sum = 0;
+    for (auto d : distribution) {
+      sum += d;
+    }
+  }
+
+  std::vector<double> uniform_sampling(number_of_samples, 0.0);
+  for (auto &index : uniform_sampling) {
+    index = this->random_uniform() * sum;
+  }
+
+  std::sort(uniform_sampling.begin(), uniform_sampling.end());
+
+  double sum_weight = 0;
+  int uniform_sampling_index = 0;
+
+  for (auto pi = 0; pi < distribution.size(); pi++) {
+    if (distribution[pi] == 0) continue;
+    sum_weight += distribution[pi];
+    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight) {
+      samples[uniform_sampling_index] = std::make_tuple(all_objects[pi], distribution[pi]);
+      uniform_sampling_index++;
+    }
+    if (uniform_sampling_index == number_of_samples) {
+      break;
+    }
+  }
+
+  if (uniform_sampling_index < number_of_samples) {
+    LOG(FATAL) << fmt::format("Error in roulette sampling. Sum weight: {}. Sum distribution: {}", sum_weight,
+                              sum_distribution);
+  }
+
+  if (is_shuffled) {
+    random_shuffle(&samples[0], samples.size(), sizeof(T *));
+  }
+  return samples;
+}
+
 #endif /* RANDOM_H */
