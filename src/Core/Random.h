@@ -145,8 +145,9 @@ std::vector<T *> Random::roulette_sampling(int number_of_samples, std::vector<do
   int uniform_sampling_index = 0;
 
   for (auto pi = 0; pi < distribution.size(); pi++) {
+    if(distribution[pi] == 0) continue;
     sum_weight += distribution[pi];
-    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] <= sum_weight) {
+    while (uniform_sampling_index < number_of_samples && uniform_sampling[uniform_sampling_index] < sum_weight) {
       samples[uniform_sampling_index] = all_objects[pi];
       uniform_sampling_index++;
     }

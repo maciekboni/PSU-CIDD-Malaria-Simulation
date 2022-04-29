@@ -74,6 +74,11 @@ void Mosquito::infect_new_cohort_in_PRMC(Config *config, Random *random, Populat
       // get all infectious parasites from first person
       get_genotypes_profile_from_person(first_sampling[if_index], sampling_genotypes, relative_infectivity_each_pp);
 
+      if (sampling_genotypes.empty()) {
+        LOG(FATAL) << "first person has no infectious parasites, log10_total_infectious_denstiy = "
+                   << first_sampling[if_index]->all_clonal_parasite_populations()->log10_total_infectious_denstiy;
+      }
+
       if (interrupted_feeding_indices[if_index]) {
         // interrupted feeding occurs
         get_genotypes_profile_from_person(second_sampling[if_index], sampling_genotypes, relative_infectivity_each_pp);
@@ -116,8 +121,10 @@ int Mosquito::random_genotype(int location, int tracking_index) {
 void Mosquito::get_genotypes_profile_from_person(Person *person, std::vector<Genotype *> &sampling_genotypes,
                                                  std::vector<double> &relative_infectivity_each_pp) {
   for (auto *pp : *person->all_clonal_parasite_populations()->parasites()) {
-    relative_infectivity_each_pp.push_back(
-        pp->gametocyte_level() * Person::relative_infectivity(pp->last_update_log10_parasite_density()));
-    sampling_genotypes.push_back(pp->genotype());
+    auto clonal_foi = pp->gametocyte_level() * Person::relative_infectivity(pp->last_update_log10_parasite_density());
+    if (clonal_foi > 0) {
+      relative_infectivity_each_pp.push_back(clonal_foi);
+      sampling_genotypes.push_back(pp->genotype());
+    }
   }
 }
