@@ -67,7 +67,7 @@ location_db:
   beta_by_location: [ 0.09 ]
 
   #if the number of values less than number of locations, the first value will be applied for all locations
-  population_size_by_location: [ 50000 ]
+  population_size_by_location: [ 1000 ]
   #spatial_model could be Gravity, Barabasi, or Wesolowski
 
 # seasonality parameters for all location
@@ -742,6 +742,15 @@ fraction_mosquitoes_interrupted_feeding: 0.0
 inflation_factor: 0.01
 
 events:
+  - name: change_within_host_induced_recombination
+    info:
+      day: 2000/1/1
+      value: false
+  - name: change_within_host_induced_recombination
+    info:
+      day: 2010/1/1
+      value: true
+
   - name: turn_off_mutation
     info:
       - day: 2000/1/1
@@ -854,3 +863,5 @@ sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
 mosquito_config:
   interrupted_feeding_rate: [0.19]
   prmc_size: 800
+
+within_host_induced_free_recombination: true

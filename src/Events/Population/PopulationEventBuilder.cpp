@@ -7,8 +7,10 @@
 #include <algorithm>
 #include <vector>
 
+#include "ChangeInterruptedFeedingRateEvent.h"
 #include "ChangeStrategyEvent.h"
 #include "ChangeTreatmentCoverageEvent.h"
+#include "ChangeWithinHostInducedRecombinationEvent.h"
 #include "Core/Config/Config.h"
 #include "ImportationEvent.h"
 #include "ImportationPeriodicallyEvent.h"
@@ -22,12 +24,11 @@
 #include "SingleRoundMDAEvent.h"
 #include "TurnOffMutationEvent.h"
 #include "TurnOnMutationEvent.h"
-#include "ChangeInterruptedFeedingRateEvent.h"
 #include "yaml-cpp/yaml.h"
 
 std::vector<Event*> PopulationEventBuilder::build_introduce_parasite_events(const YAML::Node& node, Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       for (std::size_t j = 0; j < event_node["parasite_info"].size(); j++) {
@@ -155,7 +156,7 @@ std::vector<Event*> PopulationEventBuilder::build_change_treatment_strategy_even
 
 std::vector<Event*> PopulationEventBuilder::build_single_round_mda_event(const YAML::Node& node, Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     const auto starting_date = event_node["day"].as<date::year_month_day>();
     auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
     auto* e = new SingleRoundMDAEvent(time);
@@ -192,7 +193,7 @@ std::vector<Event*> PopulationEventBuilder::build_turn_on_mutation_event(const Y
     const auto starting_date = event_node["day"].as<date::year_month_day>();
     auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
     double mutation_probability = event_node["mutation_probability"] ? event_node["mutation_probability"].as<double>()
-                                                            : Model::CONFIG->drug_db()->at(0)->p_mutation();
+                                                                     : Model::CONFIG->drug_db()->at(0)->p_mutation();
 
     int drug_id = event_node["drug_id"] ? event_node["drug_id"].as<int>() : -1;
 
@@ -205,7 +206,7 @@ std::vector<Event*> PopulationEventBuilder::build_turn_on_mutation_event(const Y
 
 std::vector<Event*> PopulationEventBuilder::build_turn_off_mutation_event(const YAML::Node& node, Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     const auto starting_date = event_node["day"].as<date::year_month_day>();
     auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
     auto* e = new TurnOffMutationEvent(time);
@@ -218,7 +219,7 @@ std::vector<Event*> PopulationEventBuilder::build_turn_off_mutation_event(const 
 std::vector<Event*> PopulationEventBuilder::build_introduce_plas2_parasite_events(const YAML::Node& node,
                                                                                   Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       auto fraction = event_node["fraction"].as<double>();
@@ -235,7 +236,7 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_plas2_parasite_event
 
 std::vector<Event*> PopulationEventBuilder::build_introduce_580Y_mutant_events(const YAML::Node& node, Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       auto fraction = event_node["fraction"].as<double>();
@@ -253,7 +254,7 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_580Y_mutant_events(c
 std::vector<Event*> PopulationEventBuilder::build_introduce_aq_mutant_parasite_events(const YAML::Node& node,
                                                                                       Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       auto fraction = event_node["fraction"].as<double>();
@@ -271,7 +272,7 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_aq_mutant_parasite_e
 std::vector<Event*> PopulationEventBuilder::build_introduce_lumefantrine_mutant_parasite_events(const YAML::Node& node,
                                                                                                 Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       auto fraction = event_node["fraction"].as<double>();
@@ -289,7 +290,7 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_lumefantrine_mutant_
 std::vector<Event*> PopulationEventBuilder::build_introduce_triple_mutant_to_dpm_parasite_events(const YAML::Node& node,
                                                                                                  Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       auto fraction = event_node["fraction"].as<double>();
@@ -304,10 +305,10 @@ std::vector<Event*> PopulationEventBuilder::build_introduce_triple_mutant_to_dpm
   return events;
 }
 
-
-std::vector<Event*> PopulationEventBuilder::build_change_interrupted_feeding_rate_event(const YAML::Node& node, Config* config) {
+std::vector<Event*> PopulationEventBuilder::build_change_interrupted_feeding_rate_event(const YAML::Node& node,
+                                                                                        Config* config) {
   std::vector<Event*> events;
-  for (const auto & event_node : node) {
+  for (const auto& event_node : node) {
     auto location = event_node["location"].as<int>();
     if (location < config->number_of_locations()) {
       const auto starting_date = event_node["day"].as<date::year_month_day>();
@@ -317,6 +318,18 @@ std::vector<Event*> PopulationEventBuilder::build_change_interrupted_feeding_rat
       events.push_back(event);
     }
   }
+  return events;
+}
+
+std::vector<Event*> PopulationEventBuilder::build_change_within_host_induced_recombination(const YAML::Node event_node,
+                                                                                           Config* config) {
+  std::vector<Event*> events;
+  const auto starting_date = event_node["day"].as<date::year_month_day>();
+  auto time = (date::sys_days { starting_date } - date::sys_days { config->starting_date() }).count();
+  auto value = event_node["value"].as<bool>();
+  auto* event = new ChangeWithinHostInducedRecombinationEvent(value, time);
+  events.push_back(event);
+
   return events;
 }
 
@@ -376,6 +389,9 @@ std::vector<Event*> PopulationEventBuilder::build(const YAML::Node& node, Config
   }
   if (name == "change_interrupted_feeding_rate") {
     events = build_change_interrupted_feeding_rate_event(node["info"], config);
+  }
+  if (name == "change_within_host_induced_recombination") {
+    events = build_change_within_host_induced_recombination(node["info"], config);
   }
   return events;
 }
