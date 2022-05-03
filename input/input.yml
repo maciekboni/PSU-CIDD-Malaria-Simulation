@@ -831,6 +831,10 @@ fraction_mosquitoes_interrupted_feeding: 0.0
 inflation_factor: 0.01
 
 events:
+  - name: change_within_host_induced_recombination
+    info:
+      day: 1990/1/1
+      value: true
   - name: introduce_plas2_parasites
     info:
       - location: 0
