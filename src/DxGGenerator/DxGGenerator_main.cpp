@@ -203,7 +203,7 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
   p_model->reporters().clear();
 
   p_model->add_reporter(new PkPdReporter());
-  // p_model->add_reporter(new IndividualsFileReporter("out.txt"));
+   p_model->add_reporter(new IndividualsFileReporter("out.txt"));
 
   auto* genotype = Model::CONFIG->genotype_db()->at(g->genotype_id());
 

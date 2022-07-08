@@ -113,3 +113,8 @@ for tc, tc_details in tcs.items():
                 yaml.dump(new_data, output_stream); 
                 output_stream.close();
 
+#%%
+for ta, ta_details in tact_adoption.items():
+    ta_str = ta_details['ta_str']
+    peak_after =  round((0.8-0.674854)*365.25*100/ta)
+    print(peak_after)
