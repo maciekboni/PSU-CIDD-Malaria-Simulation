@@ -26,7 +26,8 @@ class Reporter {
     MONTHLY_REPORTER,
     MMC_REPORTER,
     TACT_REPORTER,
-    NOVEL_DRUG_REPOTER
+    NOVEL_DRUG_REPOTER,
+    VALIDATION_REPORTER
   };
  public:
   static std::map<std::string, ReportType> ReportTypeMap;
