@@ -18,7 +18,7 @@ def kFormatter(num):
 
 
 stream = open('input_base_A2_mu_0p001983_v2.yml', 'r');
-data = yaml.load(stream);
+data = yaml.full_load(stream);
 stream.close();
 
  # COMMENT IT LATER
@@ -39,25 +39,28 @@ tcs = {
        0.25: {
            'tc_str': '0p25',
            'pfprs': {
-               0.13: 'PFPR10p0',
-               0.049: 'PFPR01p0',
-               0.044: 'PFPR00p1'
+               0.35: 'PFPR25P0',
+               # 0.13: 'PFPR10p0',
+               # 0.049: 'PFPR01p0',
+               # 0.044: 'PFPR00p1'
                }           
            },
        0.5: {
            'tc_str': '0p50',
            'pfprs': {
-               0.15: 'PFPR10p0',
-               0.057: 'PFPR01p0',
-               0.05: 'PFPR00p1'
+               0.38: 'PFPR25P0',
+               # 0.15: 'PFPR10p0',
+               # 0.057: 'PFPR01p0',
+               # 0.05: 'PFPR00p1'
                }           
            },
        0.75: {
            'tc_str': '0p75',
            'pfprs': {
-               0.17: 'PFPR10p0',
-               0.065: 'PFPR01p0',
-               0.059: 'PFPR00p1'
+               0.43: 'PFPR25P0',
+               # 0.17: 'PFPR10p0',
+               # 0.065: 'PFPR01p0',
+               # 0.059: 'PFPR00p1'
                }           
            },
        }
@@ -84,7 +87,8 @@ for tc, tc_details in tcs.items():
                 if event['name'] == 'modify_nested_mft_strategy':
                     new_data['events'][index]['info'][0]['strategy_id'] = tact_id
                     
-            output_filename = 'A2_1M_v2/TACT_%s_TC_%s_TACT_%s.yml'%( pfpr,tc_str, tact_str);
+            # output_filename = 'A2_1M_v2/TACT_%s_TC_%s_TACT_%s.yml'%( pfpr,tc_str, tact_str);
+            output_filename = 'A1_A2_A3_PFPR_25/TACT_%s_TC_%s_ASAQ_%s.yml'%(pfpr,tc_str, tact_str);
             output_stream = open(output_filename, 'w');
             yaml.dump(new_data, output_stream); 
             output_stream.close();
