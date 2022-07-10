@@ -95,8 +95,13 @@ void ValidationReporter::monthly_report() {
     ss << Model::DATA_COLLECTOR->number_of_treatments_fail_with_therapy_ID()[0] << sep;
     ss << group_sep;
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-        ss << Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] /
-              (Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] + Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::CLINICAL])  << sep;
+        if ((Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] + Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::CLINICAL]) == 0){
+            ss << 0 << sep;
+        }
+        else{
+            ss << Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] /
+                  (Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] + Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::CLINICAL])  << sep;
+        }
     }
     ss << group_sep;
 
