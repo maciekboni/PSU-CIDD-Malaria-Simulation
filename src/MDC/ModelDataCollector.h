@@ -172,6 +172,8 @@ PROPERTY_REF(IntVector, monthly_number_of_new_infections_by_location);
 
 PROPERTY_REF(IntVector, monthly_number_of_clinical_episode_by_location);
 
+PROPERTY_REF(IntVector2, monthly_number_of_clinical_episode_by_location_age);
+
 PROPERTY_REF(IntVector, monthly_number_of_mutation_events_by_location);
 
 PROPERTY_REF(IntVector2, popsize_by_location_age)

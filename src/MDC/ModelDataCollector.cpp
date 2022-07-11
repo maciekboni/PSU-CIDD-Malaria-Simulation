@@ -226,6 +226,8 @@ void ModelDataCollector::initialize() {
     monthly_number_of_TF_by_location_ = IntVector(Model::CONFIG->number_of_locations(), 0);
     monthly_number_of_new_infections_by_location_ = IntVector(Model::CONFIG->number_of_locations(), 0);
     monthly_number_of_clinical_episode_by_location_ = IntVector(Model::CONFIG->number_of_locations(), 0);
+    monthly_number_of_clinical_episode_by_location_age_ = IntVector2(Model::CONFIG->number_of_locations(),
+                                                                     IntVector(100, 0));
     monthly_number_of_mutation_events_by_location_ = IntVector(Model::CONFIG->number_of_locations(), 0);
 
     current_number_of_mutation_events_in_this_year_ = 0;
@@ -492,6 +494,13 @@ void ModelDataCollector::calculate_eir() {
 void ModelDataCollector::collect_1_clinical_episode(const int& location, const int& age, const int& age_class) {
   if (Model::SCHEDULER->current_time() >= Model::CONFIG->start_collect_data_day()) {
     monthly_number_of_clinical_episode_by_location_[location] += 1;
+
+    if (age < 100) {
+      monthly_number_of_clinical_episode_by_location_age_[location][age] += 1;
+    } else {
+      monthly_number_of_clinical_episode_by_location_age_[location][99] += 1;
+    }
+
   }
 
   if (Model::SCHEDULER->current_time() >= Model::CONFIG->start_of_comparison_period()) {
@@ -848,6 +857,9 @@ void ModelDataCollector::monthly_update() {
       monthly_number_of_new_infections_by_location_[loc] = 0;
       monthly_number_of_clinical_episode_by_location_[loc] = 0;
       monthly_number_of_mutation_events_by_location_[loc] = 0;
+      for(int age = 0; age < 100; age++){
+        monthly_number_of_clinical_episode_by_location_age_[loc][age] = 0;
+      }
     }
   }
 }

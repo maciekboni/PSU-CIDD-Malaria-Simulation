@@ -104,6 +104,12 @@ void ValidationReporter::monthly_report() {
         }
     }
     ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        for (auto age = 0; age < 60; age++){
+            ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location_age()[loc][age] << sep;
+        }
+    }
+    ss << group_sep;
 
     monthly_data_file << ss.str() << std::endl;
 
