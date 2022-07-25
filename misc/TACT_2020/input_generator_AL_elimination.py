@@ -32,9 +32,6 @@ data['location_db']['location_info']= location_info;
 popsize = 1000000
 data['location_db']['population_size_by_location'] = [popsize];       
 
-#3RMDA
-number_MDA_round = [0,1,2,3,4];
-
 tcs = {
        # 0.25: {
        #     'tc_str': '0p25',
@@ -45,15 +42,15 @@ tcs = {
        #         # 0.044: 'PFPR00p1'
        #         }           
        #     },
-       0.5: {
-           'tc_str': '0p50',
-           'pfprs': {
-               # 0.39: 'PFPR25P0',
-               # 0.15: 'PFPR10p0',
-               # 0.058: 'PFPR01p0',
-                0.051: 'PFPR00p1'
-               }           
-           },
+       # 0.5: {
+       #     'tc_str': '0p50',
+       #     'pfprs': {
+       #         # 0.39: 'PFPR25P0',
+       #         # 0.15: 'PFPR10p0',
+       #         # 0.058: 'PFPR01p0',
+       #          0.051: 'PFPR00p1'
+       #         }           
+       #     },
        0.75: {
            'tc_str': '0p75',
            'pfprs': {
@@ -76,7 +73,7 @@ tact = {
         # 5: 'AMP'
         }
 import numpy as np
-betas = np.arange(0.050, 0.06, 0.001)
+betas = np.arange(0.06, 0.07, 0.001)
 
 for tc, tc_details in tcs.items():
     tc_str = tc_details['tc_str'];
@@ -98,7 +95,7 @@ for tc, tc_details in tcs.items():
                         if event['name'] == 'introduce_parasites_periodically':
                             new_data['events'][index]['info']= []  
                 # output_filename = 'A3_1M_v2/TACT_%s_TC_%s_TACT_%s.yml'%(pfpr,tc_str, tact_str);
-                output_filename = 'AL_elimination/TACT_%.3f_TC_%s_AL_%s%s.yml'%(beta,tc_str, tact_str,imp);
+                output_filename = 'AL_elimination_2/TACT_%.3f_TC_%s_AL_%s%s.yml'%(beta,tc_str, tact_str,imp);
                 output_stream = open(output_filename, 'w');
                 yaml.dump(new_data, output_stream); 
                 output_stream.close();
