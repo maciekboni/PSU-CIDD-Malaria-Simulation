@@ -57,7 +57,8 @@ tcs = {
                # 0.43: 'PFPR25P0',
                # 0.17: 'PFPR10p0',
                # 0.069: 'PFPR01p0',
-                0.06: 'PFPR00p1'
+                0.06: 'PFPR00p1',
+                
                }           
            },
        }
@@ -69,36 +70,40 @@ importations = {True: '_imp' ,
 
 tact = {
         2: 'AL',
-        # 4: 'ALAQ',
-        # 5: 'AMP'
+        4: 'ALAQ',
+        5: 'AMP'
         }
 import numpy as np
-betas = np.arange(0.06, 0.07, 0.001)
+betas = [0.0625, 0.063, 0.064]
+switch_tacts_at = [2020,2021,2022,2023,2024,2025];
 
-for tc, tc_details in tcs.items():
-    tc_str = tc_details['tc_str'];
-    pfprs = tc_details['pfprs'];
-    for beta in betas:
-        for tact_id, tact_str in tact.items():
-            for _,imp in importations.items():  
-                print(beta, tc_str, tact_id)
-                new_data = copy.deepcopy(data)
-                new_data['location_db']['beta_by_location'] = np.full(number_of_locations, beta).tolist()
-                
-                new_data['location_db']['p_treatment_for_less_than_5_by_location'] = np.full(number_of_locations, tc).tolist()
-                new_data['location_db']['p_treatment_for_more_than_5_by_location'] = np.full(number_of_locations, tc).tolist()
-                
-                for index,event in enumerate(data['events']):                    
-                    if event['name'] == 'modify_nested_mft_strategy':
-                        new_data['events'][index]['info'][0]['strategy_id'] = tact_id
-                    if imp == '':
-                        if event['name'] == 'introduce_parasites_periodically':
-                            new_data['events'][index]['info']= []  
-                # output_filename = 'A3_1M_v2/TACT_%s_TC_%s_TACT_%s.yml'%(pfpr,tc_str, tact_str);
-                output_filename = 'AL_elimination_2/TACT_%.3f_TC_%s_AL_%s%s.yml'%(beta,tc_str, tact_str,imp);
-                output_stream = open(output_filename, 'w');
-                yaml.dump(new_data, output_stream); 
-                output_stream.close();
+for switch_year in switch_tacts_at:
+    for tc, tc_details in tcs.items():
+        tc_str = tc_details['tc_str'];
+        pfprs = tc_details['pfprs'];
+        for beta in betas:
+            for tact_id, tact_str in tact.items():
+                for _,imp in importations.items():  
+                    print(beta, tc_str, tact_id)
+                    new_data = copy.deepcopy(data)
+                    new_data['location_db']['beta_by_location'] = np.full(number_of_locations, beta).tolist()
+                    
+                    new_data['location_db']['p_treatment_for_less_than_5_by_location'] = np.full(number_of_locations, tc).tolist()
+                    new_data['location_db']['p_treatment_for_more_than_5_by_location'] = np.full(number_of_locations, tc).tolist()
+                    
+                    for index,event in enumerate(data['events']):                    
+                        if event['name'] == 'modify_nested_mft_strategy':
+                            new_data['events'][index]['info'][0]['strategy_id'] = tact_id
+                            new_data['events'][index]['info'][0]['day'] = "%d/1/1"%(switch_year)
+                            
+                        if imp == '':
+                            if event['name'] == 'introduce_parasites_periodically':
+                                new_data['events'][index]['info']= []  
+                    # output_filename = 'A3_1M_v2/TACT_%s_TC_%s_TACT_%s.yml'%(pfpr,tc_str, tact_str);
+                    output_filename = 'AL_elimination_3/TACT_%.3f_TC_%s_AL_%s_switch_year_%d%s.yml'%(beta,tc_str, tact_str,switch_year,imp);
+                    output_stream = open(output_filename, 'w');
+                    yaml.dump(new_data, output_stream); 
+                    output_stream.close();
 
 
 # for mda_round in number_MDA_round:
