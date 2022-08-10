@@ -17,7 +17,7 @@ def kFormatter(num):
     return str(num) if num <=999 else str(round(num/1000)) +'k';
 
 
-stream = open('input_base_A3_mu_0p001983_v2.yml', 'r');
+stream = open('input_base_A2_mu_0p001983_v2.yml', 'r');
 data = yaml.full_load(stream);
 stream.close();
 
@@ -105,7 +105,7 @@ for switch_year in switch_tacts_at:
                             if event['name'] == 'introduce_parasites_periodically':
                                 new_data['events'][index]['info']= []  
 
-                    output_filename = 'ASAQ_eliminations_1/TACT_%.3f_TC_%s_AL_%s_switch_year_%d%s.yml'%(beta,tc_str, tact_str,switch_year,imp);
+                    output_filename = 'ASAQ_eliminations_1/TACT_%.3f_TC_%s_ASAQ_%s_switch_year_%d%s.yml'%(beta,tc_str, tact_str,switch_year,imp);
                     output_stream = open(output_filename, 'w');
                     yaml.dump(new_data, output_stream); 
                     output_stream.close();

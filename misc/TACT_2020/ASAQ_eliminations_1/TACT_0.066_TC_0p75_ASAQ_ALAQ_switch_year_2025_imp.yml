@@ -344,7 +344,25 @@ events:
   - day: 2005/1/1
     mutation_probability: 0.001983
   name: turn_on_mutation
-- info: []
+- info:
+  - location: 0
+    parasite_info:
+    - duration: 400
+      genotype_id: 4
+      number_of_cases: 1
+      start_day: 2020/1/1
+    - duration: 400
+      genotype_id: 12
+      number_of_cases: 1
+      start_day: 2020/1/1
+    - duration: 400
+      genotype_id: 20
+      number_of_cases: 1
+      start_day: 2020/1/1
+    - duration: 400
+      genotype_id: 28
+      number_of_cases: 1
+      start_day: 2020/1/1
   name: introduce_parasites_periodically
 - info:
   - day: 2025/1/1
@@ -594,7 +612,7 @@ location_db:
     - 0.0344
     - 0.0387
   beta_by_location:
-  - 0.067
+  - 0.066
   location_info:
   - - 0
     - 0
@@ -731,7 +749,7 @@ strategy_db:
     - 0.05
     - 0.95
     strategy_ids:
-    - 2
+    - 1
     - 3
     type: NestedMFT
 tf_rate: 0.1
