@@ -3,21 +3,21 @@
 # DATE: Sep 16 2015
 # AUTHORS: Tran Dang Nguyen and Maciej F Boni
 #
-# This sample input file was created to get a first-time user up 
+# This sample input file was created to get a first-time user up
 # and running quickly with the simulation.
 #
 # ---------------------------------------------------------------
 
 
-# starting time point of the simulation (in yyyy/m/d format) 
+# starting time point of the simulation (in yyyy/m/d format)
 # which is day 0 in the simulation
 # including the burn-in period which we normally set to 4000# days;
 starting_date: 1990/1/1
 
-# ending time point of the simulation (in yyyy/m/d format) 
+# ending time point of the simulation (in yyyy/m/d format)
 ending_date: 1991/1/1
 
-# the day at which the simulation's reporting functionality begins collecting data for 
+# the day at which the simulation's reporting functionality begins collecting data for
 # EIR, # of clinical episodes, # death , # of treatment, #TF by location,...
 # for monthly data display
 start_collect_data_day: 365
@@ -27,7 +27,7 @@ start_of_comparison_period: 2019/12/1
 
 # number of days to keep track total number of parasites in population
 # in other words, the simulation stores 11 days of mosquitoes-biting-on-humans history
-# if an individual is infected today, the infection type and probability will be based 
+# if an individual is infected today, the infection type and probability will be based
 # on the biting that took place 11 days ago
 number_of_tracking_days: 11
 
@@ -143,7 +143,7 @@ immune_system_information:
   #rate at which antimalarial immune function decreases when a host is parasitaemic
   b2: 0.0025
 
-  # durations of infection of naive and fully-immune hosts. 
+  # durations of infection of naive and fully-immune hosts.
   # these parameters are used to calculate max and min killing rate by immune system
   duration_for_naive: 300
   duration_for_fully_immune: 60
@@ -160,7 +160,7 @@ immune_system_information:
   min_clinical_probability: 0.05
   max_clinical_probability: 0.99
 
-  # slope of sigmoidal prob-v-immunity function (parameter z in supplement of 2015 LGH paper) 
+  # slope of sigmoidal prob-v-immunity function (parameter z in supplement of 2015 LGH paper)
   immune_effect_on_progression_to_clinical: 4
 
   # age at which immune function is mature
@@ -344,21 +344,21 @@ initial_parasite_info:
 
 # drug information below
 #
-# maximum_parasite_killing_rate: 
-#       e.g. 0.999 means the drug can kill 99.9% of parasites in 1 day if a person has 
+# maximum_parasite_killing_rate:
+#       e.g. 0.999 means the drug can kill 99.9% of parasites in 1 day if a person has
 #       the highest possible drug concentration
 #
-# n: 
+# n:
 #       the slope of the linear portion of the conentration-effect curve
 #
-# EC50: 
+# EC50:
 #       the drug concentration which produces 50% of the parasite killing achieved at maximum-concentration
 #       ( the expected starting concentration is 1.0 )
 #
-# age_specific_drug_concentration_sd: 
+# age_specific_drug_concentration_sd:
 #       the actual drug concentration, per individual, will be drawn from a normal distribution with mean=1 and this sd.
 #
-# k: 
+# k:
 #       parameter that describes the change in the mutation probability when drug levels are intermediate
 #       - set k=0.5 for a simple linear model where mutation probablity decreases linearly with drug concentration
 #       - set k=2 or k=4 for a piecewise-linear model where mutation probability increases from high concentrations
@@ -560,7 +560,7 @@ lumefantrine_drug_id: 2
 artemisinin_drug_id: 0
 
 # therapy info
-# the drug_ids that make up the therapy, and the number of days that the therapy is prescribed for 
+# the drug_ids that make up the therapy, and the number of days that the therapy is prescribed for
 # testing day tells you the follow-up point at which it is determined if treatment failed or not
 tf_testing_day: 28
 
@@ -732,7 +732,7 @@ initial_strategy_id: 5
 
 
 
-# this number use to detemine whether a therapy is "useful" or not and it is used to calculate 
+# this number use to detemine whether a therapy is "useful" or not and it is used to calculate
 # the useful therapeutic duration of a therapy
 tf_rate: 0.1
 
@@ -753,7 +753,7 @@ p_compliance: 1
 
 # this functionality works. It is used when p_compliance (above) is less than 1.
 # It was not used in any analyses for the 2015 LGH paper where p_compliance is always 1.
-# this guarantees that the minimum number of dosing days for a poorly-complying 
+# this guarantees that the minimum number of dosing days for a poorly-complying
 # patient is still 1
 min_dosing_days: 1
 
@@ -799,7 +799,7 @@ update_frequency: 7
 #report to GUI and console every 30 days
 report_frequency: 30
 
-# if an infected and asymptomatic host is bitten and infected by a new 
+# if an infected and asymptomatic host is bitten and infected by a new
 # parasite clone, this setting allows the new infection to cause symptoms
 allow_new_coinfection_to_cause_symtoms: true
 
@@ -833,14 +833,14 @@ using_free_recombination: true
 
 # the current treatment failure rate as observed in the population is not really
 # today's treatment failure rate, as these data are never assembled that quickly in
-# real life; rather, it is the average treatment failure rate observed over the 
+# real life; rather, it is the average treatment failure rate observed over the
 # past 60 days
 tf_window_size: 60
 
 # special function to make the mean biting rate (across hosts) depend on age
 using_age_dependent_bitting_level: false
 
-# special function which makes the probability of an infection (resulting 
+# special function which makes the probability of an infection (resulting
 # from an infectious mosquito bite) age-dependent
 using_variable_probability_infectious_bites_cause_infection: false
 
@@ -950,3 +950,10 @@ age_bracket_prob_individual_present_at_mda: [10, 40]
 mean_prob_individual_present_at_mda: [0.85, 0.75, 0.85]
 
 sd_prob_individual_present_at_mda: [0.3, 0.3, 0.3]
+
+rapt_config:
+  period: 2
+  therapy_id: 1
+  compliance: 0.5
+  age_start: 5
+  start_day: 2020/1/1

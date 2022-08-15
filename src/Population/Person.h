@@ -9,6 +9,7 @@
 #define    PERSON_H
 
 #include "Core/PropertyMacro.h"
+#include "Events/Event.h"
 #include "Properties/PersonIndexAllHandler.h"
 #include "Properties/PersonIndexByLocationStateAgeClassHandler.h"
 #include "Core/ObjectPool.h"
@@ -230,6 +231,9 @@ public:
 
   bool has_update_by_having_drug_event() const;
 
+  template <typename T>
+  bool has_event() const;
+
   double get_age_dependent_biting_factor() const;
 
   void update_bitting_level();
@@ -245,4 +249,15 @@ public:
   bool has_effective_drug_in_blood() const;
 };
 
-#endif    /* PERSON_H */
+template <typename T>
+bool Person::has_event() const {
+  for (Event *e : *events()) {
+    if (dynamic_cast<T *>(e) != nullptr && e->executable
+        && e->dispatcher != nullptr) {
+      return true;
+    }
+  }
+  return false;
+}
+
+#endif /* PERSON_H */

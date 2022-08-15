@@ -6,7 +6,7 @@ PWD := $(dir $(mkfile_path))
 all: generate-vcpkg build
 
 build:
-	cmake --build build --config Release -- -j6
+	cmake --build build --config Release -- -j4
 
 ci: generate-vcpkg build test
 
@@ -30,6 +30,10 @@ generate-vcpkg: clean
 
 g: generate
 generate: clean
+	cmake -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1 . -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+	cp $(PWD)build/compile_commands.json $(PWD)
+
+reload_cmake:
 	cmake -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=1 . -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
 	cp $(PWD)build/compile_commands.json $(PWD)
 

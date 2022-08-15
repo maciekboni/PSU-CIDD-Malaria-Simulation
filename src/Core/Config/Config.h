@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Config.h
  * Author: nguyentran
  *
@@ -8,30 +8,33 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <date/date.h>
+
+#include <string>
+#include <vector>
+
+#include "ConfigItem.h"
+#include "Core/MultinomialDistributionGenerator.h"
 #include "Core/PropertyMacro.h"
 #include "Core/TypeDef.h"
 #include "CustomConfigItem.h"
-#include "ConfigItem.h"
 #include "Spatial/Location.h"
-#include "Core/MultinomialDistributionGenerator.h"
-#include <string>
-#include <vector>
-#include <date/date.h>
+#include "rapt_config.h"
 
 class Model;
 
 class Config {
- DISALLOW_COPY_AND_ASSIGN(Config)
+  DISALLOW_COPY_AND_ASSIGN(Config)
 
- DISALLOW_MOVE(Config)
+  DISALLOW_MOVE(Config)
 
- public:
- POINTER_PROPERTY(Model, model)
+public:
+  POINTER_PROPERTY(Model, model)
 
-  std::vector<IConfigItem *> config_items{};
+  std::vector<IConfigItem *> config_items {};
 
-  CONFIG_ITEM(starting_date, date::year_month_day, date::year_month_day{date::year{1999}/1/1})
-  CONFIG_ITEM(ending_date, date::year_month_day, date::year_month_day{date::year{1999}/1/2})
+  CONFIG_ITEM(starting_date, date::year_month_day, date::year_month_day { date::year { 1999 } / 1 / 1 })
+  CONFIG_ITEM(ending_date, date::year_month_day, date::year_month_day { date::year { 1999 } / 1 / 2 })
 
   CUSTOM_CONFIG_ITEM(total_time, 100)
 
@@ -40,8 +43,8 @@ class Config {
   CONFIG_ITEM(number_of_tracking_days, int, 0)
   CONFIG_ITEM(p_infection_from_an_infectious_bite, double, 0.0)
 
-  CONFIG_ITEM(age_structure, std::vector<int>, std::vector<int>{})
-  CONFIG_ITEM(initial_age_structure, std::vector<int>, std::vector<int>{})
+  CONFIG_ITEM(age_structure, std::vector<int>, std::vector<int> {})
+  CONFIG_ITEM(initial_age_structure, std::vector<int>, std::vector<int> {})
 
   CONFIG_ITEM(tf_testing_day, int, 28)
 
@@ -73,7 +76,7 @@ class Config {
   CONFIG_ITEM(inflation_factor, double, 0.01)
 
   CONFIG_ITEM(location_db, std::vector<Spatial::Location>,
-              std::vector<Spatial::Location>{Spatial::Location(0, 0, 0, 10000)})
+              std::vector<Spatial::Location> { Spatial::Location(0, 0, 0, 10000) })
 
   CONFIG_ITEM(birth_rate, double, 0)
 
@@ -127,15 +130,15 @@ class Config {
 
   CUSTOM_CONFIG_ITEM(relative_bitting_info, RelativeBittingInformation())
 
-//  TODO: release ptr in destructor
+  //  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(therapy_db, TherapyPtrVector())
 
-//  TODO: release ptr in destructor
+  //  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(strategy_db, StrategyPtrVector())
 
   CUSTOM_CONFIG_ITEM(initial_parasite_info, std::vector<InitialParasiteInfo>())
 
-//  TODO: release ptr in destructor
+  //  TODO: release ptr in destructor
   CUSTOM_CONFIG_ITEM(preconfig_population_events, std::vector<Event *>())
 
   CUSTOM_CONFIG_ITEM(bitting_level_generator, MultinomialDistributionGenerator())
@@ -143,20 +146,21 @@ class Config {
 
   CUSTOM_CONFIG_ITEM(prob_individual_present_at_mda_distribution, std::vector<beta_distribution_params>())
 
- VIRTUAL_PROPERTY_REF(double, modified_mutation_factor)
+  CUSTOM_CONFIG_ITEM(rapt_config, RaptConfig())
 
- VIRTUAL_PROPERTY_REF(double, modified_drug_half_life)
+  VIRTUAL_PROPERTY_REF(double, modified_mutation_factor)
 
- VIRTUAL_PROPERTY_REF(double, modified_daily_cost_of_resistance)
+  VIRTUAL_PROPERTY_REF(double, modified_drug_half_life)
 
- VIRTUAL_PROPERTY_REF(double, modified_mutation_probability)
+  VIRTUAL_PROPERTY_REF(double, modified_daily_cost_of_resistance)
+
+  VIRTUAL_PROPERTY_REF(double, modified_mutation_probability)
 
   explicit Config(Model *model = nullptr);
 
   virtual ~Config();
 
   void read_from_file(const std::string &config_file_name = "config.yml");
-
 };
 
 #endif /* CONFIG_H */
