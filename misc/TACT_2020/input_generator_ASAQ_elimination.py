@@ -69,17 +69,17 @@ importations = {True: '_imp' ,
 
 
 tact = {
-        # 2: 'ASAQ',
+        2: 'ASAQ',
         4: 'ALAQ',
-        # 5: 'AMP'
+        5: 'AMP'
         }
 
 import numpy as np
 
-betas = np.arange(0.060, 0.068, 0.001)
+betas = np.arange(0.060, 0.061, 0.0005)
 # betas = [0.0625, 0.063, 0.064]
-switch_tacts_at = [2025];
-# switch_tacts_at = [2020,2021,2022,2023,2024,2025];
+# switch_tacts_at = [2025];
+switch_tacts_at = [2020,2021,2022,2023,2024,2025];
 
 
 for switch_year in switch_tacts_at:
@@ -105,7 +105,7 @@ for switch_year in switch_tacts_at:
                             if event['name'] == 'introduce_parasites_periodically':
                                 new_data['events'][index]['info']= []  
 
-                    output_filename = 'ASAQ_eliminations_1/TACT_%.3f_TC_%s_ASAQ_%s_switch_year_%d%s.yml'%(beta,tc_str, tact_str,switch_year,imp);
+                    output_filename = 'ASAQ_eliminations_2/TACT_%.3f_TC_%s_ASAQ_%s_switch_year_%d%s.yml'%(beta,tc_str, tact_str,switch_year,imp);
                     output_stream = open(output_filename, 'w');
                     yaml.dump(new_data, output_stream); 
                     output_stream.close();
