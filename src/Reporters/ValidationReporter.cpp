@@ -42,26 +42,27 @@ void ValidationReporter::monthly_report() {
     ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 1) << sep;
     ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 10) << sep;
     ss << Model::POPULATION->size() << sep;
-    ss << group_sep;
-    print_EIR_PfPR_by_location(ss);
-    ss << group_sep;
+    ss << group_sep;//9
+    print_EIR_PfPR_by_location(ss);//11
+    ss << group_sep;//15
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         ss << Model::DATA_COLLECTOR->monthly_number_of_new_infections_by_location()[loc] << sep;
     }
-    ss << group_sep;
+    ss << group_sep;//17
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         ss << Model::DATA_COLLECTOR->monthly_number_of_treatment_by_location()[loc] << sep; //Incidence
     }
-    ss << group_sep;
+    ss << group_sep;//19
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
     }
+    ss << group_sep;///21
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         for(auto moi : Model::DATA_COLLECTOR->multiple_of_infection_by_location()[loc]){
             ss << moi << sep;
         }
     }
-    ss << group_sep;
+    ss << group_sep;///31
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         for (auto ac = 0ul; ac < Model::CONFIG->number_of_age_classes(); ac++){
             ss << Model::DATA_COLLECTOR->blood_slide_prevalence_by_location_age_group()[loc][ac] << sep;
@@ -197,7 +198,7 @@ void ValidationReporter::print_EIR_PfPR_by_location(std::stringstream& ss) {
         } else {
             ss << Model::DATA_COLLECTOR->EIR_by_location_year()[loc].back() << sep;
         }
-        ss << group_sep;
+        ss << group_sep;//11
         // pfpr <5 , 2-10 and all
         ss << Model::DATA_COLLECTOR->get_blood_slide_prevalence(loc, 2, 10) * 100 << sep;
         ss << Model::DATA_COLLECTOR->get_blood_slide_prevalence(loc, 0, 5) * 100 << sep;
