@@ -78,6 +78,9 @@ void ModelDataCollector::initialize() {
     popsize_by_location_age_class_by_5_ = IntVector2(
         Model::CONFIG->number_of_locations(),
         IntVector(Model::CONFIG->number_of_age_classes(), 0));
+      popsize_by_location_hoststate_age_class_ = IntVector3(
+              Model::CONFIG->number_of_locations(),
+              IntVector2(Person::NUMBER_OF_STATE, IntVector(Model::CONFIG->number_of_age_classes(), 0)));
 
     total_immune_by_location_ = DoubleVector(Model::CONFIG->number_of_locations(), 0.0);
     total_immune_by_location_age_class_ = DoubleVector2(
@@ -266,6 +269,9 @@ void ModelDataCollector::perform_population_statistic() {
 
     for (auto i = 0; i < Person::NUMBER_OF_STATE; i++) {
       popsize_by_location_hoststate_[location][i] = 0;
+      for (auto ac = 0ul; ac < Model::CONFIG->number_of_age_classes(); ac++) {
+        popsize_by_location_hoststate_age_class_[location][i][ac] = 0.0;
+      }
     }
 
     for (auto ac = 0ul; ac < Model::CONFIG->number_of_age_classes(); ac++) {
@@ -302,6 +308,7 @@ void ModelDataCollector::perform_population_statistic() {
         popsize_by_location_hoststate_[loc][hs] += (int) size;
         pop_sum_location += size;
         popsize_by_location_age_class_[loc][ac] += size;
+        popsize_by_location_hoststate_age_class_[loc][hs][ac] += size;
 
         for (int i = 0; i < size; i++) {
           Person* p = pi->vPerson()[loc][hs][ac][i];

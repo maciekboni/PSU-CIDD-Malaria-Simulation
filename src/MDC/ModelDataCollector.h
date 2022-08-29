@@ -40,6 +40,8 @@ PROPERTY_REF(IntVector2, popsize_by_location_age_class_by_5)
 
 PROPERTY_REF(IntVector2, popsize_by_location_hoststate)
 
+PROPERTY_REF(IntVector3, popsize_by_location_hoststate_age_class)
+
 PROPERTY_REF(DoubleVector, blood_slide_prevalence_by_location)
 
 PROPERTY_REF(DoubleVector2, blood_slide_number_by_location_age_group)

@@ -120,7 +120,8 @@ void ValidationReporter::monthly_report() {
     ss << group_sep;//201
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         for (auto ac = 0; ac < Model::CONFIG->number_of_age_classes(); ac++){
-            int all_infected_pop = Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC] + Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::CLINICAL];
+            int all_infected_pop = Model::DATA_COLLECTOR->popsize_by_location_hoststate_age_class()[loc][Person::ASYMPTOMATIC][ac]
+                                 + Model::DATA_COLLECTOR->popsize_by_location_hoststate_age_class()[loc][Person::CLINICAL][ac];
             if (all_infected_pop == 0){
                 ss << 0 << sep;
             }
