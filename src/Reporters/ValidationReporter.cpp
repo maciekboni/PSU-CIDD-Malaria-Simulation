@@ -131,6 +131,10 @@ void ValidationReporter::monthly_report() {
         }
     }
     ss << group_sep;//217
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        std::cout << Model::DATA_COLLECTOR->total_immune_by_location()[loc] / Model::POPULATION->size(loc)
+    }
+    ss << group_sep;//219
 
     monthly_data_file << ss.str() << std::endl;
 
@@ -150,7 +154,7 @@ void ValidationReporter::after_run() {
     ss << Model::CONFIG->location_db()[0].population_size << sep;
     print_EIR_PfPR_by_location(ss);
 
-    ss << group_sep;
+    ss << group_sep;//6
     // output last strategy information
     ss << Model::TREATMENT_STRATEGY->id << sep;
 
@@ -166,23 +170,25 @@ void ValidationReporter::after_run() {
     }
     ss << (sum_ntf * 100 / pop_size) / total_time_in_years << sep;
 
-    ss << group_sep;
+    ss << group_sep;//10
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
-        std::cout << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[location] << "\t";
+        ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[location] << sep;
+//        std::cout << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[location] << "\t";
     }
-    ss << group_sep;
+    ss << group_sep;//12
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
-        std::cout << Model::DATA_COLLECTOR->percentage_bites_on_top_20_by_location()[location] * 100 << "%" << "\t";
+        ss << Model::DATA_COLLECTOR->percentage_bites_on_top_20_by_location()[location] * 100 << "%"  << sep;
+//        std::cout << Model::DATA_COLLECTOR->percentage_bites_on_top_20_by_location()[location] * 100 << "%" << "\t";
     }
     ss << group_sep;
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
         double location_NTF = Model::DATA_COLLECTOR->cumulative_NTF_by_location()[location] * 100 /
                               (double) Model::DATA_COLLECTOR->popsize_by_location()[location];
         location_NTF /= total_time_in_years;
-
-        std::cout << location_NTF << "\t";
+        ss << location_NTF << sep;
+//        std::cout << location_NTF << "\t";
     }
-    ss << group_sep;
+    ss << group_sep;//16
     for (auto location = 0; location < Model::CONFIG->number_of_locations(); location++)
     {
         for (auto age = 0; age < 60; age++){
