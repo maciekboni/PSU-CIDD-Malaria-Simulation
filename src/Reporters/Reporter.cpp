@@ -12,6 +12,7 @@
 #include "MMCReporter.h"
 #include "TACTReporter.h"
 #include "NovelDrugReporter.h"
+#include "ValidationReporter.h"
 
 std::map<std::string, Reporter::ReportType> Reporter::ReportTypeMap{
     {"Console",         CONSOLE},
@@ -19,6 +20,7 @@ std::map<std::string, Reporter::ReportType> Reporter::ReportTypeMap{
     {"MMC",             MMC_REPORTER},
     {"TACT",            TACT_REPORTER},
     {"NovelDrug",       NOVEL_DRUG_REPOTER},
+    {"ValidationReporter",       VALIDATION_REPORTER},
 };
 
 Reporter::Reporter() : model_(nullptr) {
@@ -38,6 +40,8 @@ Reporter* Reporter::MakeReport(ReportType report_type) {
       return new TACTReporter();
     case NOVEL_DRUG_REPOTER:
       return new NovelDrugReporter();
+    case VALIDATION_REPORTER:
+      return new ValidationReporter();
     default:
       return new MonthlyReporter();
   }

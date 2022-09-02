@@ -810,7 +810,7 @@ external_population_circulation_information:
 
 # TODO: remove unused parameter
 # free recombination among the drug resistance loci
-using_free_recombination: true
+#using_free_recombination: true
 #using_free_recombination: false
 
 # the current treatment failure rate as observed in the population is not really
