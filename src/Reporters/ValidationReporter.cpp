@@ -132,7 +132,7 @@ void ValidationReporter::monthly_report() {
     }
     ss << group_sep;//217
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-        std::cout << Model::DATA_COLLECTOR->total_immune_by_location()[loc] / Model::POPULATION->size(loc);
+        ss << Model::DATA_COLLECTOR->total_immune_by_location()[loc] / Model::POPULATION->size(loc) << sep;
     }
     ss << group_sep;//219
 
