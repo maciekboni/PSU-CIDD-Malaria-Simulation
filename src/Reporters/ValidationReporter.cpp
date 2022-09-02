@@ -135,7 +135,17 @@ void ValidationReporter::monthly_report() {
         ss << Model::DATA_COLLECTOR->total_immune_by_location()[loc] / Model::POPULATION->size(loc) << sep;
     }
     ss << group_sep;//219
-
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        int all_infected_pop = Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::ASYMPTOMATIC]
+                               + Model::DATA_COLLECTOR->popsize_by_location_hoststate()[loc][Person::CLINICAL];
+        if (all_infected_pop == 0){
+            ss << 0 << sep;
+        }
+        else{
+            ss << std::setprecision(6) << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] / (double) all_infected_pop<< sep;
+        }
+    }
+    ss << group_sep;//221
     monthly_data_file << ss.str() << std::endl;
 
     std::stringstream gene_freq_ss;
@@ -154,14 +164,12 @@ void ValidationReporter::after_run() {
     ss << Model::CONFIG->location_db()[0].population_size << sep;
     print_EIR_PfPR_by_location(ss);
 
-    ss << group_sep;//6
+    ss << group_sep;//10
     // output last strategy information
-    ss << Model::TREATMENT_STRATEGY->id << sep;
-
+    ss << Model::TREATMENT_STRATEGY->id << sep;//11
     // output NTF
     const auto total_time_in_years = (Model::SCHEDULER->current_time() - Model::CONFIG->start_of_comparison_period())
                                      / static_cast<double>(Constants::DAYS_IN_YEAR());
-
     auto sum_ntf = 0.0;
     ul pop_size = 0;
     for (auto location = 0; location < Model::CONFIG->number_of_locations(); location++) {
@@ -169,18 +177,17 @@ void ValidationReporter::after_run() {
         pop_size += Model::DATA_COLLECTOR->popsize_by_location()[location];
     }
     ss << (sum_ntf * 100 / pop_size) / total_time_in_years << sep;
-
-    ss << group_sep;//10
+    ss << group_sep;//13
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
         ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[location] << sep;
 //        std::cout << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location()[location] << "\t";
     }
-    ss << group_sep;//12
+    ss << group_sep;//15
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
         ss << Model::DATA_COLLECTOR->percentage_bites_on_top_20_by_location()[location] * 100 << "%"  << sep;
 //        std::cout << Model::DATA_COLLECTOR->percentage_bites_on_top_20_by_location()[location] * 100 << "%" << "\t";
     }
-    ss << group_sep;
+    ss << group_sep;//17
     for (int location = 0; location < Model::CONFIG->number_of_locations(); location++) {
         double location_NTF = Model::DATA_COLLECTOR->cumulative_NTF_by_location()[location] * 100 /
                               (double) Model::DATA_COLLECTOR->popsize_by_location()[location];
@@ -188,14 +195,14 @@ void ValidationReporter::after_run() {
         ss << location_NTF << sep;
 //        std::cout << location_NTF << "\t";
     }
-    ss << group_sep;//16
+    ss << group_sep;//19
     for (auto location = 0; location < Model::CONFIG->number_of_locations(); location++)
     {
         for (auto age = 0; age < 60; age++){
             ss << Model::DATA_COLLECTOR->cumulative_clinical_episodes_by_location_age()[location][age]/total_time_in_years/Model::DATA_COLLECTOR->popsize_by_location_age()[location][age] << sep;
         }
     }
-    ss << group_sep;
+    ss << group_sep;//80
 
     summary_data_file << ss.str() << std::endl;
 
