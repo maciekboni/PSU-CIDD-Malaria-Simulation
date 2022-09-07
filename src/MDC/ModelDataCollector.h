@@ -52,6 +52,10 @@ PROPERTY_REF(DoubleVector2, blood_slide_number_by_location_age_group_by_5)
 
 PROPERTY_REF(DoubleVector2, blood_slide_prevalence_by_location_age_group_by_5)
 
+PROPERTY_REF(DoubleVector2, blood_slide_prevalence_by_location_age)
+
+PROPERTY_REF(DoubleVector2, blood_slide_number_by_location_age)
+
 PROPERTY_REF(DoubleVector, fraction_of_positive_that_are_clinical_by_location)
 
 PROPERTY_REF(LongVector, total_number_of_bites_by_location)
