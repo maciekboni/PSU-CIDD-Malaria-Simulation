@@ -188,7 +188,7 @@ circulation_info:
     mean: 5
     sd: 10
 
-mutation_mask: "||||111||11111,0||||||0000001001|1"
+mutation_mask: "||||111||11111,0||||||000000010010|1"
 
 # the appearance of gene should be in order
 pf_genotype_info:
@@ -291,6 +291,12 @@ pf_genotype_info:
             multiplicative_effect_on_EC50:
               - drug_id: 0
                 factors: [ 1, 1.6 ]
+          - position: 469
+            amino_acids: [ 'C', 'Y' ]
+            daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
           - position: 476
             amino_acids: [ 'M', 'I' ]
             daily_crs: [ 0, 0.0005 ]
@@ -339,6 +345,12 @@ pf_genotype_info:
             multiplicative_effect_on_EC50:
               - drug_id: 0
                 factors: [ 1, 1.6 ]
+          - position: 675
+            amino_acids: [ 'A', 'V' ]
+            daily_crs: [ 0, 0.0005 ]
+            multiplicative_effect_on_EC50:
+              - drug_id: 0
+                factors: [ 1, 1.6 ]
   - chromosome: 14
     genes:
       - name: "Pfplasmepsin"
@@ -350,76 +362,76 @@ pf_genotype_info:
         aa_positions: [ ]
 
 override_ec50_patterns:
-  - pattern: "||||NY1||K....,.||||||..........|."
+  - pattern: "||||NY1||K....,.||||||............|."
     drug_id: 1
     ec50: 0.8
-  - pattern: "||||YY1||K....,.||||||..........|."
+  - pattern: "||||YY1||K....,.||||||............|."
     drug_id: 1
     ec50: 0.67
-  - pattern: "||||NF1||K....,.||||||..........|."
+  - pattern: "||||NF1||K....,.||||||............|."
     drug_id: 1
     ec50: 0.9
-  - pattern: "||||YF1||K....,.||||||..........|."
+  - pattern: "||||YF1||K....,.||||||............|."
     drug_id: 1
     ec50: 0.8
-  - pattern: "||||NY2||K....,.||||||..........|."
+  - pattern: "||||NY2||K....,.||||||............|."
     drug_id: 1
     ec50: 1.0
-  - pattern: "||||YY2||K....,.||||||..........|."
+  - pattern: "||||YY2||K....,.||||||............|."
     drug_id: 1
     ec50: 0.87
-  - pattern: "||||NF2||K....,.||||||..........|."
+  - pattern: "||||NF2||K....,.||||||............|."
     drug_id: 1
     ec50: 1.1
-  - pattern: "||||YF2||K....,.||||||..........|."
+  - pattern: "||||YF2||K....,.||||||............|."
     drug_id: 1
     ec50: 1.0
-  - pattern: "||||NY1||T....,.||||||..........|."
+  - pattern: "||||NY1||T....,.||||||............|."
     drug_id: 1
     ec50: 0.75
-  - pattern: "||||YY1||T....,.||||||..........|."
+  - pattern: "||||YY1||T....,.||||||............|."
     drug_id: 1
     ec50: 0.6
-  - pattern: "||||NF1||T....,.||||||..........|."
+  - pattern: "||||NF1||T....,.||||||............|."
     drug_id: 1
     ec50: 0.85
-  - pattern: "||||YF1||T....,.||||||..........|."
+  - pattern: "||||YF1||T....,.||||||............|."
     drug_id: 1
     ec50: 0.75
-  - pattern: "||||NY2||T....,.||||||..........|."
+  - pattern: "||||NY2||T....,.||||||............|."
     drug_id: 1
     ec50: 0.95
-  - pattern: "||||YY2||T....,.||||||..........|."
+  - pattern: "||||YY2||T....,.||||||............|."
     drug_id: 1
     ec50: 0.8
-  - pattern: "||||NF2||T....,.||||||..........|."
+  - pattern: "||||NF2||T....,.||||||............|."
     drug_id: 1
     ec50: 1.05
-  - pattern: "||||YF2||T....,.||||||..........|."
+  - pattern: "||||YF2||T....,.||||||............|."
     drug_id: 1
     ec50: 0.95
-  - pattern: "||||NY.||K....,.||||||..........|."
+  - pattern: "||||NY.||K....,.||||||............|."
     drug_id: 2
     ec50: 0.62
-  - pattern: "||||YY.||K....,.||||||..........|."
+  - pattern: "||||YY.||K....,.||||||............|."
     drug_id: 2
     ec50: 0.85
-  - pattern: "||||NF.||K....,.||||||..........|."
+  - pattern: "||||NF.||K....,.||||||............|."
     drug_id: 2
     ec50: 0.5
-  - pattern: "||||YF.||K....,.||||||..........|."
+  - pattern: "||||YF.||K....,.||||||............|."
     drug_id: 2
     ec50: 0.775
-  - pattern: "||||NY.||T....,.||||||..........|."
+  - pattern: "||||NY.||T....,.||||||............|."
     drug_id: 2
     ec50: 0.7
-  - pattern: "||||YY.||T....,.||||||..........|."
+  - pattern: "||||YY.||T....,.||||||............|."
     drug_id: 2
     ec50: 0.9
-  - pattern: "||||NF.||T....,.||||||..........|."
+  - pattern: "||||NF.||T....,.||||||............|."
     drug_id: 2
     ec50: 0.65
-  - pattern: "||||YF.||T....,.||||||..........|."
+  - pattern: "||||YF.||T....,.||||||............|."
     drug_id: 2
     ec50: 0.82
 
@@ -430,9 +442,9 @@ initial_parasite_info:
   - location_id: -1
     parasite_info:
       #TNY__C1x
-      - aa_sequence: "||||NY1||KTHFI,x||||||FNMYRIPRPC|1"
+      - aa_sequence: "||||NY1||KTHFI,x||||||FNCMYRIPRPCA|1"
         prevalence: 0.05
-      - aa_sequence: "||||YY1||KTHFI,x||||||FNMYRIPRPC|1"
+      - aa_sequence: "||||NY1||KTHFI,x||||||FNCMYRIPRPCA|1"
         prevalence: 0.05
 
 # drug information below
@@ -741,7 +753,7 @@ min_dosing_days: 1
 # exponentially distributed biting rate
 relative_bitting_info:
   max_relative_biting_value: 35
-  min_relative_biting_value: 0.35
+  min_relative_biting_value: 1.0
   number_of_biting_levels: 100
   biting_level_distribution:
     #  distribution: Exponential
@@ -940,6 +952,6 @@ sd_prob_individual_present_at_mda: [ 0.3, 0.3, 0.3 ]
 #Mosquito
 mosquito_config:
   interrupted_feeding_rate: [0.19]
-  prmc_size: 40
+  prmc_size: 120
 
 within_host_induced_free_recombination: true

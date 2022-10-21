@@ -23,10 +23,12 @@ ValidationReporter::ValidationReporter() = default;
 ValidationReporter::~ValidationReporter() = default;
 
 void ValidationReporter::initialize() {
-    gene_freq_file.open(fmt::format("{}/validation_gene_freq_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
     monthly_data_file.open(fmt::format("{}/validation_monthly_data_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
     summary_data_file.open(fmt::format("{}/validation_summary_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+    gene_freq_file.open(fmt::format("{}/validation_gene_freq_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
     gene_db_file.open(fmt::format("{}/validation_gene_db_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+    prmc_freq_file.open(fmt::format("{}/validation_prmc_freq_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
+    prmc_db_file.open(fmt::format("{}/validation_prmc_db_{}.txt", Model::MODEL->output_path(), Model::MODEL->cluster_job_number()));
 }
 
 void ValidationReporter::before_run() {}
@@ -155,10 +157,15 @@ void ValidationReporter::monthly_report() {
     monthly_data_file << ss.str() << std::endl;
 
     std::stringstream gene_freq_ss;
-    ReporterUtils::output_genotype_frequency3(gene_freq_ss, Model::CONFIG->genotype_db.size(),
+//    ReporterUtils::output_genotype_frequency3(gene_freq_ss, Model::CONFIG->genotype_db.size(),
+//                                              Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
+
+    std::stringstream prmc_freq_ss;
+    ReporterUtils::output_genotype_frequency4(gene_freq_ss, prmc_freq_ss, Model::CONFIG->genotype_db.size(),
                                               Model::POPULATION->get_person_index<PersonIndexByLocationStateAgeClass>());
 
     gene_freq_file << gene_freq_ss.str() << std::endl;
+    prmc_freq_file << prmc_freq_ss.str() << std::endl;
 }
 
 void ValidationReporter::after_run() {
@@ -213,12 +220,15 @@ void ValidationReporter::after_run() {
 
     for (auto [g_id, genotype] : Model::CONFIG->genotype_db) {
         gene_db_file << g_id << sep << genotype->aa_sequence << std::endl;
+        prmc_db_file << g_id << sep << genotype->aa_sequence << std::endl;
     }
 
+    gene_db_file.close();
     gene_freq_file.close();
+    prmc_db_file.close();
+    prmc_freq_file.close();
     monthly_data_file.close();
     summary_data_file.close();
-    gene_db_file.close();
 }
 
 void ValidationReporter::print_EIR_PfPR_by_location(std::stringstream& ss) {

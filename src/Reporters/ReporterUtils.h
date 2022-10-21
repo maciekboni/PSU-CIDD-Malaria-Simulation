@@ -45,6 +45,19 @@ public:
       PersonIndexByLocationStateAgeClass* pi
   );
 
+  /// outputs genotype frequencies by the weighted number of parasite-positive individuals carrying genotype X / total number of
+    /// parasite-positive individuals (the weights for each person describe the fraction of their clonal
+    /// populations carrying genotype X; e.g. an individual host with five clonal infections two of which
+    /// carry genotype X would be given a weight of 2/5).
+    /// \param ss the output string stream
+    /// \param ss2 the output string stream - prmc
+    /// \param number_of_genotypes total number of genotypes defined in configuration
+    /// \param pi person index by location state and ageclass that obtained from the population object
+    static void output_genotype_frequency4(
+            std::stringstream& ss, std::stringstream& ss2, const int& number_of_genotypes,
+            PersonIndexByLocationStateAgeClass* pi
+    );
+
   /// \brief outputs genotype frequencies by all 3 methods:
   /// \details
   ///     1. number of parasite-positive individuals carrying genotype X / total number of parasite-positive
