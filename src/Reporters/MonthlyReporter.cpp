@@ -60,12 +60,6 @@ void MonthlyReporter::monthly_report() {
     }
     ss << group_sep;
     for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-        for(auto moi : Model::DATA_COLLECTOR->multiple_of_infection_by_location()[loc]){
-            ss << moi << sep;
-        }
-    }
-    ss << group_sep;
-    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
         ss << Model::DATA_COLLECTOR->cumulative_NTF_by_location()[loc] << sep;
     }
     ss << group_sep;
