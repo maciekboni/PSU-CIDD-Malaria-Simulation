@@ -34,37 +34,41 @@ void MonthlyReporter::before_run() {}
 void MonthlyReporter::begin_time_step() {}
 
 void MonthlyReporter::monthly_report() {
-  std::stringstream ss;
+    std::stringstream ss;
 
-  ss << Model::SCHEDULER->current_time() << sep;
-  ss << std::chrono::system_clock::to_time_t(Model::SCHEDULER->calendar_date) << sep;
-  ss << date::format("%Y\t%m\t%d", Model::SCHEDULER->calendar_date) << sep;
-  ss << Model::MODEL->get_seasonal_factor(Model::SCHEDULER->calendar_date, 0) << sep;
-  ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 1) << sep;
-  ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 10) << sep;
-  ss << Model::POPULATION->size() << sep;
-  ss << group_sep;
+    ss << Model::SCHEDULER->current_time() << sep;
+    ss << std::chrono::system_clock::to_time_t(Model::SCHEDULER->calendar_date) << sep;
+    ss << date::format("%Y\t%m\t%d", Model::SCHEDULER->calendar_date) << sep;
+    ss << Model::MODEL->get_seasonal_factor(Model::SCHEDULER->calendar_date, 0) << sep;
+    ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 1) << sep;
+    ss << Model::TREATMENT_COVERAGE->get_probability_to_be_treated(0, 10) << sep;
+    ss << Model::POPULATION->size() << sep;
+    ss << group_sep;
 
-  print_EIR_PfPR_by_location(ss);
-  ss << group_sep;
-  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    print_EIR_PfPR_by_location(ss);
+    ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
     ss << Model::DATA_COLLECTOR->monthly_number_of_new_infections_by_location()[loc] << sep;
-  }
-  ss << group_sep;
-  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-    ss << Model::DATA_COLLECTOR->monthly_number_of_treatment_by_location()[loc] << sep;
-  }
-  ss << group_sep;
-  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-    ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
-  }
-  ss << group_sep;
-  for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
-    for(auto moi : Model::DATA_COLLECTOR->multiple_of_infection_by_location()[loc]){
-      ss << moi << sep;
     }
-  }
-  ss << group_sep;
+    ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    ss << Model::DATA_COLLECTOR->monthly_number_of_treatment_by_location()[loc] << sep;
+    }
+    ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+    ss << Model::DATA_COLLECTOR->monthly_number_of_clinical_episode_by_location()[loc] << sep;
+    }
+    ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        for(auto moi : Model::DATA_COLLECTOR->multiple_of_infection_by_location()[loc]){
+            ss << moi << sep;
+        }
+    }
+    ss << group_sep;
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        ss << Model::DATA_COLLECTOR->cumulative_NTF_by_location()[loc] << sep;
+    }
+    ss << group_sep;
 
   // including total number of positive individuals
   //  ReporterUtils::output_genotype_frequency3(ss, Model::CONFIG->genotype_db.size(),

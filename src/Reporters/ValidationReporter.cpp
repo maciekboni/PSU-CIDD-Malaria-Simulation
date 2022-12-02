@@ -154,6 +154,11 @@ void ValidationReporter::monthly_report() {
         }
     }
     ss << group_sep;//342
+    for (auto loc = 0; loc < Model::CONFIG->number_of_locations(); loc++) {
+        ss << Model::DATA_COLLECTOR->cumulative_NTF_by_location()[loc] << sep;
+    }
+    ss << group_sep;
+
     monthly_data_file << ss.str() << std::endl;
 
     std::stringstream gene_freq_ss;

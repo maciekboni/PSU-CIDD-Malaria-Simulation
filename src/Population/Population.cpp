@@ -36,7 +36,6 @@ Population::Population(Model* model) : model_(model) {
 
   person_index_list_->push_back(all_persons_);
 }
-
 Population::~Population() {
   // release memory for all persons
   if (all_persons_ != nullptr) {
@@ -201,6 +200,8 @@ void Population::perform_infection_event() {
 
   today_infections.clear();
 }
+
+
 
 void Population::initialize() {
   if (model() != nullptr) {
