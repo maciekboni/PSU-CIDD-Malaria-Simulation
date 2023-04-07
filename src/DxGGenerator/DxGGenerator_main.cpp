@@ -10,9 +10,8 @@
  *
  * Created on January 12, 2017, 4:31 PM
  */
-#include <math.h>  // log10
-
 #include <CLI/CLI.hpp>
+#include <cmath>  // log10
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -84,22 +83,23 @@ int main(int argc, char** argv) {
   p_model->initialize();
 
   if (as_iov != -1) {
-    p_model->CONFIG->as_iov() = as_iov;
+    Model::CONFIG->as_iov() = as_iov;
   }
 
   if (as_iiv != -1) {
-    for (auto& sd : p_model->CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()) {
+    for (auto& sd : Model::CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()) {
       sd = as_iiv;
     }
   }
 
   if (as_ec50 != -1) {
-    p_model->CONFIG->EC50_power_n_table()[0][0] = pow(as_ec50, p_model->CONFIG->drug_db()->at(0)->n());
+    Model::CONFIG->EC50_power_n_table()[0][0] = pow(as_ec50, Model::CONFIG->drug_db()->at(0)->n());
   }
 
   // initialEC50Table
-  std::vector<std::vector<double>> EC50_table(Model::CONFIG->genotype_db()->size(),
-                                              std::vector<double>(Model::CONFIG->drug_db()->size(), 0));
+  std::vector<std::vector<double>> EC50_table(
+      Model::CONFIG->genotype_db()->size(),
+      std::vector<double>(Model::CONFIG->drug_db()->size(), 0));
   std::cout << std::setprecision(5);
   int max_therapy_id { 0 }, min_therapy_id { 0 };
 
@@ -142,15 +142,15 @@ int main(int argc, char** argv) {
       double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
       ss << efficacy << (therapy_id == max_therapy_id ? "" : ",");
 
-//      EF50Key key = get_EC50_key(therapy, p_genotype);
-//      auto search = efficacies.find(key);
-//      if (search == efficacies.end()) {
-//        double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
-//        ss << efficacy << (therapy_id == max_therapy_id ? "" : ",");
-//        efficacies.insert(std::make_pair(key, efficacy));
-//      } else {
-//        ss << search->second << (therapy_id == max_therapy_id ? "" : ",");
-//      }
+      //      EF50Key key = get_EC50_key(therapy, p_genotype);
+      //      auto search = efficacies.find(key);
+      //      if (search == efficacies.end()) {
+      //        double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
+      //        ss << efficacy << (therapy_id == max_therapy_id ? "" : ",");
+      //        efficacies.insert(std::make_pair(key, efficacy));
+      //      } else {
+      //        ss << search->second << (therapy_id == max_therapy_id ? "" : ",");
+      //      }
 
       //      double efficacy = getEfficacyForTherapy(p_genotype, therapy_id, p_model);
       //      ss << efficacy << "\t";
@@ -158,7 +158,9 @@ int main(int argc, char** argv) {
     std::cout << ss.str() << std::endl;
   }
 
-  //    std::cout << p_model->CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()[0] << std::endl;
+  //    std::cout <<
+  //    p_model->CONFIG->drug_db()->at(0)->age_group_specific_drug_concentration_sd()[0] <<
+  //    std::endl;
   delete p_model;
 
   return 0;
@@ -167,11 +169,11 @@ int main(int argc, char** argv) {
 EF50Key get_EC50_key(SCTherapy* p_therapy, Genotype* p_genotype) {
   EF50Key result;
 
-  for (int j = 0; j < p_therapy->drug_ids.size(); ++j) {
+  for (int drug_id : p_therapy->drug_ids) {
     //    drug_type->ec50_map()
-    auto ec50 = Model::CONFIG->EC50_power_n_table()[p_genotype->genotype_id()][p_therapy->drug_ids[j]];
+    auto ec50 = Model::CONFIG->EC50_power_n_table()[p_genotype->genotype_id()][drug_id];
     //    std::cout << p_therapy->drug_ids[j] << "-" << ec50 << std::endl;
-    result.push_back(p_therapy->drug_ids[j]);
+    result.push_back(drug_id);
     result.push_back(ec50);
   }
 
@@ -203,7 +205,7 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
   p_model->reporters().clear();
 
   p_model->add_reporter(new PkPdReporter());
-   p_model->add_reporter(new IndividualsFileReporter("out.txt"));
+  p_model->add_reporter(new IndividualsFileReporter(fmt::format("individuals_{}.csv", therapy_id)));
 
   auto* genotype = Model::CONFIG->genotype_db()->at(g->genotype_id());
 
@@ -225,13 +227,18 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
 
   delete Model::POPULATION;
   delete Model::SCHEDULER;
+  delete Model::DATA_COLLECTOR;
+
   p_model->set_population(new Population(p_model));
   Model::POPULATION = p_model->population();
   p_model->set_scheduler(new Scheduler(p_model));
   Model::SCHEDULER = p_model->scheduler();
+  p_model->set_data_collector(new ModelDataCollector(p_model));
+  Model::DATA_COLLECTOR = p_model->data_collector();
 
   p_model->scheduler()->initialize(Model::CONFIG->starting_date(), Model::CONFIG->total_time());
   p_model->population()->initialize();
+  p_model->data_collector()->initialize();
 
   return result;
 }
