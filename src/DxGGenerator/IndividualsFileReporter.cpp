@@ -16,9 +16,10 @@
 #include "Population/Properties/PersonIndexAll.h"
 #include "Population/SingleHostClonalParasitePopulations.h"
 
-IndividualsFileReporter::IndividualsFileReporter(const std::string &file_name) : file_name_(file_name) {}
+IndividualsFileReporter::IndividualsFileReporter(const std::string &file_name)
+    : file_name_ { file_name } {}
 
-IndividualsFileReporter::~IndividualsFileReporter() {}
+IndividualsFileReporter::~IndividualsFileReporter() = default;
 
 void IndividualsFileReporter::initialize() {}
 
@@ -27,14 +28,23 @@ void IndividualsFileReporter::before_run() {
 }
 
 void IndividualsFileReporter::begin_time_step() {
-  for (auto person : Model::POPULATION->all_persons()->vPerson()) {
+  auto persons = Model::POPULATION->all_persons()->vPerson();
+  for (size_t i = 0; i < persons.size(); i++) {
     double p_density = 0;
-    if (!person->all_clonal_parasite_populations()->parasites()->empty()) {
-      p_density = person->all_clonal_parasite_populations()->parasites()->at(0)->last_update_log10_parasite_density();
+    if (!persons[i]->all_clonal_parasite_populations()->parasites()->empty()) {
+      p_density = persons[i]
+                      ->all_clonal_parasite_populations()
+                      ->parasites()
+                      ->at(0)
+                      ->last_update_log10_parasite_density();
     } else {
-      p_density = Model::CONFIG->parasite_density_level().log_parasite_density_cured;
+      p_density =
+          Model::CONFIG->parasite_density_level().log_parasite_density_cured;
     }
-    fs_ << p_density << "\t";
+    fs_ << p_density;
+    if (i != persons.size() - 1) {
+      fs_ << ", ";
+    }
   }
   fs_ << std::endl;
 }
