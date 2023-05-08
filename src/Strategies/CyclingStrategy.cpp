@@ -31,7 +31,7 @@ void CyclingStrategy::switch_therapy() {
   // TODO: cycling_time should be match with calendar day
   next_switching_day = Model::SCHEDULER->current_time() + cycling_time;
   LOG(INFO) << date::year_month_day{Model::SCHEDULER->calendar_date}
-            << ": Cycling Strategy Swith Therapy to: " << therapy_list[index]->id();
+            << ": Cycling Strategy switch therapy to: " << therapy_list[index]->id();
 }
 
 Therapy *CyclingStrategy::get_therapy(Person *person) {
