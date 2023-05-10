@@ -56,7 +56,7 @@ public:
 
   void calculate_EC50_power_n(const PfGeneInfo& info, DrugDatabase* pDatabase);
 
-  Genotype* perform_mutation_by_drug(Config* pConfig, Random* pRandom, DrugType* pDrugType, double mutation_probability) const;
+  Genotype* perform_mutation_by_drug(Config* pConfig, Random* pRandom, DrugType* pDrugType, double mutation_probability_by_locus) const;
 
   friend std::ostream& operator<<(std::ostream& os, const Genotype& e);
 

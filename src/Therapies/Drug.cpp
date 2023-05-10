@@ -70,14 +70,15 @@ double Drug::get_current_drug_concentration(int currentTime) {
 
 double Drug::get_mutation_probability(double currentDrugConcentration) const {
   double P = 0;
+  double mutation_prob_by_locus = Model::CONFIG->mutation_probability_by_locus();
   if (currentDrugConcentration <= 0) return 0;
   if (currentDrugConcentration < (0.5))
-    P = 2 * drug_type_->p_mutation() * drug_type_->k() * currentDrugConcentration;
+    P = 2 * mutation_prob_by_locus * drug_type_->k() * currentDrugConcentration;
 
   else if (currentDrugConcentration >= (0.5) && currentDrugConcentration < 1.0) {
-    P = drug_type_->p_mutation() * (2 * (1 - drug_type_->k()) * currentDrugConcentration + (2 * drug_type_->k() - 1));
+    P = mutation_prob_by_locus * (2 * (1 - drug_type_->k()) * currentDrugConcentration + (2 * drug_type_->k() - 1));
   } else if (currentDrugConcentration >= 1.0) {
-    P = drug_type_->p_mutation();
+    P = mutation_prob_by_locus;
   }
   //    cout << P << endl;
   return P;

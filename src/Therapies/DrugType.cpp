@@ -23,7 +23,6 @@ DrugType::DrugType()
     : id_(0),
       drug_half_life_(0),
       maximum_parasite_killing_rate_(0),
-      p_mutation_(0),
       k_(0),
       cut_off_percent_(0),
       n_(1) {}

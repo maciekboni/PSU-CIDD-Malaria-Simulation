@@ -196,17 +196,15 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
   }
 }
 
-Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType, double mutation_probability) const {
+Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType, double mutation_probability_by_locus) const {
   std::string new_aa_sequence { aa_sequence };
   for(int aa_pos_id = 0; aa_pos_id < pDrugType->resistant_aa_locations.size(); aa_pos_id++) {
     // get aa position info (aa index in aa string, is copy number)
     auto aa_pos = pDrugType->resistant_aa_locations[aa_pos_id];
     if(pConfig->mutation_mask()[aa_pos.aa_index_in_aa_string] == '1'){
-//        LOG(INFO) << "Drug: " << pDrugType->name() << " genotype: " << aa_sequence << " mutation pos: " << aa_pos.aa_index_in_aa_string << " is 1";
         const auto p = Model::RANDOM->random_flat(0.0, 1.0);
-        if (p < mutation_probability){
-//            LOG(INFO) << "\tDrug: " << pDrugType->name() << " genotype: " << aa_sequence << " mutation happened at aa_pos_id: " << aa_pos_id << " aa_pos: " << aa_pos.aa_index_in_aa_string;
-            if (aa_pos.is_copy_number) {
+        if (p < mutation_probability_by_locus){
+          if (aa_pos.is_copy_number) {
                 // increase or decrease by 1 step
                 auto old_copy_number = NumberHelpers::char_to_single_digit_number(aa_sequence[aa_pos.aa_index_in_aa_string]);
                 if (old_copy_number == 1) {
@@ -237,14 +235,10 @@ Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, D
                     new_aa = aa_list[new_aa_id + 1];
                 }
                 new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
-//                LOG(INFO) << aa_pos_id <<  " MUTATION: " << aa_pos.aa_index_in_aa_string << " " << old_aa << " -> " << new_aa;
             }
         }
     }
   }
-//  if(new_aa_sequence != aa_sequence){
-//      LOG(INFO) << "AFTER FOR LOOP new aa sequence: " << new_aa_sequence;
-//  }
   // get genotype pointer from gene database based on aa sequence
   return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
 }

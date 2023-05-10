@@ -144,7 +144,8 @@ void SingleHostClonalParasitePopulations::update_by_drugs(DrugsInBlood* drugs_in
       // select all locus
       // remember to use mask to turn on and off mutation location
       // for a specific time
-      Genotype* candidate_genotype = new_genotype->perform_mutation_by_drug(Model::CONFIG, Model::RANDOM, drug->drug_type(), drug->get_mutation_probability());
+      Genotype* candidate_genotype = new_genotype->perform_mutation_by_drug(Model::CONFIG, Model::RANDOM, drug->drug_type(),
+                                                                            Model::CONFIG->mutation_probability_by_locus());
 
       if (candidate_genotype->get_EC50_power_n(drug->drug_type())
           > new_genotype->get_EC50_power_n(drug->drug_type())) {

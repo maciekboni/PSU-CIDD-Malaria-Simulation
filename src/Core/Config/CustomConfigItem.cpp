@@ -183,7 +183,6 @@ void drug_db::set_value(const YAML::Node &node) {
       }
     }
 
-    dt->set_p_mutation(dt_node["mutation_probability"].as<double>());
     dt->set_k(dt_node["k"].as<double>());
 
     dt->base_EC50 = dt_node["base_EC50"].as<double>();
