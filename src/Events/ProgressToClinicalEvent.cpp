@@ -73,7 +73,7 @@ void ProgressToClinicalEvent::execute() {
   const auto p_treatment = Model::TREATMENT_COVERAGE->get_probability_to_be_treated(
       person->location(), person->age());
 
-  // std::cout << p_treatment << std::endl;
+//   std::cout << p_treatment << std::endl;
   if (p <= p_treatment) {
     auto *therapy = Model::TREATMENT_STRATEGY->get_therapy(person);
 

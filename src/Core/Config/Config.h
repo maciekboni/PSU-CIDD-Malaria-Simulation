@@ -112,6 +112,8 @@ public:
 
   CONFIG_ITEM(within_host_induced_free_recombination, bool, true)
 
+  CONFIG_ITEM(mutation_probability_by_locus, double, 0)
+
   CUSTOM_CONFIG_ITEM(start_of_comparison_period, 0)
 
   CUSTOM_CONFIG_ITEM(number_of_age_classes, 0)

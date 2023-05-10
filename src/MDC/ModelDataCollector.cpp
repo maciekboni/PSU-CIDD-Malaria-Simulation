@@ -62,6 +62,18 @@ void ModelDataCollector::initialize() {
             Model::CONFIG->number_of_age_classes(),
             0.0
         ));
+    blood_slide_prevalence_by_location_age_ = DoubleVector2(
+          Model::CONFIG->number_of_locations(),
+          DoubleVector(
+                  80,
+                  0.0
+          ));
+    blood_slide_number_by_location_age_ = DoubleVector2(
+          Model::CONFIG->number_of_locations(),
+          DoubleVector(
+                  80,
+                  0.0
+          ));
     blood_slide_number_by_location_age_group_by_5_ = DoubleVector2(
         Model::CONFIG->number_of_locations(),
         DoubleVector(
@@ -289,6 +301,10 @@ void ModelDataCollector::perform_population_statistic() {
       blood_slide_number_by_location_age_group_by_5_[location][ac] = 0.0;
     }
     for (auto age = 0; age < 80; age++) {
+        blood_slide_prevalence_by_location_age_[location][age] = 0.0;
+        blood_slide_number_by_location_age_[location][age] = 0.0;
+    }
+    for (auto age = 0; age < 80; age++) {
       popsize_by_location_age_[location][age] = 0;
     }
 
@@ -332,6 +348,11 @@ void ModelDataCollector::perform_population_statistic() {
               blood_slide_prevalence_by_location_[loc] += 1;
               blood_slide_number_by_location_age_group_[loc][ac] += 1;
               blood_slide_number_by_location_age_group_by_5_[loc][ac1] += 1;
+              if (p->age() < 79) {
+                blood_slide_number_by_location_age_[loc][p->age()] += 1;
+              } else {
+                blood_slide_number_by_location_age_[loc][79] += 1;
+              }
             }
           } else if (hs == Person::CLINICAL) {
             number_of_positive_by_location_[loc]++;
@@ -341,10 +362,14 @@ void ModelDataCollector::perform_population_statistic() {
             blood_slide_number_by_location_age_group_by_5_[loc][ac1] += 1;
             number_of_clinical_by_location_age_group_[loc][ac] += 1;
             number_of_clinical_by_location_age_group_by_5_[loc][ac1] += 1;
+            if (p->age() < 79) {
+              blood_slide_number_by_location_age_[loc][p->age()] += 1;
+            } else {
+              blood_slide_number_by_location_age_[loc][79] += 1;
+            }
           }
 
           int moi = p->all_clonal_parasite_populations()->size();
-
 
           if (moi >= number_of_reported_MOI) {
             multiple_of_infection_by_location_[loc][number_of_reported_MOI - 1]++;
@@ -417,9 +442,15 @@ void ModelDataCollector::perform_population_statistic() {
       blood_slide_prevalence_by_location_age_group_[loc][ac] =
           blood_slide_number_by_location_age_group_[loc][ac] /
           static_cast<double>(popsize_by_location_age_class_[loc][ac]);
+
       blood_slide_prevalence_by_location_age_group_by_5_[loc][ac] =
           blood_slide_number_by_location_age_group_by_5_[loc][ac] /
           static_cast<double>(popsize_by_location_age_class_by_5_[loc][ac]);
+    }
+    for(int age = 0; age < 80; age++){
+        blood_slide_prevalence_by_location_age_[loc][age] =
+        blood_slide_number_by_location_age_[loc][age] /
+        static_cast<double>(popsize_by_location_age_[loc][age]);
     }
   }
 }

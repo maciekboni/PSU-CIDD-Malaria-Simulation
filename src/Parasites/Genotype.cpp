@@ -196,49 +196,49 @@ void Genotype::calculate_EC50_power_n(const PfGeneInfo &gene_info, DrugDatabase 
   }
 }
 
-Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType) const {
+Genotype *Genotype::perform_mutation_by_drug(Config *pConfig, Random *pRandom, DrugType *pDrugType, double mutation_probability_by_locus) const {
   std::string new_aa_sequence { aa_sequence };
+  for(int aa_pos_id = 0; aa_pos_id < pDrugType->resistant_aa_locations.size(); aa_pos_id++) {
+    // get aa position info (aa index in aa string, is copy number)
+    auto aa_pos = pDrugType->resistant_aa_locations[aa_pos_id];
+    if(pConfig->mutation_mask()[aa_pos.aa_index_in_aa_string] == '1'){
+        const auto p = Model::RANDOM->random_flat(0.0, 1.0);
+        if (p < mutation_probability_by_locus){
+          if (aa_pos.is_copy_number) {
+                // increase or decrease by 1 step
+                auto old_copy_number = NumberHelpers::char_to_single_digit_number(aa_sequence[aa_pos.aa_index_in_aa_string]);
+                if (old_copy_number == 1) {
+                    new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number + 1);
+                } else if (old_copy_number
+                           == pConfig->pf_genotype_info()
+                                   .chromosome_infos[aa_pos.chromosome_id]
+                                   .gene_infos[aa_pos.gene_id]
+                                   .max_copies) {
+                    new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number - 1);
+                } else {
+                    auto new_copy_number = pRandom->random_uniform() < 0.5 ? old_copy_number - 1 : old_copy_number + 1;
+                    new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
+                }
 
-  // draw random aa position
-  auto aa_pos_id = pRandom->random_uniform(pDrugType->resistant_aa_locations.size());
-  auto aa_pos = pDrugType->resistant_aa_locations[aa_pos_id];
-
-  if (pConfig->mutation_mask()[aa_pos.aa_index_in_aa_string] == '1') {
-    if (aa_pos.is_copy_number) {
-      // increase or decrease by 1 step
-      auto old_copy_number = NumberHelpers::char_to_single_digit_number(aa_sequence[aa_pos.aa_index_in_aa_string]);
-      if (old_copy_number == 1) {
-        new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number + 1);
-      } else if (old_copy_number
-                 == pConfig->pf_genotype_info()
+            } else {
+                auto &aa_list = pConfig->pf_genotype_info()
                         .chromosome_infos[aa_pos.chromosome_id]
                         .gene_infos[aa_pos.gene_id]
-                        .max_copies) {
-        new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(old_copy_number - 1);
-      } else {
-        auto new_copy_number = pRandom->random_uniform() < 0.5 ? old_copy_number - 1 : old_copy_number + 1;
-        new_aa_sequence[aa_pos.aa_index_in_aa_string] = NumberHelpers::single_digit_number_to_char(new_copy_number);
-      }
+                        .aa_position_infos[aa_pos.aa_id]
+                        .amino_acids;
+                // draw random aa id
+                auto new_aa_id = pRandom->random_uniform(aa_list.size() - 1);
 
-    } else {
-      auto &aa_list = pConfig->pf_genotype_info()
-                          .chromosome_infos[aa_pos.chromosome_id]
-                          .gene_infos[aa_pos.gene_id]
-                          .aa_position_infos[aa_pos.aa_id]
-                          .amino_acids;
-      // draw random aa id
-      auto new_aa_id = pRandom->random_uniform(aa_list.size() - 1);
-
-      auto old_aa = aa_sequence[aa_pos.aa_index_in_aa_string];
-      auto new_aa = aa_list[new_aa_id];
-      if (new_aa == old_aa) {
-        new_aa = aa_list[new_aa_id + 1];
-      }
-
-      new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
+                auto old_aa = aa_sequence[aa_pos.aa_index_in_aa_string];
+                auto new_aa = aa_list[new_aa_id];
+                if (new_aa == old_aa) {
+                    new_aa = aa_list[new_aa_id + 1];
+                }
+                new_aa_sequence[aa_pos.aa_index_in_aa_string] = new_aa;
+            }
+        }
     }
   }
-
   // get genotype pointer from gene database based on aa sequence
   return pConfig->genotype_db.get_genotype(new_aa_sequence, pConfig);
 }

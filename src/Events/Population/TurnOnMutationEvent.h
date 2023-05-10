@@ -14,7 +14,7 @@ DISALLOW_MOVE(TurnOnMutationEvent)
   int drug_id = -1;
 
 public:
-  explicit TurnOnMutationEvent(const int &at_time, const double &mutation_probability, const int& drug_id);
+  explicit TurnOnMutationEvent(const int &at_time, const double &mutation_probability);
 
   ~TurnOnMutationEvent() override = default;
 

@@ -38,8 +38,6 @@ public:
 
   VIRTUAL_PROPERTY_REF(DoubleVector, age_specific_drug_absorption);
 
-  VIRTUAL_PROPERTY_REF(double, p_mutation)
-
   VIRTUAL_PROPERTY_REF(double, k)
 
   VIRTUAL_PROPERTY_REF(double, cut_off_percent)
