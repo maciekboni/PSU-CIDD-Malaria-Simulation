@@ -12,7 +12,6 @@
  */
 #include <CLI/CLI.hpp>
 #include <cmath>  // log10
-#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 
@@ -237,8 +236,8 @@ double getEfficacyForTherapy(Genotype* g, int therapy_id, Model* p_model) {
   Model::DATA_COLLECTOR = p_model->data_collector();
 
   p_model->scheduler()->initialize(Model::CONFIG->starting_date(), Model::CONFIG->total_time());
-  p_model->population()->initialize();
   p_model->data_collector()->initialize();
+  p_model->population()->initialize();
 
   return result;
 }
